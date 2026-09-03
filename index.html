@@ -27,12 +27,16 @@ body{
   background:radial-gradient(ellipse at 50% 34%, #2A1F17 0%, var(--lacquer) 62%);
   color:var(--ivory);
   font-family:"Noto Serif SC","Songti SC","STSong","Source Han Serif SC",serif;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:clamp(10px,2.4vh,20px);
-  padding:calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 16px);
   overflow:hidden;touch-action:none;
 }
 [hidden]{display:none!important}
+
+.act{
+  height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(10px,2.4vh,20px);
+  padding:calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 16px);
+}
 
 /* ══════════════════════════════════════
    3 · 盘面
@@ -121,16 +125,19 @@ button{
 }
 button:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
 button:active{transform:translateY(1px)}
-.actions button{padding:11px 26px;font-size:14px}
-.actions .ghost{
+button:disabled{opacity:.35;pointer-events:none}
+
+.ghost{
   background:none;color:var(--ivory-dim);box-shadow:none;
   border:1px solid rgba(224,190,106,.4);
 }
+.actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.actions button{padding:11px 24px;font-size:14px}
 
 /* ══════════════════════════════════════
-   6 · 开场遮罩
+   6 · 遮罩与对话框
    ══════════════════════════════════════ */
-.gate{
+.gate,.modal{
   position:fixed;inset:0;z-index:9;
   background:rgba(23,17,14,.94);backdrop-filter:blur(3px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -141,34 +148,140 @@ button:active{transform:translateY(1px)}
   letter-spacing:.5em;text-indent:.5em;color:var(--ivory);
 }
 .gate p{font-size:13.5px;line-height:1.8;color:rgba(239,226,196,.58);max-width:26em}
+
+.modal .ask{
+  font-size:clamp(19px,5.4vw,24px);line-height:1.6;color:var(--ivory);max-width:14em;
+}
+.modal .hint{font-size:13px;line-height:1.8;color:rgba(239,226,196,.5);max-width:24em}
+.modal .choices{display:flex;gap:14px;margin-top:4px}
+
+/* ══════════════════════════════════════
+   7 · 第二幕 · 格局图
+   ══════════════════════════════════════ */
+#act2{justify-content:flex-start;gap:12px}
+
+.plan-head{
+  width:100%;max-width:640px;
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  font-size:13px;color:rgba(239,226,196,.62);
+  letter-spacing:.1em;
+}
+.plan-head b{color:var(--brass);font-weight:500;font-variant-numeric:tabular-nums}
+
+.canvas-wrap{
+  position:relative;width:100%;max-width:640px;flex:1 1 auto;min-height:0;
+  border:1px solid rgba(224,190,106,.22);border-radius:3px;
+  background:rgba(0,0,0,.18);overflow:hidden;
+}
+#plan{display:block;width:100%;height:100%;touch-action:none}
+
+/* 北针：随读数旋转，指出真北在图上的方位 */
+.rose{
+  position:absolute;top:10px;right:10px;width:52px;height:52px;
+  pointer-events:none;opacity:.9;
+}
+.rose svg{width:100%;height:100%;display:block}
+
+.plan-tools{
+  width:100%;max-width:640px;
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+}
+.plan-tools button{padding:9px 16px;font-size:13px;letter-spacing:.12em;text-indent:.12em}
+.plan-tools .mode[aria-pressed="true"]{
+  background:linear-gradient(180deg,var(--brass),var(--gold));
+  color:var(--lacquer);border-color:transparent;
+}
+
+.chips{
+  width:100%;max-width:640px;
+  display:flex;flex-wrap:wrap;gap:6px;justify-content:center;
+}
+.chips button{
+  padding:7px 13px;font-size:12.5px;letter-spacing:.08em;text-indent:.08em;
+  background:none;color:var(--ivory-dim);box-shadow:none;
+  border:1px solid rgba(224,190,106,.3);
+}
+.chips button[aria-pressed="true"]{
+  background:rgba(224,190,106,.16);color:var(--ivory);border-color:var(--brass);
+}
 </style>
 </head>
 <body>
 
-<div class="plate" id="plate">
-  <svg id="dial" viewBox="0 0 400 400" aria-label="罗盘盘面"></svg>
-  <svg class="hud" viewBox="0 0 400 400" aria-hidden="true">
-    <circle class="track" id="track" cx="200" cy="200" r="193" hidden></circle>
-    <circle class="ring"  id="ring"  cx="200" cy="200" r="193"
-            transform="rotate(-90 200 200)" hidden></circle>
-  </svg>
-  <div class="threads"><i class="v"></i><i class="h"></i></div>
-  <div class="cursor"></div>
-</div>
+<!-- ═══ 第一幕 · 定盘 ═══════════════════ -->
+<main class="act" id="act1">
+  <div class="plate" id="plate">
+    <svg id="dial" viewBox="0 0 400 400" aria-label="罗盘盘面"></svg>
+    <svg class="hud" viewBox="0 0 400 400" aria-hidden="true">
+      <circle class="track" id="track" cx="200" cy="200" r="193" hidden></circle>
+      <circle class="ring"  id="ring"  cx="200" cy="200" r="193"
+              transform="rotate(-90 200 200)" hidden></circle>
+    </svg>
+    <div class="threads"><i class="v"></i><i class="h"></i></div>
+    <div class="cursor"></div>
+  </div>
 
-<div class="timer" id="timer"></div>
+  <div class="timer" id="timer"></div>
 
-<div class="readout">
-  <div class="deg" id="deg">—<small>°</small></div>
-  <div class="mountain" id="mountain">等待磁场</div>
-  <div class="sitting" id="sitting"></div>
-</div>
+  <div class="readout">
+    <div class="deg" id="deg">—<small>°</small></div>
+    <div class="mountain" id="mountain">等待磁场</div>
+    <div class="sitting" id="sitting"></div>
+  </div>
 
-<p class="note" id="note"></p>
+  <p class="note" id="note"></p>
 
-<div class="actions">
-  <button id="lockNow" hidden>立即定盘</button>
-  <button id="again" class="ghost" hidden>重新定盘</button>
+  <div class="actions">
+    <button id="lockNow" hidden>立即定盘</button>
+    <button id="again" class="ghost" hidden>重新定盘</button>
+    <button id="confirmStance" hidden>确认站位</button>
+  </div>
+</main>
+
+<!-- ═══ 第二幕 · 格局图 ═════════════════ -->
+<section class="act" id="act2" hidden>
+  <div class="plan-head">
+    <span>大门朝 <b id="planFacing">—</b></span>
+    <span>画面上方即屋外</span>
+  </div>
+
+  <div class="canvas-wrap">
+    <canvas id="plan"></canvas>
+    <div class="rose">
+      <svg viewBox="0 0 60 60" id="rose" aria-label="北针">
+        <circle cx="30" cy="30" r="27" fill="rgba(23,17,14,.55)" stroke="rgba(224,190,106,.35)"/>
+        <g id="roseNeedle">
+          <path d="M30 8 L35 30 L30 26 L25 30 Z" fill="#A32B1E"/>
+          <path d="M30 52 L25 30 L30 34 L35 30 Z" fill="rgba(239,226,196,.5)"/>
+          <text x="30" y="20" text-anchor="middle" font-size="9" fill="#E0BE6A"
+                font-family="Helvetica Neue, Arial, sans-serif">N</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="chips" id="chips" hidden></div>
+
+  <div class="plan-tools">
+    <button class="mode ghost" data-mode="wall"  aria-pressed="true">墙</button>
+    <button class="mode ghost" data-mode="door"  aria-pressed="false">大门</button>
+    <button class="mode ghost" data-mode="label" aria-pressed="false">房间</button>
+    <button class="ghost" id="undo">撤销</button>
+    <button class="ghost" id="clear">清空</button>
+    <button id="planDone" disabled>完成</button>
+  </div>
+
+  <p class="note" id="planNote">按住拖动画一道墙，靠近既有墙角会自动咬合。</p>
+</section>
+
+<!-- ═══ 对话框 ═════════════════════════ -->
+<div class="modal" id="stanceModal" hidden>
+  <p class="ask">是否面对大门，脸朝外？</p>
+  <p class="hint">背对屋内，身体与门框平行，手机端平齐胸。这一步决定整间屋的坐向，站错则后续全错。</p>
+  <div class="choices">
+    <button class="ghost" id="stanceNo">不是</button>
+    <button id="stanceYes">是</button>
+  </div>
 </div>
 
 <div class="gate" id="gate">
@@ -195,6 +308,14 @@ const CFG = {
 };
 CFG.RING_LEN = 2 * Math.PI * CFG.RING_R;
 
+const PLAN = {
+  WORLD    : 600,      // 画布虚拟坐标边长
+  GRID     : 20,       // 网格间距
+  SNAP_PT  : 14,       // 端点吸附半径
+  SNAP_DEG : 10,       // 拉直吸附角度
+  MIN_LEN  : 12,       // 一道墙的最短长度
+};
+
 /* 二十四山：由子山起，顺时针每山十五度 */
 const MOUNTAINS = ['子','癸','丑','艮','寅','甲','卯','乙','辰','巽','巳','丙',
                    '午','丁','未','坤','申','庚','酉','辛','戌','乾','亥','壬'];
@@ -207,24 +328,42 @@ const TRIGRAMS  = [['坎','北'],['艮','东北'],['震','东'],['巽','东南']
 /* 四正方位：中英并列 */
 const COMPASS   = [['北','N'],['东','E'],['南','S'],['西','W']];
 
+/* 房间标签 */
+const ROOMS = ['客厅','餐厅','厨房','主卧','次卧','书房','卫生间','阳台','玄关'];
+
 /* ══════════════════════════════════════
    2 · DOM
    ══════════════════════════════════════ */
 
 const $ = {
-  plate   : document.getElementById('plate'),
-  dial    : document.getElementById('dial'),
-  ring    : document.getElementById('ring'),
-  track   : document.getElementById('track'),
-  timer   : document.getElementById('timer'),
-  deg     : document.getElementById('deg'),
-  mountain: document.getElementById('mountain'),
-  sitting : document.getElementById('sitting'),
-  note    : document.getElementById('note'),
-  lockNow : document.getElementById('lockNow'),
-  again   : document.getElementById('again'),
-  gate    : document.getElementById('gate'),
-  start   : document.getElementById('start'),
+  act1     : document.getElementById('act1'),
+  act2     : document.getElementById('act2'),
+  plate    : document.getElementById('plate'),
+  dial     : document.getElementById('dial'),
+  ring     : document.getElementById('ring'),
+  track    : document.getElementById('track'),
+  timer    : document.getElementById('timer'),
+  deg      : document.getElementById('deg'),
+  mountain : document.getElementById('mountain'),
+  sitting  : document.getElementById('sitting'),
+  note     : document.getElementById('note'),
+  lockNow  : document.getElementById('lockNow'),
+  again    : document.getElementById('again'),
+  confirm  : document.getElementById('confirmStance'),
+  modal    : document.getElementById('stanceModal'),
+  stanceYes: document.getElementById('stanceYes'),
+  stanceNo : document.getElementById('stanceNo'),
+  gate     : document.getElementById('gate'),
+  start    : document.getElementById('start'),
+
+  canvas   : document.getElementById('plan'),
+  facing   : document.getElementById('planFacing'),
+  needle   : document.getElementById('roseNeedle'),
+  chips    : document.getElementById('chips'),
+  undo     : document.getElementById('undo'),
+  clear    : document.getElementById('clear'),
+  planDone : document.getElementById('planDone'),
+  planNote : document.getElementById('planNote'),
 };
 
 /* ══════════════════════════════════════
@@ -327,4 +466,611 @@ function drawDial(){
     f.append(svg('line', {x1:200, y1:88, x2:200, y2: major ? 100 : 95,
                           stroke: major ? '#22190F' : '#9C845A',
                           'stroke-width': major ? 1 : .6, transform:spin(a)}));
-    if (major) f.append(radialText(String(a), 94, 7.5,
+    if (major) f.append(radialText(String(a), 94, 7.5, '#7A6234', a));
+  }
+
+  /* 第四层 · 四正方位，中英并列 */
+  COMPASS.forEach(([zh, en], i) => {
+    const a = i * 90;
+    f.append(svg('line', {x1:200, y1:116, x2:200, y2:140, stroke:'#A32B1E',
+                          'stroke-width':1.1, 'stroke-opacity':.45, transform:spin(a)}));
+    f.append(radialText(zh, 76, 13, '#A32B1E', a));
+    f.append(radialText(en, 66, 8, '#7A6234', a,
+                        {'font-family':'Helvetica Neue, Arial, sans-serif',
+                         'letter-spacing':.6}));
+  });
+
+  /* 天池 · 磁针 */
+  f.append(svg('circle', {cx:200, cy:200, r:60, fill:'#F5EBD4',
+                          stroke:'#8A6E3E', 'stroke-width':.9}));
+  f.append(svg('circle', {cx:200, cy:200, r:60, fill:'none',
+                          stroke:'#000', 'stroke-opacity':.07, 'stroke-width':6}));
+  f.append(svg('path', {d:'M200 152 L207 200 L200 248 L193 200 Z', fill:'#22190F'}));
+  f.append(svg('path', {d:'M200 152 L207 200 L193 200 Z', fill:'#A32B1E'}));
+  f.append(svg('circle', {cx:200, cy:200, r:4.6, fill:'#B4903C',
+                          stroke:'#22190F', 'stroke-width':.8}));
+  const cap = svg('text', {x:200, y:232, 'text-anchor':'middle',
+                           'font-size':9, fill:'#9C845A', 'letter-spacing':2});
+  cap.textContent = '天池';
+  f.append(cap);
+
+  $.dial.append(f);
+}
+
+/* ══════════════════════════════════════
+   5 · 状态
+   ══════════════════════════════════════ */
+
+const state = {
+  raw       : 0,      // 传感器最新方位
+  shown     : 0,      // 平滑后的显示方位
+  tilt      : 0,      // 当前偏离水平的角度
+  live      : false,  // 是否已收到数据
+  locked    : false,  // 是否已定盘
+  absolute  : false,  // 是否有绝对方位可用
+  startedAt : 0,      // 本轮采样起点
+  samples   : [],     // {t, heading, tilt}
+};
+
+const plan = {
+  facing : null,      // 确认站位时锁定的向度
+  walls  : [],        // {a:{x,y}, b:{x,y}}
+  labels : [],        // {x, y, text}
+  door   : null,      // {x, y}
+  history: [],        // 供撤销：{type, ...}
+  mode   : 'wall',
+  room   : ROOMS[0],
+};
+
+/* ══════════════════════════════════════
+   6 · 画面更新
+   ══════════════════════════════════════ */
+
+function renderReadout(){
+  const d = norm(state.shown);
+  const [gua, dir] = trigramOf(d);
+  const [, en] = compassOf(d);
+
+  $.deg.innerHTML        = d.toFixed(1) + '<small>°</small>';
+  $.mountain.textContent = `${mountainOf(d)}山 · ${gua}卦 ${dir} ${en}`;
+  $.sitting.textContent  = `坐 ${mountainOf(norm(d + 180))} 向 ${mountainOf(d)}`;
+}
+
+function renderCountdown(msLeft){
+  const secs = Math.ceil(msLeft / 1000);
+  $.ring.style.strokeDasharray  = CFG.RING_LEN;
+  $.ring.style.strokeDashoffset = CFG.RING_LEN * (1 - msLeft / CFG.LOCK_MS);
+  $.timer.innerHTML =
+    (state.tilt > CFG.TILT_MAX ? '请将手机端平' : '请固定方向') + ` <b>${secs}</b>`;
+}
+
+function showCountdown(on){
+  $.ring.hidden = $.track.hidden = !on;
+  if (!on) $.timer.textContent = '';
+}
+
+/* ══════════════════════════════════════
+   7 · 传感器
+   ══════════════════════════════════════ */
+
+function readSample(heading, beta, gamma){
+  if (state.locked || heading === null || Number.isNaN(heading)) return;
+
+  /* 屏幕朝上平放时 beta、gamma 皆近零，两者合成即偏离水平的角度。
+     倾斜会放大方位补偿误差，故标记出来，事后剔除。 */
+  state.tilt = Math.hypot(beta || 0, gamma || 0);
+  $.plate.classList.toggle('tilted', state.tilt > CFG.TILT_MAX);
+
+  const screenAngle =
+    (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+  state.raw = norm(heading + screenAngle);
+
+  if (!state.live){
+    state.live      = true;
+    state.startedAt = performance.now();
+    state.shown     = state.raw;
+    $.lockNow.hidden = false;
+    showCountdown(true);
+  }
+
+  state.samples.push({t: performance.now(), heading: state.raw, tilt: state.tilt});
+  if (state.samples.length > CFG.MAX_KEEP)
+    state.samples.splice(0, state.samples.length - CFG.MAX_KEEP);
+}
+
+/* 绝对方位：Android 首选 */
+function onAbsolute(e){
+  state.absolute = true;
+  if (e.alpha !== null) readSample(360 - e.alpha, e.beta, e.gamma);
+}
+
+/* 相对方位：仅在没有绝对方位时才用。
+   相对方位靠陀螺仪积分，会持续漂移，两路混用会让盘面一直转。 */
+function onRelative(e){
+  if (state.absolute) return;
+  if (typeof e.webkitCompassHeading === 'number')          // iOS
+    readSample(e.webkitCompassHeading, e.beta, e.gamma);
+  else if (e.absolute === true && e.alpha !== null)
+    readSample(360 - e.alpha, e.beta, e.gamma);
+}
+
+function attachSensors(){
+  window.addEventListener('deviceorientationabsolute', onAbsolute, true);
+  window.addEventListener('deviceorientation', onRelative, true);
+}
+
+function detachSensors(){
+  window.removeEventListener('deviceorientationabsolute', onAbsolute, true);
+  window.removeEventListener('deviceorientation', onRelative, true);
+}
+
+/* ══════════════════════════════════════
+   8 · 定盘
+   ══════════════════════════════════════ */
+
+/** 优先取端平时的样本；不足则退回全部近期样本 */
+function pickSamples(){
+  const now    = performance.now();
+  const recent = state.samples.filter(s => now - s.t <= CFG.WINDOW_MS);
+  const level  = recent.filter(s => s.tilt <= CFG.TILT_MAX);
+  if (level.length >= 8) return level;
+  if (recent.length)     return recent;
+  return state.samples;
+}
+
+function lockPlate(){
+  if (state.locked) return;
+  state.locked = true;
+  detachSensors();                    // 摘掉监听，读数从此不可能再动
+
+  const pool = pickSamples();
+  const mean = robustMean(pool);
+  if (mean !== null) state.shown = state.raw = mean;
+
+  $.dial.style.transform = `rotate(${-state.shown}deg)`;
+  $.plate.classList.add('locked');
+  $.plate.classList.remove('tilted');
+  showCountdown(false);
+  $.lockNow.hidden = true;
+  $.again.hidden   = false;
+  $.confirm.hidden = false;           // 定盘之后才可确认站位
+  $.note.innerHTML = `已定盘，取 ${pool.length} 笔样本平均。确认站位无误即可绘制格局。`;
+  renderReadout();
+}
+
+function restart(){
+  state.locked  = false;
+  state.live    = false;              // 重新等第一笔数据，倒数才从头开始
+  state.samples = [];
+  $.plate.classList.remove('locked');
+  $.again.hidden   = true;
+  $.confirm.hidden = true;
+  $.note.innerHTML = '重新采样中，请端平勿动。';
+  attachSensors();
+}
+
+/* ══════════════════════════════════════
+   9 · 主循环
+   ══════════════════════════════════════ */
+
+function frame(){
+  requestAnimationFrame(frame);
+  if (state.locked) return;
+
+  /* 沿最短路径逼近目标角，避免跨越 0° 时整圈回弹 */
+  state.shown += delta(state.raw, state.shown) * CFG.SMOOTH;
+  $.dial.style.transform = `rotate(${-state.shown}deg)`;
+  renderReadout();
+
+  if (!state.live) return;
+
+  const left = CFG.LOCK_MS - (performance.now() - state.startedAt);
+  if (left <= 0) lockPlate();
+  else renderCountdown(left);
+}
+
+/* ══════════════════════════════════════
+   10 · 手动转盘（无传感器时的退路）
+   ══════════════════════════════════════ */
+
+function enableDrag(){
+  let last = null;
+
+  const angleAt = ev => {
+    const box = $.plate.getBoundingClientRect();
+    return Math.atan2(ev.clientY - (box.top  + box.height / 2),
+                      ev.clientX - (box.left + box.width  / 2)) * 180 / Math.PI;
+  };
+
+  $.plate.addEventListener('pointerdown', ev => {
+    if (state.live || state.locked) return;
+    last = angleAt(ev);
+    $.plate.setPointerCapture(ev.pointerId);
+  });
+
+  $.plate.addEventListener('pointermove', ev => {
+    if (last === null) return;
+    const now   = angleAt(ev);
+    state.raw   = norm(state.raw + delta(now, last));
+    state.shown = state.raw;
+    last = now;
+  });
+
+  for (const type of ['pointerup','pointercancel'])
+    $.plate.addEventListener(type, () => { last = null; });
+}
+
+/* ══════════════════════════════════════
+   11 · 幕次切换
+   ══════════════════════════════════════ */
+
+function askStance(){
+  $.modal.hidden = false;
+}
+
+function enterAct2(){
+  $.modal.hidden = false ? false : true;   // 关闭对话框
+  $.modal.hidden = true;
+  plan.facing = norm(state.shown);
+
+  const [gua, dir] = trigramOf(plan.facing);
+  const [, en] = compassOf(plan.facing);
+  $.facing.textContent =
+    `${mountainOf(plan.facing)} ${plan.facing.toFixed(1)}° ${dir}${en}`;
+
+  $.act1.hidden = true;
+  $.act2.hidden = false;
+  resizeCanvas();
+  updateRose();
+}
+
+function backToAct1(){
+  $.modal.hidden = true;
+  restart();
+}
+
+/* ══════════════════════════════════════
+   12 · 第二幕 · 画布基础
+   ══════════════════════════════════════ */
+
+const ctx  = $.canvas.getContext('2d');
+const view = {scale: 1, ox: 0, oy: 0};
+
+function resizeCanvas(){
+  const box = $.canvas.getBoundingClientRect();
+  if (!box.width || !box.height) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  $.canvas.width  = Math.round(box.width  * dpr);
+  $.canvas.height = Math.round(box.height * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  /* 虚拟坐标居中铺满，改变窗口尺寸不会挪动已画的墙 */
+  view.scale = Math.min(box.width, box.height) / PLAN.WORLD;
+  view.ox = (box.width  - PLAN.WORLD * view.scale) / 2;
+  view.oy = (box.height - PLAN.WORLD * view.scale) / 2;
+
+  drawPlan();
+}
+
+const toScreen = p => ({x: p.x * view.scale + view.ox, y: p.y * view.scale + view.oy});
+const toWorld  = (sx, sy) => ({x: (sx - view.ox) / view.scale,
+                               y: (sy - view.oy) / view.scale});
+
+function pointerWorld(ev){
+  const box = $.canvas.getBoundingClientRect();
+  return toWorld(ev.clientX - box.left, ev.clientY - box.top);
+}
+
+/** 北针指向：画面上方是屋外，即向度方向 */
+function updateRose(){
+  $.needle.setAttribute('transform', `rotate(${-(plan.facing || 0)} 30 30)`);
+}
+
+/* ══════════════════════════════════════
+   13 · 第二幕 · 吸附
+   ══════════════════════════════════════ */
+
+const snapToGrid = p => ({
+  x: Math.round(p.x / PLAN.GRID) * PLAN.GRID,
+  y: Math.round(p.y / PLAN.GRID) * PLAN.GRID,
+});
+
+/** 落点若靠近已有墙端点，直接咬合过去，房间才不会有缝 */
+function snapToEndpoint(p){
+  let best = null, bestDist = PLAN.SNAP_PT;
+  for (const w of plan.walls){
+    for (const end of [w.a, w.b]){
+      const d = Math.hypot(end.x - p.x, end.y - p.y);
+      if (d < bestDist){ bestDist = d; best = end; }
+    }
+  }
+  return best ? {x: best.x, y: best.y} : null;
+}
+
+/** 接近水平或垂直时自动拉直 */
+function snapOrtho(from, to){
+  const dx = to.x - from.x, dy = to.y - from.y;
+  const angle = Math.abs(Math.atan2(dy, dx) * 180 / Math.PI);
+  const nearH = angle < PLAN.SNAP_DEG || angle > 180 - PLAN.SNAP_DEG;
+  const nearV = Math.abs(angle - 90) < PLAN.SNAP_DEG;
+  if (nearH) return {x: to.x, y: from.y};
+  if (nearV) return {x: from.x, y: to.y};
+  return to;
+}
+
+function resolvePoint(p, from){
+  const onEnd = snapToEndpoint(p);
+  if (onEnd) return onEnd;
+  const straight = from ? snapOrtho(from, p) : p;
+  return snapToGrid(straight);
+}
+
+/* ══════════════════════════════════════
+   14 · 第二幕 · 绘制
+   ══════════════════════════════════════ */
+
+let preview = null;   // {a, b} 拖动中的墙
+
+function drawPlan(){
+  const box = $.canvas.getBoundingClientRect();
+  ctx.clearRect(0, 0, box.width, box.height);
+
+  drawGrid();
+  drawWalls();
+  drawPreview();
+  drawDoor();
+  drawLabels();
+}
+
+function drawGrid(){
+  ctx.save();
+  ctx.strokeStyle = 'rgba(224,190,106,.08)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (let v = 0; v <= PLAN.WORLD; v += PLAN.GRID){
+    const a = toScreen({x: v, y: 0}), b = toScreen({x: v, y: PLAN.WORLD});
+    ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+    const c = toScreen({x: 0, y: v}), d = toScreen({x: PLAN.WORLD, y: v});
+    ctx.moveTo(c.x, c.y); ctx.lineTo(d.x, d.y);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawWalls(){
+  ctx.save();
+  ctx.strokeStyle = '#E8DCC0';
+  ctx.lineWidth = 4;
+  ctx.lineCap = 'round';
+  for (const w of plan.walls){
+    const a = toScreen(w.a), b = toScreen(w.b);
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+    ctx.stroke();
+  }
+
+  /* 墙角点，看得出接得上没有 */
+  ctx.fillStyle = 'rgba(224,190,106,.75)';
+  for (const w of plan.walls){
+    for (const end of [w.a, w.b]){
+      const s = toScreen(end);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.restore();
+}
+
+function drawPreview(){
+  if (!preview) return;
+  ctx.save();
+  ctx.strokeStyle = '#E0BE6A';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([7, 5]);
+  const a = toScreen(preview.a), b = toScreen(preview.b);
+  ctx.beginPath();
+  ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawDoor(){
+  if (!plan.door) return;
+  const s = toScreen(plan.door);
+  ctx.save();
+  ctx.strokeStyle = '#A32B1E';
+  ctx.fillStyle   = '#A32B1E';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.arc(s.x, s.y, 9, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(s.x, s.y, 3.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.font = '11px "Songti SC", serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('大门', s.x, s.y + 24);
+  ctx.restore();
+}
+
+function drawLabels(){
+  ctx.save();
+  ctx.fillStyle = 'rgba(239,226,196,.82)';
+  ctx.font = '13px "Songti SC", "Noto Serif SC", serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (const l of plan.labels){
+    const s = toScreen(l);
+    ctx.fillText(l.text, s.x, s.y);
+  }
+  ctx.restore();
+}
+
+/* ══════════════════════════════════════
+   15 · 第二幕 · 交互
+   ══════════════════════════════════════ */
+
+let dragFrom = null;
+
+function onPlanDown(ev){
+  const p = pointerWorld(ev);
+
+  if (plan.mode === 'door'){
+    plan.door = resolvePoint(p, null);
+    plan.history.push({type: 'door'});
+    drawPlan(); refreshPlanUI();
+    return;
+  }
+
+  if (plan.mode === 'label'){
+    plan.labels.push({x: p.x, y: p.y, text: plan.room});
+    plan.history.push({type: 'label'});
+    drawPlan(); refreshPlanUI();
+    return;
+  }
+
+  dragFrom = resolvePoint(p, null);
+  $.canvas.setPointerCapture(ev.pointerId);
+}
+
+function onPlanMove(ev){
+  if (!dragFrom) return;
+  preview = {a: dragFrom, b: resolvePoint(pointerWorld(ev), dragFrom)};
+  drawPlan();
+}
+
+function onPlanUp(ev){
+  if (!dragFrom) return;
+  const end = resolvePoint(pointerWorld(ev), dragFrom);
+  const long = Math.hypot(end.x - dragFrom.x, end.y - dragFrom.y) >= PLAN.MIN_LEN;
+  if (long){
+    plan.walls.push({a: dragFrom, b: end});
+    plan.history.push({type: 'wall'});
+  }
+  dragFrom = null;
+  preview  = null;
+  drawPlan();
+  refreshPlanUI();
+}
+
+function undoLast(){
+  const last = plan.history.pop();
+  if (!last) return;
+  if (last.type === 'wall')  plan.walls.pop();
+  if (last.type === 'label') plan.labels.pop();
+  if (last.type === 'door')  plan.door = null;
+  drawPlan();
+  refreshPlanUI();
+}
+
+function clearPlan(){
+  plan.walls = [];
+  plan.labels = [];
+  plan.door = null;
+  plan.history = [];
+  drawPlan();
+  refreshPlanUI();
+}
+
+function setMode(mode){
+  plan.mode = mode;
+  for (const btn of document.querySelectorAll('.mode'))
+    btn.setAttribute('aria-pressed', String(btn.dataset.mode === mode));
+  $.chips.hidden = mode !== 'label';
+  $.planNote.textContent =
+    mode === 'wall'  ? '按住拖动画一道墙，靠近既有墙角会自动咬合。' :
+    mode === 'door'  ? '点一下大门所在的位置。' :
+                       '先选房间名，再点它在图上的位置。';
+}
+
+function buildChips(){
+  for (const name of ROOMS){
+    const btn = document.createElement('button');
+    btn.textContent = name;
+    btn.setAttribute('aria-pressed', String(name === plan.room));
+    btn.addEventListener('click', () => {
+      plan.room = name;
+      for (const other of $.chips.children)
+        other.setAttribute('aria-pressed', String(other === btn));
+    });
+    $.chips.append(btn);
+  }
+}
+
+function refreshPlanUI(){
+  $.planDone.disabled = plan.walls.length < 3;
+}
+
+function finishPlan(){
+  const rooms = plan.labels.length;
+  $.planNote.innerHTML =
+    `格局已记录：<b>${plan.walls.length}</b> 道墙、<b>${rooms}</b> 个房间`
+    + (plan.door ? '、大门已标' : '、<b>尚未标大门</b>')
+    + '。第三幕待建。';
+}
+
+/* ══════════════════════════════════════
+   16 · 启动
+   ══════════════════════════════════════ */
+
+async function requestPermissionIfNeeded(){
+  const DOE = window.DeviceOrientationEvent;
+  if (!DOE || typeof DOE.requestPermission !== 'function') return true;   // 非 iOS
+  try {
+    return await DOE.requestPermission() === 'granted';
+  } catch {
+    return true;                      // 权限接口异常时仍尝试监听
+  }
+}
+
+async function begin(){
+  $.gate.hidden = true;
+
+  if (!await requestPermissionIfNeeded()){
+    $.note.textContent =
+      '未授予方向感应权限。可在 设置 › Safari › 动作与方向 中开启后重进。';
+    return;
+  }
+
+  attachSensors();
+  requestAnimationFrame(frame);
+
+  setTimeout(() => {
+    if (state.live) return;
+    $.mountain.textContent = '未读到磁场';
+    $.note.innerHTML = '这台设备没有回传磁力计数据。请确认网址是 <b>https</b> 开头，'
+                     + '并检查系统定位服务是否开启。眼下可用手指转动盘面手动定向。';
+  }, 2500);
+}
+
+drawDial();
+enableDrag();
+buildChips();
+setMode('wall');
+
+$.start.addEventListener('click', begin);
+$.lockNow.addEventListener('click', lockPlate);
+$.again.addEventListener('click', restart);
+$.confirm.addEventListener('click', askStance);
+$.stanceYes.addEventListener('click', enterAct2);
+$.stanceNo.addEventListener('click', backToAct1);
+
+$.canvas.addEventListener('pointerdown', onPlanDown);
+$.canvas.addEventListener('pointermove', onPlanMove);
+$.canvas.addEventListener('pointerup', onPlanUp);
+$.canvas.addEventListener('pointercancel', onPlanUp);
+
+$.undo.addEventListener('click', undoLast);
+$.clear.addEventListener('click', clearPlan);
+$.planDone.addEventListener('click', finishPlan);
+
+for (const btn of document.querySelectorAll('.mode'))
+  btn.addEventListener('click', () => setMode(btn.dataset.mode));
+
+window.addEventListener('resize', resizeCanvas);
+window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 200));
+</script>
+</body>
+</html>
