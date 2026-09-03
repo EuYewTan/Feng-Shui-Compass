@@ -6,113 +6,157 @@
 <meta name="theme-color" content="#17110E">
 <title>罗盘</title>
 <style>
-  :root{
-    --lacquer:#17110E;
-    --ivory:#EFE2C4;
-    --ivory-deep:#D6C193;
-    --ink:#22190F;
-    --cinnabar:#A32B1E;
-    --gold:#B4903C;
-    --brass:#E0BE6A;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%}
-  body{
-    background:radial-gradient(ellipse at 50% 34%, #2A1F17 0%, var(--lacquer) 62%);
-    color:var(--ivory);
-    font-family:"Noto Serif SC","Songti SC","STSong","Source Han Serif SC",serif;
-    display:flex;flex-direction:column;align-items:center;
-    justify-content:center;gap:clamp(10px,2.6vh,22px);
-    padding:calc(env(safe-area-inset-top) + 14px) 16px calc(env(safe-area-inset-bottom) + 18px);
-    overflow:hidden;touch-action:none;
-  }
+/* ══════════════════════════════════════
+   1 · 设计变量
+   ══════════════════════════════════════ */
+:root{
+  --lacquer:#17110E;
+  --ivory:#EFE2C4;
+  --ivory-dim:#D6C193;
+  --cinnabar:#A32B1E;
+  --gold:#B4903C;
+  --brass:#E0BE6A;
+}
 
-  /* ── 盘面 ───────────────────────────── */
-  .plate{
-    position:relative;
-    width:min(92vw,54vh);height:min(92vw,54vh);
-    flex:0 0 auto;
-  }
-  .plate::after{ /* 盘边木框 */
-    content:"";position:absolute;inset:-2.4%;border-radius:50%;
-    background:linear-gradient(150deg,#4A3524,#241812 55%,#3D2B1C);
-    box-shadow:0 14px 40px rgba(0,0,0,.65), inset 0 0 0 1px rgba(224,190,106,.28);
-    z-index:-1;
-  }
-  #dial{width:100%;height:100%;display:block;will-change:transform}
-  .plate.locked::after{box-shadow:0 14px 40px rgba(0,0,0,.65), inset 0 0 0 1.5px rgba(224,190,106,.75)}
+/* ══════════════════════════════════════
+   2 · 基础版式
+   ══════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:radial-gradient(ellipse at 50% 34%, #2A1F17 0%, var(--lacquer) 62%);
+  color:var(--ivory);
+  font-family:"Noto Serif SC","Songti SC","STSong","Source Han Serif SC",serif;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(10px,2.4vh,20px);
+  padding:calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 16px);
+  overflow:hidden;touch-action:none;
+}
+[hidden]{display:none!important}
 
-  /* 天心十道：固定不动，代表手机所指 */
-  .threads{position:absolute;inset:0;pointer-events:none}
-  .threads i{position:absolute;background:rgba(224,190,106,.55)}
-  .threads .v{left:50%;top:-1.5%;bottom:-1.5%;width:1px;transform:translateX(-.5px);
-              background:linear-gradient(180deg,var(--cinnabar) 0 46%,rgba(224,190,106,.5) 46%)}
-  .threads .h{top:50%;left:-1.5%;right:-1.5%;height:1px;transform:translateY(-.5px)}
-  .cursor{
-    position:absolute;left:50%;top:-3.6%;width:0;height:0;
-    transform:translateX(-50%);
-    border-left:8px solid transparent;border-right:8px solid transparent;
-    border-top:13px solid var(--cinnabar);
-    filter:drop-shadow(0 1px 2px rgba(0,0,0,.7));
-  }
+/* ══════════════════════════════════════
+   3 · 盘面
+   ══════════════════════════════════════ */
+.plate{
+  position:relative;
+  width:min(90vw,52vh);height:min(90vw,52vh);
+  flex:0 0 auto;
+}
+.plate::after{                       /* 盘边木框 */
+  content:"";position:absolute;inset:-2.4%;border-radius:50%;
+  background:linear-gradient(150deg,#4A3524,#241812 55%,#3D2B1C);
+  box-shadow:0 14px 40px rgba(0,0,0,.65), inset 0 0 0 1px rgba(224,190,106,.28);
+  z-index:-1;
+}
+.plate.locked::after{
+  box-shadow:0 14px 40px rgba(0,0,0,.65), inset 0 0 0 1.5px rgba(224,190,106,.75);
+}
+#dial{width:100%;height:100%;display:block;will-change:transform}
 
-  /* ── 读数 ───────────────────────────── */
-  .readout{text-align:center;line-height:1.15}
-  .deg{
-    font-size:clamp(36px,10.5vw,54px);font-weight:500;
-    font-variant-numeric:tabular-nums;color:var(--brass);
-  }
-  .deg small{font-size:.42em;color:var(--ivory-deep);margin-left:.12em}
-  .mountain{
-    font-size:clamp(17px,5vw,22px);color:var(--ivory);
-    margin-top:6px;letter-spacing:.32em;text-indent:.32em;
-  }
-  .sitting{
-    font-size:clamp(12px,3.4vw,14px);color:rgba(239,226,196,.52);
-    margin-top:9px;letter-spacing:.16em;text-indent:.16em;
-  }
+/* 倒数进度环：覆盖在盘上，不随盘转 */
+.hud{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hud .track{fill:none;stroke:rgba(23,17,14,.22);stroke-width:5}
+.hud .ring{fill:none;stroke:var(--brass);stroke-width:5;stroke-linecap:round;transition:stroke .25s}
+.plate.tilted .hud .ring{stroke:var(--cinnabar)}
 
-  /* ── 提示与按钮 ─────────────────────── */
-  .note{
-    font-size:13px;line-height:1.7;text-align:center;max-width:30em;
-    color:rgba(239,226,196,.6);min-height:1.7em;
-  }
-  .note b{color:var(--brass);font-weight:500}
-  button{
-    font:inherit;font-size:15px;letter-spacing:.2em;text-indent:.2em;
-    color:var(--lacquer);background:linear-gradient(180deg,var(--brass),var(--gold));
-    border:0;border-radius:2px;padding:13px 30px;cursor:pointer;
-    box-shadow:0 3px 14px rgba(180,144,60,.3);
-  }
-  button:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
-  button:active{transform:translateY(1px)}
-  .actions button{padding:11px 26px;font-size:14px}
-  .actions .ghost{
-    background:none;color:var(--ivory-deep);box-shadow:none;
-    border:1px solid rgba(224,190,106,.4);
-  }
+/* 天心十道：固定不动，代表手机所指 */
+.threads{position:absolute;inset:0;pointer-events:none}
+.threads i{position:absolute;background:rgba(224,190,106,.55)}
+.threads .v{
+  left:50%;top:-1.5%;bottom:-1.5%;width:1px;transform:translateX(-.5px);
+  background:linear-gradient(180deg,var(--cinnabar) 0 46%,rgba(224,190,106,.5) 46%);
+}
+.threads .h{top:50%;left:-1.5%;right:-1.5%;height:1px;transform:translateY(-.5px)}
+.cursor{
+  position:absolute;left:50%;top:-3.6%;width:0;height:0;transform:translateX(-50%);
+  border-left:8px solid transparent;border-right:8px solid transparent;
+  border-top:13px solid var(--cinnabar);
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.7));
+}
 
-  .gate{
-    position:fixed;inset:0;z-index:9;
-    background:rgba(23,17,14,.94);backdrop-filter:blur(3px);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:22px;padding:28px;text-align:center;
-  }
-  .gate h1{
-    font-size:clamp(26px,8vw,36px);font-weight:500;
-    letter-spacing:.5em;text-indent:.5em;color:var(--ivory);
-  }
-  .gate p{font-size:13.5px;line-height:1.8;color:rgba(239,226,196,.58);max-width:26em}
-  [hidden]{display:none!important}
+/* ══════════════════════════════════════
+   4 · 倒数与读数
+   ══════════════════════════════════════ */
+.timer{
+  display:flex;align-items:baseline;gap:.6em;min-height:1.4em;
+  font-size:clamp(15px,4.4vw,19px);color:var(--ivory-dim);
+  letter-spacing:.2em;text-indent:.2em;
+}
+.timer b{
+  font-size:clamp(30px,8.5vw,42px);font-weight:500;letter-spacing:0;
+  font-variant-numeric:tabular-nums;color:var(--brass);
+}
+.plate.tilted ~ .timer,
+.plate.tilted ~ .timer b{color:var(--cinnabar)}
+
+.readout{text-align:center;line-height:1.15}
+.readout .deg{
+  font-size:clamp(30px,8.5vw,44px);font-weight:500;
+  font-variant-numeric:tabular-nums;color:var(--brass);
+}
+.readout .deg small{font-size:.42em;color:var(--ivory-dim);margin-left:.12em}
+.readout .mountain{
+  font-size:clamp(16px,4.6vw,20px);color:var(--ivory);
+  margin-top:5px;letter-spacing:.32em;text-indent:.32em;
+}
+.readout .sitting{
+  font-size:clamp(11.5px,3.2vw,13px);color:rgba(239,226,196,.52);
+  margin-top:7px;letter-spacing:.16em;text-indent:.16em;
+}
+
+/* ══════════════════════════════════════
+   5 · 提示与按钮
+   ══════════════════════════════════════ */
+.note{
+  font-size:12.5px;line-height:1.65;text-align:center;max-width:30em;
+  color:rgba(239,226,196,.55);min-height:1.65em;
+}
+.note b{color:var(--brass);font-weight:500}
+
+button{
+  font:inherit;font-size:15px;letter-spacing:.2em;text-indent:.2em;
+  color:var(--lacquer);background:linear-gradient(180deg,var(--brass),var(--gold));
+  border:0;border-radius:2px;padding:13px 30px;cursor:pointer;
+  box-shadow:0 3px 14px rgba(180,144,60,.3);
+}
+button:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+button:active{transform:translateY(1px)}
+.actions button{padding:11px 26px;font-size:14px}
+.actions .ghost{
+  background:none;color:var(--ivory-dim);box-shadow:none;
+  border:1px solid rgba(224,190,106,.4);
+}
+
+/* ══════════════════════════════════════
+   6 · 开场遮罩
+   ══════════════════════════════════════ */
+.gate{
+  position:fixed;inset:0;z-index:9;
+  background:rgba(23,17,14,.94);backdrop-filter:blur(3px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:22px;padding:28px;text-align:center;
+}
+.gate h1{
+  font-size:clamp(26px,8vw,36px);font-weight:500;
+  letter-spacing:.5em;text-indent:.5em;color:var(--ivory);
+}
+.gate p{font-size:13.5px;line-height:1.8;color:rgba(239,226,196,.58);max-width:26em}
 </style>
 </head>
 <body>
 
 <div class="plate" id="plate">
   <svg id="dial" viewBox="0 0 400 400" aria-label="罗盘盘面"></svg>
+  <svg class="hud" viewBox="0 0 400 400" aria-hidden="true">
+    <circle class="track" id="track" cx="200" cy="200" r="193" hidden></circle>
+    <circle class="ring"  id="ring"  cx="200" cy="200" r="193"
+            transform="rotate(-90 200 200)" hidden></circle>
+  </svg>
   <div class="threads"><i class="v"></i><i class="h"></i></div>
   <div class="cursor"></div>
 </div>
+
+<div class="timer" id="timer"></div>
 
 <div class="readout">
   <div class="deg" id="deg">—<small>°</small></div>
@@ -129,284 +173,158 @@
 
 <div class="gate" id="gate">
   <h1>罗盘</h1>
-  <p>手机需平放于掌心，避开电脑、音箱、钢筋与金属桌面。首次使用请握机划几个「8」字，让磁力计自行校准。站定后十秒自动定盘，也可随时按「立即定盘」。</p>
+  <p>手机端平齐胸，屏幕朝上，避开电脑、音箱、钢筋与金属桌面。首次使用请握机划几个「8」字校准磁力计。站定后十秒内自动定盘。</p>
   <button id="start">开盘</button>
 </div>
 
 <script>
-/* ══ 二十四山：由子山起，顺时针每山十五度 ══ */
+'use strict';
+
+/* ══════════════════════════════════════
+   1 · 常量
+   ══════════════════════════════════════ */
+
+const CFG = {
+  LOCK_MS   : 10000,   // 定盘倒计时
+  WINDOW_MS : 6000,    // 取末六秒样本求平均
+  TILT_MAX  : 12,      // 允许的最大倾斜度数
+  OUTLIER   : 20,      // 离群值判定阈值
+  SMOOTH    : 0.12,    // 盘面跟随的低通系数
+  MAX_KEEP  : 600,     // 样本队列上限
+  RING_R    : 193,     // 进度环半径
+};
+CFG.RING_LEN = 2 * Math.PI * CFG.RING_R;
+
+/* 二十四山：由子山起，顺时针每山十五度 */
 const MOUNTAINS = ['子','癸','丑','艮','寅','甲','卯','乙','辰','巽','巳','丙',
                    '午','丁','未','坤','申','庚','酉','辛','戌','乾','亥','壬'];
 const CARDINAL  = new Set(['子','午','卯','酉']);
 
-/* ══ 八卦八方：坎起正北，每卦四十五度 ══ */
+/* 八卦八方：坎起正北，每卦四十五度 */
 const TRIGRAMS  = [['坎','北'],['艮','东北'],['震','东'],['巽','东南'],
                    ['离','南'],['坤','西南'],['兑','西'],['乾','西北']];
 
-/* ══ 四正方位：中英并列 ══ */
+/* 四正方位：中英并列 */
 const COMPASS   = [['北','N'],['东','E'],['南','S'],['西','W']];
 
-const NS = 'http://www.w3.org/2000/svg';
-const dial = document.getElementById('dial');
-const el = (tag, attrs) => {
-  const n = document.createElementNS(NS, tag);
-  for (const k in attrs) n.setAttribute(k, attrs[k]);
-  return n;
+/* ══════════════════════════════════════
+   2 · DOM
+   ══════════════════════════════════════ */
+
+const $ = {
+  plate   : document.getElementById('plate'),
+  dial    : document.getElementById('dial'),
+  ring    : document.getElementById('ring'),
+  track   : document.getElementById('track'),
+  timer   : document.getElementById('timer'),
+  deg     : document.getElementById('deg'),
+  mountain: document.getElementById('mountain'),
+  sitting : document.getElementById('sitting'),
+  note    : document.getElementById('note'),
+  lockNow : document.getElementById('lockNow'),
+  again   : document.getElementById('again'),
+  gate    : document.getElementById('gate'),
+  start   : document.getElementById('start'),
 };
-const spin = a => `rotate(${a} 200 200)`;
 
-/* 把文字放在半径 r 处，沿半径朝外排列 */
-function radial(text, r, size, fill, angle, extra={}){
-  const t = el('text', Object.assign({
-    x:200, y:(200 - r) + size*0.35,
-    'text-anchor':'middle', 'font-size':size,
-    fill, transform:spin(angle)
-  }, extra));
-  t.textContent = text;
-  return t;
-}
+/* ══════════════════════════════════════
+   3 · 角度工具
+   ══════════════════════════════════════ */
 
-/* ── 绘制盘面 ─────────────────────────── */
-(function draw(){
-  const f = document.createDocumentFragment();
+/** 两角之差，收敛到 -180…180，避免跨越 0° 时算错 */
+const delta = (a, b) => ((a - b + 540) % 360) - 180;
 
-  const defs = el('defs');
-  const g = el('radialGradient',{id:'wood',cx:'.5',cy:'.42',r:'.72'});
-  g.append(el('stop',{offset:'0',  'stop-color':'#F3E8CD'}),
-           el('stop',{offset:'.68','stop-color':'#E2D0A6'}),
-           el('stop',{offset:'1',  'stop-color':'#C8B183'}));
-  defs.append(g);
-  f.append(defs, el('circle',{cx:200,cy:200,r:198,fill:'url(#wood)'}));
+/** 归一到 0…360 */
+const norm = a => (a % 360 + 360) % 360;
 
-  [198,152,110,84,60].forEach(r =>
-    f.append(el('circle',{cx:200,cy:200,r,fill:'none',stroke:'#8A6E3E','stroke-width':.9})));
-
-  /* 第一层 · 二十四山 */
-  MOUNTAINS.forEach((m,i)=>{
-    const a = i*15;
-    f.append(el('line',{x1:200,y1:2,x2:200,y2:48,stroke:'#8A6E3E',
-                        'stroke-width':.8,transform:spin(a-7.5)}));
-    f.append(radial(m, 175, 17, CARDINAL.has(m) ? '#A32B1E' : '#22190F', a));
-  });
-
-  /* 第二层 · 八卦，四隅另注方位 */
-  TRIGRAMS.forEach(([gua,dir],i)=>{
-    const a = i*45;
-    f.append(el('line',{x1:200,y1:50,x2:200,y2:90,stroke:'#8A6E3E',
-                        'stroke-width':.8,transform:spin(a-22.5)}));
-    f.append(radial(gua, 137, 15, '#8C2318', a));
-    if (i % 2) f.append(radial(dir, 119, 8.5, '#7A6234', a));
-  });
-
-  /* 第三层 · 周天三百六十度 */
-  for(let a=0;a<360;a+=5){
-    const long = a%30===0;
-    f.append(el('line',{x1:200,y1:88,x2:200,y2:long?100:95,
-                        stroke:long?'#22190F':'#9C845A',
-                        'stroke-width':long?1:.6,transform:spin(a)}));
-    if(long) f.append(radial(String(a), 94, 7.5, '#7A6234', a));
-  }
-
-  /* 第四层 · 四正方位，中英并列 */
-  COMPASS.forEach(([zh,en],i)=>{
-    const a = i*90;
-    f.append(el('line',{x1:200,y1:116,x2:200,y2:140,stroke:'#A32B1E',
-                        'stroke-width':1.1,'stroke-opacity':.45,transform:spin(a)}));
-    f.append(radial(zh, 76, 13, '#A32B1E', a));
-    f.append(radial(en, 66, 8,  '#7A6234', a,
-                    {'font-family':'Helvetica Neue, Arial, sans-serif','letter-spacing':.6}));
-  });
-
-  /* 天池 · 磁针 */
-  f.append(el('circle',{cx:200,cy:200,r:60,fill:'#F5EBD4',stroke:'#8A6E3E','stroke-width':.9}));
-  f.append(el('circle',{cx:200,cy:200,r:60,fill:'none',stroke:'#000','stroke-opacity':.07,'stroke-width':6}));
-  f.append(el('path',{d:'M200 152 L207 200 L200 248 L193 200 Z',fill:'#22190F'}));
-  f.append(el('path',{d:'M200 152 L207 200 L193 200 Z',fill:'#A32B1E'}));
-  f.append(el('circle',{cx:200,cy:200,r:4.6,fill:'#B4903C',stroke:'#22190F','stroke-width':.8}));
-  const label = el('text',{x:200,y:232,'text-anchor':'middle','font-size':9,
-                           fill:'#9C845A','letter-spacing':2});
-  label.textContent='天池';
-  f.append(label);
-
-  dial.append(f);
-})();
-
-/* ── 状态 ─────────────────────────────── */
-const $deg     = document.getElementById('deg');
-const $mtn     = document.getElementById('mountain');
-const $sit     = document.getElementById('sitting');
-const $note    = document.getElementById('note');
-const $lockNow = document.getElementById('lockNow');
-const $again   = document.getElementById('again');
-const $plate   = document.getElementById('plate');
-
-const mountainOf = d => MOUNTAINS[Math.floor(((d+7.5)%360)/15)];
-const trigramOf  = d => TRIGRAMS[Math.floor(((d+22.5)%360)/45)];
-const compassOf  = d => COMPASS[Math.floor(((d+45)%360)/90)];
-
-const LOCK_MS   = 10000;   // 定盘倒计时
-const WINDOW_MS = 4000;    // 取末四秒求平均
-
-let raw = 0, shown = 0;
-let live = false, locked = false, hasAbsolute = false;
-let settleFrom = 0;
-let samples = [];
-
-/* 圆周平均：直接算术平均会在 359°/1° 处出错，须走向量 */
+/** 圆周平均：算术平均在 359°/1° 处会失效，须走单位向量 */
 function circularMean(list){
   let x = 0, y = 0;
   for (const s of list){
-    const r = s.h * Math.PI / 180;
+    const r = s.heading * Math.PI / 180;
     x += Math.cos(r); y += Math.sin(r);
   }
-  return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+  return norm(Math.atan2(y, x) * 180 / Math.PI);
 }
 
-function render(){
-  const d = (shown % 360 + 360) % 360;
-  $deg.innerHTML = d.toFixed(1) + '<small>°</small>';
-  const [gua, dir] = trigramOf(d);
-  const [, en] = compassOf(d);
-  $mtn.textContent = `${mountainOf(d)}山 · ${gua}卦 ${dir} ${en}`;
-  $sit.textContent = `坐 ${mountainOf((d+180)%360)} 向 ${mountainOf(d)}`;
+/** 先求均值，剔除离群值后再求一次，抵消手抖与偶发晃动 */
+function robustMean(list){
+  if (!list.length) return null;
+  const first  = circularMean(list);
+  const keep   = list.filter(s => Math.abs(delta(s.heading, first)) <= CFG.OUTLIER);
+  const enough = keep.length >= Math.max(5, list.length * 0.4);
+  return enough ? circularMean(keep) : first;
 }
 
-/* ── 传感器开关 ───────────────────────── */
-function attachSensors(){
-  window.addEventListener('deviceorientationabsolute', onAbsolute, true);
-  window.addEventListener('deviceorientation', onRelative, true);
-}
-function detachSensors(){
-  window.removeEventListener('deviceorientationabsolute', onAbsolute, true);
-  window.removeEventListener('deviceorientation', onRelative, true);
-}
+/* 方位换算 */
+const mountainOf = d => MOUNTAINS[Math.floor(norm(d + 7.5)  / 15)];
+const trigramOf  = d => TRIGRAMS [Math.floor(norm(d + 22.5) / 45)];
+const compassOf  = d => COMPASS  [Math.floor(norm(d + 45)   / 90)];
 
-/* ── 定盘 · 锁定后彻底停止采样 ─────────── */
-function lockPlate(){
-  if (locked) return;
-  locked = true;
-  detachSensors();                     // 摘掉监听，读数从此不再变动
+/* ══════════════════════════════════════
+   4 · 盘面绘制
+   ══════════════════════════════════════ */
 
-  const recent = samples.filter(s => performance.now() - s.t <= WINDOW_MS);
-  const pool   = recent.length ? recent : samples;
-  if (pool.length) shown = raw = circularMean(pool);
+const NS = 'http://www.w3.org/2000/svg';
 
-  dial.style.transform = `rotate(${-shown}deg)`;
-  $plate.classList.add('locked');
-  $lockNow.hidden = true;
-  $again.hidden = false;
-  $note.innerHTML = '已定盘。读数已固定，需重测请按「重新定盘」。';
-  render();
+function svg(tag, attrs){
+  const node = document.createElementNS(NS, tag);
+  for (const key in attrs) node.setAttribute(key, attrs[key]);
+  return node;
 }
 
-function tick(){
-  if (!locked){
-    let diff = raw - shown;
-    diff -= Math.round(diff / 360) * 360;   // 取最短路径，避免绕圈回弹
-    shown += diff * 0.12;                   // 低通滤波，压住抖动
-    dial.style.transform = `rotate(${-shown}deg)`;
-    render();
+const spin = angle => `rotate(${angle} 200 200)`;
 
-    if (live){
-      const left = LOCK_MS - (performance.now() - settleFrom);
-      if (left <= 0) lockPlate();
-      else $note.innerHTML = `定盘中，请端平勿动 &nbsp;<b>${Math.ceil(left/1000)}</b>`;
-    }
-  }
-  requestAnimationFrame(tick);
+/** 把文字排在半径 r 处，字身沿半径朝外 */
+function radialText(text, r, size, fill, angle, extra = {}){
+  const node = svg('text', Object.assign({
+    x: 200, y: (200 - r) + size * 0.35,
+    'text-anchor': 'middle', 'font-size': size,
+    fill, transform: spin(angle),
+  }, extra));
+  node.textContent = text;
+  return node;
 }
 
-/* ── 传感器数据 ───────────────────────── */
-function accept(h){
-  if (locked) return;                  // 双重保险
-  if (h === null || Number.isNaN(h)) return;
+function drawDial(){
+  const f = document.createDocumentFragment();
 
-  const so = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
-  raw = (h + so + 360) % 360;          // 补偿横屏
+  /* 盘底 */
+  const defs = svg('defs');
+  const grad = svg('radialGradient', {id:'wood', cx:'.5', cy:'.42', r:'.72'});
+  grad.append(
+    svg('stop', {offset:'0',   'stop-color':'#F3E8CD'}),
+    svg('stop', {offset:'.68', 'stop-color':'#E2D0A6'}),
+    svg('stop', {offset:'1',   'stop-color':'#C8B183'}));
+  defs.append(grad);
+  f.append(defs, svg('circle', {cx:200, cy:200, r:198, fill:'url(#wood)'}));
 
-  if (!live){
-    live = true;
-    settleFrom = performance.now();
-    shown = raw;
-    $lockNow.hidden = false;
-  }
-  samples.push({ t: performance.now(), h: raw });
-  if (samples.length > 400) samples.splice(0, samples.length - 400);
-}
+  /* 层间分界 */
+  for (const r of [198,152,110,84,60])
+    f.append(svg('circle', {cx:200, cy:200, r, fill:'none',
+                            stroke:'#8A6E3E', 'stroke-width':.9}));
 
-/* 绝对方位：Android 首选 */
-function onAbsolute(e){
-  hasAbsolute = true;
-  if (e.alpha !== null) accept(360 - e.alpha);
-}
-
-/* 相对方位：仅在没有绝对方位时才用，否则陀螺仪积分漂移会让盘面一直转 */
-function onRelative(e){
-  if (hasAbsolute) return;
-  if (typeof e.webkitCompassHeading === 'number') accept(e.webkitCompassHeading);
-  else if (e.absolute === true && e.alpha !== null) accept(360 - e.alpha);
-}
-
-/* ── 无传感器时可用手指转盘 ───────────── */
-(function enableDrag(){
-  let last = null;
-  const angleAt = ev => {
-    const r = $plate.getBoundingClientRect();
-    return Math.atan2(ev.clientY - (r.top + r.height/2),
-                      ev.clientX - (r.left + r.width/2)) * 180 / Math.PI;
-  };
-  $plate.addEventListener('pointerdown', ev=>{
-    if (live || locked) return;
-    last = angleAt(ev); $plate.setPointerCapture(ev.pointerId);
+  /* 第一层 · 二十四山 */
+  MOUNTAINS.forEach((name, i) => {
+    const a = i * 15;
+    f.append(svg('line', {x1:200, y1:2, x2:200, y2:48,
+                          stroke:'#8A6E3E', 'stroke-width':.8, transform:spin(a - 7.5)}));
+    f.append(radialText(name, 175, 17, CARDINAL.has(name) ? '#A32B1E' : '#22190F', a));
   });
-  $plate.addEventListener('pointermove', ev=>{
-    if (last === null) return;
-    const a = angleAt(ev);
-    let d = a - last; d -= Math.round(d/360)*360;
-    raw = (raw + d + 360) % 360; shown = raw; last = a;
+
+  /* 第二层 · 八卦，四隅另注方位 */
+  TRIGRAMS.forEach(([gua, dir], i) => {
+    const a = i * 45;
+    f.append(svg('line', {x1:200, y1:50, x2:200, y2:90,
+                          stroke:'#8A6E3E', 'stroke-width':.8, transform:spin(a - 22.5)}));
+    f.append(radialText(gua, 137, 15, '#8C2318', a));
+    if (i % 2) f.append(radialText(dir, 119, 8.5, '#7A6234', a));
   });
-  ['pointerup','pointercancel'].forEach(t =>
-    $plate.addEventListener(t, ()=>{ last = null; }));
-})();
 
-/* ── 按钮 ─────────────────────────────── */
-$lockNow.addEventListener('click', lockPlate);
-
-$again.addEventListener('click', ()=>{
-  locked = false;
-  live = false;                        // 重新等第一笔数据，倒数才从头开始
-  samples = [];
-  $plate.classList.remove('locked');
-  $again.hidden = true;
-  $note.innerHTML = '重新采样中，请端平勿动。';
-  attachSensors();                     // 重新挂上监听
-});
-
-/* ── 启动 ─────────────────────────────── */
-document.getElementById('start').addEventListener('click', async ()=>{
-  document.getElementById('gate').hidden = true;
-
-  const DOE = window.DeviceOrientationEvent;
-  if (DOE && typeof DOE.requestPermission === 'function'){   // iOS 13+
-    try {
-      if (await DOE.requestPermission() !== 'granted'){
-        $note.textContent = '未授予方向感应权限。可在 设置 › Safari › 动作与方向 中开启后重进。';
-        return;
-      }
-    } catch { /* 忽略，继续尝试监听 */ }
-  }
-
-  attachSensors();
-  requestAnimationFrame(tick);
-
-  setTimeout(()=>{
-    if (!live){
-      $mtn.textContent = '未读到磁场';
-      $note.innerHTML = '这台设备没有回传磁力计数据。请确认网址是 <b>https</b> 开头，'
-                      + '并检查系统定位服务是否开启。眼下可用手指转动盘面手动定向。';
-    }
-  }, 2500);
-});
-</script>
-</body>
-</html>
+  /* 第三层 · 周天三百六十度 */
+  for (let a = 0; a < 360; a += 5){
+    const major = a % 30 === 0;
+    f.append(svg('line', {x1:200, y1:88, x2:200, y2: major ? 100 : 95,
+                          stroke: major ? '#22190F' : '#9C845A',
+                          'stroke-width': major ? 1 : .6, transform:spin(a)}));
+    if (major) f.append(radialText(String(a), 94, 7.5,
