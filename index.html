@@ -16,6 +16,7 @@
   --cinnabar:#A32B1E;
   --gold:#B4903C;
   --brass:#E0BE6A;
+  --jade:#7FA88A;
 }
 
 /* ══════════════════════════════════════
@@ -141,7 +142,7 @@ button:disabled{opacity:.35;pointer-events:none}
   position:fixed;inset:0;z-index:9;
   background:rgba(23,17,14,.95);backdrop-filter:blur(3px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:18px;padding:26px 22px;text-align:center;overflow-y:auto;
+  gap:18px;padding:26px 20px;text-align:center;overflow-y:auto;
 }
 .gate h1{
   font-size:clamp(24px,7.5vw,34px);font-weight:500;
@@ -169,7 +170,7 @@ button:disabled{opacity:.35;pointer-events:none}
   flex:0 0 3.4em;text-align:right;
   font-size:13px;color:var(--ivory-dim);letter-spacing:.06em;
 }
-.birth .opt{color:rgba(239,226,196,.38);font-size:11.5px}
+.birth .opt{color:rgba(239,226,196,.38);font-size:11.5px;line-height:1.7}
 
 input[type="text"],input[type="number"],input[type="date"],input[type="time"]{
   font:inherit;font-size:15px;color:var(--ivory);
@@ -192,7 +193,7 @@ select{
 }
 .bazi b{color:var(--brass);font-weight:500}
 .bazi .pillars{
-  font-size:15px;letter-spacing:.5em;text-indent:.5em;color:var(--ivory);
+  font-size:15px;letter-spacing:.45em;text-indent:.45em;color:var(--ivory);
 }
 
 /* ══════════════════════════════════════
@@ -252,10 +253,14 @@ select{
   width:100%;max-width:680px;
   display:flex;flex-wrap:wrap;gap:6px;justify-content:center;
 }
-.plan-tools button{padding:9px 14px;font-size:13px;letter-spacing:.08em;text-indent:.08em}
+.plan-tools button{padding:9px 13px;font-size:13px;letter-spacing:.06em;text-indent:.06em}
 .plan-tools .mode[aria-pressed="true"]{
   background:linear-gradient(180deg,var(--brass),var(--gold));
   color:var(--lacquer);border-color:transparent;
+}
+.plan-tools .accent{
+  background:none;color:var(--brass);box-shadow:none;
+  border:1px solid var(--brass);
 }
 .chips button{
   padding:6px 11px;font-size:12.5px;
@@ -264,6 +269,80 @@ select{
 }
 .chips button[aria-pressed="true"]{
   background:rgba(224,190,106,.16);color:var(--ivory);border-color:var(--brass);
+}
+
+/* ══════════════════════════════════════
+   9 · 八宅九宫面板
+   ══════════════════════════════════════ */
+.bz-title{
+  font-size:clamp(17px,5vw,21px);color:var(--ivory);
+  letter-spacing:.32em;text-indent:.32em;
+}
+.bz-switch{display:flex;gap:8px}
+.bz-switch button{
+  padding:8px 16px;font-size:13px;
+  background:none;color:var(--ivory-dim);box-shadow:none;
+  border:1px solid rgba(224,190,106,.35);
+}
+.bz-switch button[aria-pressed="true"]{
+  background:rgba(224,190,106,.18);color:var(--ivory);border-color:var(--brass);
+}
+
+.bz-base{
+  font-size:12.5px;line-height:1.8;color:rgba(239,226,196,.6);max-width:26em;
+}
+.bz-base b{color:var(--brass);font-weight:500}
+
+.bz-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:5px;
+  width:100%;max-width:23em;
+}
+.bz-cell{
+  aspect-ratio:1;border-radius:2px;padding:5px 3px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;text-align:center;
+  border:1px solid rgba(224,190,106,.18);
+  background:rgba(0,0,0,.24);
+}
+.bz-cell .gua{font-size:11px;color:rgba(239,226,196,.5);letter-spacing:.04em}
+.bz-cell .star{font-size:clamp(14px,4.2vw,17px);letter-spacing:.04em}
+.bz-cell .gloss{
+  font-size:9.5px;line-height:1.35;color:rgba(239,226,196,.42);
+  padding:0 1px;
+}
+.bz-cell.good{border-color:rgba(127,168,138,.45);background:rgba(127,168,138,.08)}
+.bz-cell.good .star{color:var(--jade)}
+.bz-cell.bad{border-color:rgba(163,43,30,.45);background:rgba(163,43,30,.08)}
+.bz-cell.bad .star{color:#C4564A}
+.bz-cell.self{border-color:var(--brass);border-width:1.5px}
+.bz-cell.hub{
+  border-style:dashed;border-color:rgba(224,190,106,.3);
+  background:rgba(0,0,0,.1);
+}
+.bz-cell.hub .star{color:rgba(239,226,196,.45);font-size:12px}
+
+.bz-verdict{
+  width:100%;max-width:25em;
+  padding:13px 15px;border-radius:2px;
+  border:1px solid rgba(224,190,106,.3);background:rgba(0,0,0,.26);
+  font-size:13px;line-height:1.85;color:rgba(239,226,196,.72);
+  text-align:left;
+}
+.bz-verdict .head{
+  font-size:15px;color:var(--ivory);letter-spacing:.1em;
+  margin-bottom:5px;display:block;
+}
+.bz-verdict .head.ok{color:var(--jade)}
+.bz-verdict .head.no{color:#C4564A}
+.bz-verdict b{color:var(--brass);font-weight:500}
+.bz-verdict ul{list-style:none;margin-top:4px}
+.bz-verdict li{padding-left:1em;position:relative}
+.bz-verdict li::before{
+  content:"·";position:absolute;left:.2em;color:rgba(224,190,106,.6);
+}
+
+.bz-foot{
+  font-size:11px;line-height:1.7;color:rgba(239,226,196,.34);max-width:25em;
 }
 </style>
 </head>
@@ -341,12 +420,33 @@ select{
     <button class="mode ghost" data-mode="measure" aria-pressed="false">尺寸</button>
     <button class="mode ghost" data-mode="door"    aria-pressed="false">大门</button>
     <button class="mode ghost" data-mode="label"   aria-pressed="false">房间</button>
+    <button class="accent" id="openBazhai">八宅</button>
     <button class="ghost" id="undo">撤销</button>
     <button class="ghost" id="clear">清空本页</button>
   </div>
 
   <p class="note" id="planNote"></p>
 </section>
+
+<!-- ═══ 八宅九宫面板 ═══════════════════ -->
+<div class="modal" id="bazhaiModal" hidden>
+  <p class="bz-title">八宅九宫</p>
+
+  <div class="bz-switch">
+    <button id="bzHouse" aria-pressed="true">依宅卦</button>
+    <button id="bzLife"  aria-pressed="false">依命卦</button>
+  </div>
+
+  <p class="bz-base" id="bzBase"></p>
+  <div class="bz-grid" id="bzGrid"></div>
+  <div class="bz-verdict" id="bzVerdict"></div>
+  <p class="bz-foot">
+    九宫依地理方位排列，正上为北。八星由本卦爻变推得：
+    生气变上爻、天医变中下、延年三爻全变、绝命变中爻、五鬼变上中、六煞变下爻、祸害变上下。
+  </p>
+
+  <button class="ghost" id="bzClose">关闭</button>
+</div>
 
 <!-- ═══ 对话框 ═════════════════════════ -->
 <div class="modal" id="stanceModal" hidden>
@@ -389,7 +489,7 @@ select{
         <option value="female">女</option>
       </select>
     </div>
-    <p class="opt">时辰可不填，命卦只看年份。填了才能排出完整四柱。</p>
+    <p class="opt">时辰可不填。命卦只看年份，不填也能排八宅；填了才能定时柱，凑齐四柱。</p>
     <div class="bazi" id="baziOut"></div>
   </div>
 
@@ -445,8 +545,20 @@ const COMPASS   = [['北','N'],['东','E'],['南','S'],['西','W']];
 /* 房间标签 */
 const ROOMS = ['客厅','餐厅','厨房','主卧','次卧','书房','卫生间','阳台','玄关'];
 
-/* 八宅：坐山所属之卦决定宅之东西四 */
-const EAST_HOUSE = new Set(['坎','离','震','巽']);
+/* 八卦爻象，自下而上记为 [初, 二, 三] */
+const GUA_BITS = {
+  乾:[1,1,1], 兑:[1,1,0], 离:[1,0,1], 震:[1,0,0],
+  巽:[0,1,1], 坎:[0,1,0], 艮:[0,0,1], 坤:[0,0,0],
+};
+
+/* 卦所属方位 */
+const GUA_DIR = {
+  坎:'北', 艮:'东北', 震:'东', 巽:'东南',
+  离:'南', 坤:'西南', 兑:'西', 乾:'西北',
+};
+
+/* 东四：坎离震巽。宅以坐山定，命以生年定 */
+const EAST_GROUP = new Set(['坎','离','震','巽']);
 
 /* 八宅宅名，以坐山之卦为名 */
 const HOUSE_NAME = {
@@ -454,15 +566,37 @@ const HOUSE_NAME = {
   乾:'乾宅', 坤:'坤宅', 艮:'艮宅', 兑:'兑宅',
 };
 
-/* 干支 */
-const STEMS   = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
-const BRANCHES= ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+/**
+ * 游年八星。flip 为需翻转的爻位索引（0 初、1 二、2 三）。
+ * 此法可自证：推出的四吉必全落同组，四凶必全落对组。
+ */
+const STARS = [
+  {name:'伏位', flip:[],      good:true,  gloss:'守常安稳 宜书房'},
+  {name:'生气', flip:[2],     good:true,  gloss:'最旺 宜门主卧'},
+  {name:'天医', flip:[0,1],   good:true,  gloss:'安康 宜卧床'},
+  {name:'延年', flip:[0,1,2], good:true,  gloss:'和睦长久 宜主卧'},
+  {name:'绝命', flip:[1],     good:false, gloss:'最忌 宜厕储'},
+  {name:'五鬼', flip:[1,2],   good:false, gloss:'口舌是非 宜厨厕'},
+  {name:'六煞', flip:[0],     good:false, gloss:'耗损 宜厨厕'},
+  {name:'祸害', flip:[0,2],   good:false, gloss:'小凶 宜走道'},
+];
 
-/* 十二时辰起始钟点，子时跨日 */
+/* 九宫排列，正上为北 */
+const PALACES = [
+  '乾','坎','艮',
+  '兑', null, '震',
+  '坤','离','巽',
+];
+
+/* 干支 */
+const STEMS    = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const BRANCHES = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+
+/* 十二时辰所属地支，索引即钟点，子时跨日 */
 const HOUR_BRANCH = ['子','丑','丑','寅','寅','卯','卯','辰','辰','巳','巳','午',
                      '午','未','未','申','申','酉','酉','戌','戌','亥','亥','子'];
 
-/* 命卦对应之卦名；五在男为坤、在女为艮，另行处理 */
+/* 命卦对应之卦名。五在男为坤、在女为艮，另行处理 */
 const LIFE_GUA = {1:'坎', 2:'坤', 3:'震', 4:'巽', 6:'乾', 7:'兑', 8:'艮', 9:'离'};
 
 /* ══════════════════════════════════════
@@ -518,6 +652,15 @@ const $ = {
   measureUnit : document.getElementById('measureUnit'),
   measureOk   : document.getElementById('measureOk'),
   measureClear: document.getElementById('measureClear'),
+
+  openBazhai : document.getElementById('openBazhai'),
+  bazhai     : document.getElementById('bazhaiModal'),
+  bzHouse    : document.getElementById('bzHouse'),
+  bzLife     : document.getElementById('bzLife'),
+  bzBase     : document.getElementById('bzBase'),
+  bzGrid     : document.getElementById('bzGrid'),
+  bzVerdict  : document.getElementById('bzVerdict'),
+  bzClose    : document.getElementById('bzClose'),
 };
 
 /* ══════════════════════════════════════
@@ -553,31 +696,51 @@ function robustMean(list){
 const mountainOf = d => MOUNTAINS[Math.floor(norm(d + 7.5)  / 15)];
 const trigramOf  = d => TRIGRAMS [Math.floor(norm(d + 22.5) / 45)];
 const compassOf  = d => COMPASS  [Math.floor(norm(d + 45)   / 90)];
+const guaOf      = d => trigramOf(d)[0];
 
 /* ══════════════════════════════════════
    4 · 八宅
-   ══════════════════════════════════════
-
-   宅之东西四以坐山定，非以向定。
-   面朝大门量得的是向，坐 = 向 + 180°。
    ══════════════════════════════════════ */
 
+const bitsKey = bits => bits.join('');
+
+/** 由爻象反查卦名 */
+const GUA_BY_BITS = Object.fromEntries(
+  Object.entries(GUA_BITS).map(([gua, bits]) => [bitsKey(bits), gua]));
+
+/**
+ * 游年盘：本卦爻变得八方之星。
+ * 回传 {卦名: 星} 与 {星名: 卦名} 两向对照。
+ */
+function youNian(base){
+  const bits = GUA_BITS[base];
+  const byGua = {}, byStar = {};
+
+  for (const star of STARS){
+    const flipped = bits.slice();
+    for (const i of star.flip) flipped[i] = flipped[i] ? 0 : 1;
+    const gua = GUA_BY_BITS[bitsKey(flipped)];
+    byGua[gua] = star;
+    byStar[star.name] = gua;
+  }
+  return {byGua, byStar};
+}
+
+/** 宅：以坐山定东西四，非以向定。面朝大门量得的是向，坐 = 向 + 180° */
 function houseOf(facing){
   if (facing === null || facing === undefined) return null;
 
   const sitting = norm(facing + 180);
-  const [gua, dir] = trigramOf(sitting);
-  const east = EAST_HOUSE.has(gua);
+  const gua = guaOf(sitting);
 
   return {
-    facing,
-    sitting,
-    gua,
-    dir,
-    name : HOUSE_NAME[gua],
-    group: east ? '东四宅' : '西四宅',
+    facing, sitting, gua,
+    name  : HOUSE_NAME[gua],
+    group : EAST_GROUP.has(gua) ? '东四宅' : '西四宅',
+    dir   : GUA_DIR[gua],
     sitMountain : mountainOf(sitting),
     facMountain : mountainOf(facing),
+    facGua      : guaOf(facing),
   };
 }
 
@@ -587,10 +750,9 @@ function houseOf(facing){
 
    精度边界：立春以每年 2 月 3 日或 4 日近似，准确到日不到时刻。
    要精确到时刻需引入天文历表，属另一量级的工程。
-   月柱与日柱采通行算法，日界以子时换日。
    ══════════════════════════════════════ */
 
-/** 该年立春日期（近似）。1900–2100 间，多数年份为 2 月 4 日 */
+/** 该年立春日期（近似）。多数年份为 2 月 4 日 */
 function lichunDay(year){
   const early = [1897,1901,1905,1909,1913,1917,1921,1925,1929,1933,1937,
                  1941,1945,1949,1953,1957,1961,1965,1969,1973,1977,1981,
@@ -613,54 +775,40 @@ function solarYear(date){
 function lifeGua(year, sex){
   let n;
   if (sex === 'male'){
-    n = (10 - (year % 9)) % 9;
-    if (n === 0) n = 9;
-    /* 2000 年后男命另起，通行做法为 (9 - (year%9)) */
-    if (year >= 2000){
-      n = (9 - (year % 9)) % 9;
-      if (n === 0) n = 9;
-    }
+    n = year >= 2000 ? (9 - year % 9) % 9 : (10 - year % 9) % 9;
   } else {
-    n = ((year % 9) + 5) % 9;
-    if (n === 0) n = 9;
-    if (year >= 2000){
-      n = ((year % 9) + 6) % 9;
-      if (n === 0) n = 9;
-    }
+    n = year >= 2000 ? (year % 9 + 6) % 9 : (year % 9 + 5) % 9;
   }
+  if (n === 0) n = 9;
 
   const gua = n === 5 ? (sex === 'male' ? '坤' : '艮') : LIFE_GUA[n];
   return {
     num  : n,
     gua,
-    group: EAST_HOUSE.has(gua) ? '东四命' : '西四命',
+    group: EAST_GROUP.has(gua) ? '东四命' : '西四命',
+    dir  : GUA_DIR[gua],
   };
 }
 
 /** 年柱干支，以命理年推 */
 function yearPillar(year){
-  const stem   = STEMS[(year - 4 + 6000) % 10];
-  const branch = BRANCHES[(year - 4 + 6000) % 12];
-  return stem + branch;
+  return STEMS[(year - 4 + 6000) % 10] + BRANCHES[(year - 4 + 6000) % 12];
 }
 
-/** 各月节气起始日（近似）。索引 0 为立春，即寅月 */
+/** 各月节气起始日（近似）。索引 0 对应寅月，即立春 */
 const TERM_DAY = [4, 6, 5, 5, 6, 6, 7, 8, 8, 8, 7, 6];
 
-/** 月柱。以节气分月，非以初一 */
-function monthPillar(date, yearStem){
+/** 月柱。以节气分月，非以初一。五虎遁：甲己之年丙作首 */
+function monthPillar(date, yearStemIdx){
   const m = date.getMonth() + 1;
   const d = date.getDate();
 
-  /* 求节气月序：寅月为 0 */
-  let idx = (m + 9) % 12;                 // 2月→0, 3月→1 …
+  let idx = (m + 9) % 12;                       // 2 月为寅月，索引 0
   if (d < TERM_DAY[idx]) idx = (idx + 11) % 12;
 
-  const branch = BRANCHES[(idx + 2) % 12];  // 寅起
-  /* 五虎遁：甲己之年丙作首 */
-  const startStem = [2, 4, 6, 8, 0][yearStem % 5];
-  const stem = STEMS[(startStem + idx) % 10];
-  return stem + branch;
+  const branch = BRANCHES[(idx + 2) % 12];      // 自寅起
+  const start  = [2, 4, 6, 8, 0][yearStemIdx % 5];
+  return STEMS[(start + idx) % 10] + branch;
 }
 
 /** 日柱。以 1900-01-01 为甲戌日起算 */
@@ -668,30 +816,31 @@ function dayPillar(date){
   const base = Date.UTC(1900, 0, 1);
   const here = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
   const days = Math.round((here - base) / 86400000);
-  const stem   = STEMS[(days + 10) % 10];
-  const branch = BRANCHES[(days + 10) % 12];
-  return {text: stem + branch, stemIdx: (days + 10) % 10};
+  return {text: STEMS[(days + 10) % 10] + BRANCHES[(days + 10) % 12],
+          stemIdx: (days + 10) % 10};
 }
 
 /** 时柱。五鼠遁：甲己还加甲 */
 function hourPillar(hour, dayStemIdx){
   const branch = HOUR_BRANCH[hour];
-  const bIdx   = BRANCHES.indexOf(branch);
-  const startStem = [0, 2, 4, 6, 8][dayStemIdx % 5];
-  const stem = STEMS[(startStem + bIdx) % 10];
-  return stem + branch;
+  const start  = [0, 2, 4, 6, 8][dayStemIdx % 5];
+  return STEMS[(start + BRANCHES.indexOf(branch)) % 10] + branch;
 }
 
-/** 四柱。无时辰则时柱留空 */
+/** 四柱。无时辰则时柱留空，不作假设 */
 function fourPillars(date, hasTime){
   const sy = solarYear(date);
   const yp = yearPillar(sy);
-  const yearStemIdx = STEMS.indexOf(yp[0]);
-  const mp = monthPillar(date, yearStemIdx);
+  const ysi = STEMS.indexOf(yp[0]);
   const dp = dayPillar(date);
-  const hp = hasTime ? hourPillar(date.getHours(), dp.stemIdx) : null;
 
-  return {solarYear: sy, year: yp, month: mp, day: dp.text, hour: hp};
+  return {
+    solarYear: sy,
+    year : yp,
+    month: monthPillar(date, ysi),
+    day  : dp.text,
+    hour : hasTime ? hourPillar(date.getHours(), dp.stemIdx) : null,
+  };
 }
 
 /* ══════════════════════════════════════
@@ -727,6 +876,7 @@ const ui = {
   mode     : 'wall',
   room     : ROOMS[0],
   selected : null,    // 尺寸模式下选中的墙 id
+  bzBasis  : 'house', // 九宫依宅卦或依命卦
 };
 
 let project = newProject();
@@ -895,7 +1045,7 @@ function readBirth(){
 }
 
 function analyseBirth(birth){
-  if (!birth) return null;
+  if (!birth || !birth.date) return null;
 
   const [y, m, day] = birth.date.split('-').map(Number);
   let hh = 0, mm = 0;
@@ -907,18 +1057,14 @@ function analyseBirth(birth){
   if (Number.isNaN(dt.getTime())) return null;
 
   const pillars = fourPillars(dt, Boolean(birth.time));
-  const gua = lifeGua(pillars.solarYear, birth.sex);
-  return {pillars, gua};
+  return {pillars, gua: lifeGua(pillars.solarYear, birth.sex)};
 }
 
 function renderBirth(){
   const birth = readBirth();
   $.start.disabled = !birth;
 
-  if (!birth){
-    $.baziOut.textContent = '请先填生日';
-    return;
-  }
+  if (!birth){ $.baziOut.textContent = '请先填生日'; return; }
 
   const res = analyseBirth(birth);
   if (!res){ $.baziOut.textContent = '日期无法辨识'; return; }
@@ -1150,14 +1296,149 @@ function renderHouse(){
 
   const res = project.birth ? analyseBirth(project.birth) : null;
   if (res){
-    const match = res.gua.group.slice(0, 2) === h.group.slice(0, 2);
+    const match = res.gua.group[0] === h.group[0];
     text += ` · 命卦<b>${res.gua.gua}</b>${match ? '相配' : '不配'}`;
   }
   $.houseType.innerHTML = text;
 }
 
 /* ══════════════════════════════════════
-   16 · 页面管理
+   16 · 八宅九宫面板
+   ══════════════════════════════════════ */
+
+function openBazhai(){
+  $.bazhai.hidden = false;
+  renderBazhai();
+}
+
+function setBzBasis(basis){
+  ui.bzBasis = basis;
+  $.bzHouse.setAttribute('aria-pressed', String(basis === 'house'));
+  $.bzLife .setAttribute('aria-pressed', String(basis === 'life'));
+  renderBazhai();
+}
+
+function renderBazhai(){
+  const h    = houseOf(project.facing);
+  const life = project.birth ? analyseBirth(project.birth) : null;
+
+  /* 没有生辰就只能看宅卦 */
+  if (ui.bzBasis === 'life' && !life) setBzBasisSilent('house');
+
+  const useLife = ui.bzBasis === 'life' && life;
+  const base    = useLife ? life.gua.gua : (h ? h.gua : null);
+  if (!base){ $.bzGrid.textContent = ''; return; }
+
+  const {byGua, byStar} = youNian(base);
+
+  /* 说明本卦从何而来 */
+  $.bzBase.innerHTML = useLife
+    ? `以命卦 <b>${life.gua.num} ${life.gua.gua}</b>（${life.gua.group}）起盘，`
+      + `伏位在 <b>${GUA_DIR[base]}</b>。此为你个人的宜忌方位。`
+    : `以坐山 <b>${h.sitMountain}</b> 之 <b>${h.gua}</b> 卦起盘（${h.group}），`
+      + `伏位在 <b>${GUA_DIR[base]}</b>。此为这套房子本身的方位吉凶。`;
+
+  /* 九宫格 */
+  $.bzGrid.textContent = '';
+  for (const gua of PALACES){
+    const cell = document.createElement('div');
+    cell.className = 'bz-cell';
+
+    if (!gua){
+      cell.classList.add('hub');
+      cell.innerHTML = '<span class="star">中宫</span>'
+                     + '<span class="gloss">不论吉凶</span>';
+      $.bzGrid.append(cell);
+      continue;
+    }
+
+    const star = byGua[gua];
+    cell.classList.add(star.good ? 'good' : 'bad');
+    if (gua === base) cell.classList.add('self');
+
+    cell.innerHTML =
+      `<span class="gua">${gua} ${GUA_DIR[gua]}</span>`
+      + `<span class="star">${star.name}</span>`
+      + `<span class="gloss">${star.gloss}</span>`;
+    $.bzGrid.append(cell);
+  }
+
+  renderVerdict(h, life, base, byGua, byStar, useLife);
+}
+
+/** 切换基准但不重绘，供 renderBazhai 内部避免递归 */
+function setBzBasisSilent(basis){
+  ui.bzBasis = basis;
+  $.bzHouse.setAttribute('aria-pressed', String(basis === 'house'));
+  $.bzLife .setAttribute('aria-pressed', String(basis === 'life'));
+}
+
+/**
+ * 适不适合这套房子。给三层判断：
+ * 一、命宅是否同组，此为大前提
+ * 二、大门朝向落在个人的哪一星，比同组更实用
+ * 三、坐山落在个人的哪一星
+ */
+function renderVerdict(h, life, base, byGua, byStar, useLife){
+  if (!h){ $.bzVerdict.textContent = ''; return; }
+
+  const fourGood = STARS.filter(s => s.good).map(s => byStar[s.name]);
+  const goodDirs = fourGood.map(g => `${GUA_DIR[g]}(${byGua[g].name})`).join('、');
+  const badDirs  = STARS.filter(s => !s.good)
+                        .map(s => `${GUA_DIR[byStar[s.name]]}(${s.name})`).join('、');
+
+  let html = '';
+
+  if (!life){
+    html = `<span class="head">尚未填生辰</span>`
+         + `此盘只论宅，未论人。回第一幕补上生日即可判断命宅相配与否。`
+         + `<ul><li>四吉方 ${goodDirs}</li><li>四凶方 ${badDirs}</li></ul>`;
+    $.bzVerdict.innerHTML = html;
+    return;
+  }
+
+  /* 以命卦起盘，才能判断个人宜忌 */
+  const lifePlate = youNian(life.gua.gua);
+  const doorStar  = lifePlate.byGua[h.facGua];
+  const sitStar   = lifePlate.byGua[h.gua];
+  const sameGroup = life.gua.group[0] === h.group[0];
+
+  const score = (sameGroup ? 1 : 0) + (doorStar.good ? 1 : 0) + (sitStar.good ? 1 : 0);
+  const verdict = score >= 3 ? ['ok', '相当合适']
+                : score === 2 ? ['ok', '大致合适']
+                : score === 1 ? ['no', '不甚合适']
+                :               ['no', '相冲较重'];
+
+  html = `<span class="head ${verdict[0]}">${verdict[1]}</span>`
+       + `你为 <b>${life.gua.num} ${life.gua.gua}</b> 命（${life.gua.group}），`
+       + `此宅为 <b>${h.name}</b>（${h.group}），`
+       + `${sameGroup ? '命宅同组' : '命宅异组'}。`
+       + `<ul>`
+       + `<li>大门朝 ${GUA_DIR[h.facGua]}，于你为 <b>${doorStar.name}</b>`
+       + `（${doorStar.good ? '吉' : '凶'}）</li>`
+       + `<li>坐山在 ${GUA_DIR[h.gua]}，于你为 <b>${sitStar.name}</b>`
+       + `（${sitStar.good ? '吉' : '凶'}）</li>`;
+
+  if (useLife){
+    html += `<li>你的四吉方 ${goodDirs}</li>`
+          + `<li>你的四凶方 ${badDirs}</li>`;
+  } else {
+    const lg = STARS.filter(s => s.good)
+                    .map(s => `${GUA_DIR[lifePlate.byStar[s.name]]}(${s.name})`).join('、');
+    html += `<li>你的四吉方 ${lg}</li>`;
+  }
+
+  html += `</ul>`;
+  if (!sameGroup)
+    html += `命宅异组不必然要搬。将卧床与书桌移到你的四吉方，`
+          + `厨厕储物留在四凶方，多能调和。`;
+
+  $.bzVerdict.innerHTML = html;
+  void base;
+}
+
+/* ══════════════════════════════════════
+   17 · 页面管理
    ══════════════════════════════════════ */
 
 function renderTabs(){
@@ -1215,7 +1496,7 @@ function removePage(i){
 }
 
 /* ══════════════════════════════════════
-   17 · 画布基础
+   18 · 画布基础
    ══════════════════════════════════════ */
 
 const ctx  = $.canvas.getContext('2d');
@@ -1248,7 +1529,7 @@ function pointerWorld(ev){
 }
 
 /* ══════════════════════════════════════
-   18 · 吸附
+   19 · 吸附
    ══════════════════════════════════════ */
 
 const snapToGrid = p => ({
@@ -1287,12 +1568,11 @@ function resolvePoint(p, from){
   if (onEnd) return onEnd;
 
   const straight = snapToGrid(from ? snapOrtho(from, p) : p);
-  const onDoor = snapDoorLine(straight);
-  return onDoor || straight;
+  return snapDoorLine(straight) || straight;
 }
 
 /* ══════════════════════════════════════
-   19 · 几何：比例尺、闭合环、面积
+   20 · 几何：比例尺、闭合环、面积
    ══════════════════════════════════════ */
 
 const pixelLen = w => Math.hypot(w.b.x - w.a.x, w.b.y - w.a.y);
@@ -1398,7 +1678,7 @@ const fmtLen    = m  => `${toDisplay(m).toFixed(2)} ${UNITS[project.unit].label}
 const fmtArea   = m2 => `${(m2 / (UNITS[project.unit].per ** 2)).toFixed(1)} ${UNITS[project.unit].area}`;
 
 /* ══════════════════════════════════════
-   20 · 绘制
+   21 · 绘制格局图
    ══════════════════════════════════════ */
 
 let preview = null;   // 拖动中的墙
@@ -1439,10 +1719,10 @@ function drawDoorLine(){
   const h = houseOf(project.facing);
   if (!h) return;
 
-  const box = $.canvas.getBoundingClientRect();
-  const y = toScreen({x: 0, y: PLAN.DOOR_Y}).y;
-  const left  = toScreen({x: 40,  y: 0}).x;
+  const y     = toScreen({x: 0, y: PLAN.DOOR_Y}).y;
+  const left  = toScreen({x: 40, y: 0}).x;
   const right = toScreen({x: PLAN.WORLD - 40, y: 0}).x;
+  const mid   = (left + right) / 2;
 
   ctx.save();
 
@@ -1456,7 +1736,6 @@ function drawDoorLine(){
   ctx.setLineDash([]);
 
   /* 朝外箭头 */
-  const mid = (left + right) / 2;
   ctx.fillStyle = 'rgba(163,43,30,.9)';
   ctx.beginPath();
   ctx.moveTo(mid, y - 26);
@@ -1481,7 +1760,6 @@ function drawDoorLine(){
   }
 
   ctx.restore();
-  void box;
 }
 
 /** 外墙闭合时淡淡填一层，让人一眼看出已经围起来了 */
@@ -1590,7 +1868,7 @@ function drawLabels(){
 }
 
 /* ══════════════════════════════════════
-   21 · 交互
+   22 · 交互
    ══════════════════════════════════════ */
 
 let dragFrom = null;
@@ -1681,7 +1959,7 @@ function clearPage(){
 }
 
 /* ══════════════════════════════════════
-   22 · 尺寸标注
+   23 · 尺寸标注
    ══════════════════════════════════════ */
 
 function openMeasure(w){
@@ -1718,7 +1996,7 @@ function clearMeasure(){
 }
 
 /* ══════════════════════════════════════
-   23 · 界面刷新
+   24 · 界面刷新
    ══════════════════════════════════════ */
 
 function setMode(mode){
@@ -1795,7 +2073,7 @@ function buildChips(){
 }
 
 /* ══════════════════════════════════════
-   24 · 启动
+   25 · 启动
    ══════════════════════════════════════ */
 
 async function requestPermissionIfNeeded(){
@@ -1893,6 +2171,11 @@ $.measureUnit.addEventListener('change', () => {
   project.unit = $.measureUnit.value;
   afterEdit();
 });
+
+$.openBazhai.addEventListener('click', openBazhai);
+$.bzHouse.addEventListener('click', () => setBzBasis('house'));
+$.bzLife .addEventListener('click', () => setBzBasis('life'));
+$.bzClose.addEventListener('click', () => { $.bazhai.hidden = true; });
 
 for (const btn of document.querySelectorAll('.mode'))
   btn.addEventListener('click', () => setMode(btn.dataset.mode));
