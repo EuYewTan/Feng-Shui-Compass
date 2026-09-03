@@ -17,6 +17,7 @@
   --gold:#B4903C;
   --brass:#E0BE6A;
   --jade:#7FA88A;
+  --rust:#C4564A;
 }
 
 /* ══════════════════════════════════════
@@ -35,16 +36,34 @@ body{
 .act{
   height:100%;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:clamp(9px,2.2vh,18px);
-  padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 14px);
+  gap:clamp(8px,2vh,16px);
+  padding:calc(env(safe-area-inset-top) + 10px) 14px calc(env(safe-area-inset-bottom) + 12px);
 }
+
+/* 每幕顶端的返回条 */
+.backbar{
+  width:100%;max-width:680px;flex:0 0 auto;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  min-height:34px;
+}
+.backbar .step{
+  font-size:11.5px;color:rgba(239,226,196,.35);
+  letter-spacing:.22em;text-indent:.22em;
+}
+.link{
+  font:inherit;font-size:13px;letter-spacing:.06em;text-indent:.06em;
+  background:none;border:0;box-shadow:none;padding:6px 2px;
+  color:var(--ivory-dim);cursor:pointer;
+}
+.link:hover{color:var(--brass)}
+.link:active{transform:none;opacity:.7}
 
 /* ══════════════════════════════════════
    3 · 盘面
    ══════════════════════════════════════ */
 .plate{
   position:relative;
-  width:min(90vw,50vh);height:min(90vw,50vh);
+  width:min(88vw,46vh);height:min(88vw,46vh);
   flex:0 0 auto;
 }
 .plate::after{                       /* 盘边木框 */
@@ -83,12 +102,12 @@ body{
    4 · 倒数与读数
    ══════════════════════════════════════ */
 .timer{
-  display:flex;align-items:baseline;gap:.6em;min-height:1.4em;
-  font-size:clamp(15px,4.4vw,19px);color:var(--ivory-dim);
+  display:flex;align-items:baseline;gap:.6em;min-height:1.3em;
+  font-size:clamp(14px,4.2vw,18px);color:var(--ivory-dim);
   letter-spacing:.2em;text-indent:.2em;
 }
 .timer b{
-  font-size:clamp(28px,8vw,40px);font-weight:500;letter-spacing:0;
+  font-size:clamp(26px,7.4vw,36px);font-weight:500;letter-spacing:0;
   font-variant-numeric:tabular-nums;color:var(--brass);
 }
 .plate.tilted ~ .timer,
@@ -96,17 +115,17 @@ body{
 
 .readout{text-align:center;line-height:1.15}
 .readout .deg{
-  font-size:clamp(28px,8vw,42px);font-weight:500;
+  font-size:clamp(26px,7.4vw,38px);font-weight:500;
   font-variant-numeric:tabular-nums;color:var(--brass);
 }
 .readout .deg small{font-size:.42em;color:var(--ivory-dim);margin-left:.12em}
 .readout .mountain{
-  font-size:clamp(15px,4.4vw,19px);color:var(--ivory);
-  margin-top:5px;letter-spacing:.3em;text-indent:.3em;
+  font-size:clamp(14px,4.2vw,18px);color:var(--ivory);
+  margin-top:5px;letter-spacing:.28em;text-indent:.28em;
 }
 .readout .sitting{
-  font-size:clamp(11.5px,3.2vw,13px);color:rgba(239,226,196,.52);
-  margin-top:7px;letter-spacing:.16em;text-indent:.16em;
+  font-size:clamp(11px,3.1vw,12.5px);color:rgba(239,226,196,.52);
+  margin-top:6px;letter-spacing:.16em;text-indent:.16em;
 }
 
 /* ══════════════════════════════════════
@@ -133,7 +152,7 @@ button:disabled{opacity:.35;pointer-events:none}
   border:1px solid rgba(224,190,106,.4);
 }
 .actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-.actions button{padding:11px 24px;font-size:14px}
+.actions button{padding:11px 22px;font-size:14px}
 
 /* ══════════════════════════════════════
    6 · 遮罩与对话框
@@ -142,13 +161,13 @@ button:disabled{opacity:.35;pointer-events:none}
   position:fixed;inset:0;z-index:9;
   background:rgba(23,17,14,.95);backdrop-filter:blur(3px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:18px;padding:26px 20px;text-align:center;overflow-y:auto;
+  gap:16px;padding:24px 20px;text-align:center;overflow-y:auto;
 }
 .gate h1{
-  font-size:clamp(24px,7.5vw,34px);font-weight:500;
+  font-size:clamp(23px,7vw,32px);font-weight:500;
   letter-spacing:.5em;text-indent:.5em;color:var(--ivory);
 }
-.gate p{font-size:13px;line-height:1.8;color:rgba(239,226,196,.58);max-width:26em}
+.gate p.lead{font-size:12.5px;line-height:1.8;color:rgba(239,226,196,.55);max-width:25em}
 
 .modal .ask{
   font-size:clamp(19px,5.4vw,24px);line-height:1.6;color:var(--ivory);max-width:14em;
@@ -160,26 +179,51 @@ button:disabled{opacity:.35;pointer-events:none}
    7 · 生辰输入
    ══════════════════════════════════════ */
 .birth{
-  width:100%;max-width:21em;
-  display:flex;flex-direction:column;gap:11px;
+  width:100%;max-width:22em;
+  display:flex;flex-direction:column;gap:12px;
   padding:16px;border:1px solid rgba(224,190,106,.25);border-radius:3px;
   background:rgba(0,0,0,.22);
 }
-.birth .row{display:flex;gap:8px;align-items:center}
-.birth .row > span{
-  flex:0 0 3.4em;text-align:right;
-  font-size:13px;color:var(--ivory-dim);letter-spacing:.06em;
+.birth .field{display:flex;flex-direction:column;gap:6px;text-align:left}
+.birth .field > label{
+  font-size:12px;color:var(--ivory-dim);letter-spacing:.12em;
 }
-.birth .opt{color:rgba(239,226,196,.38);font-size:11.5px;line-height:1.7}
+.birth .field .opt{color:rgba(239,226,196,.32)}
 
-input[type="text"],input[type="number"],input[type="date"],input[type="time"]{
+/* 年月日三格 */
+.ymd{display:flex;gap:7px;align-items:center}
+.ymd input{text-align:center;padding:11px 4px}
+.ymd .y{flex:1.6 1 0}
+.ymd .m,.ymd .d{flex:1 1 0}
+.ymd span{color:rgba(239,226,196,.28);font-size:13px}
+
+.hm{display:flex;gap:7px;align-items:center}
+.hm input{text-align:center;padding:11px 4px;flex:1 1 0}
+.hm span{color:rgba(239,226,196,.28);font-size:13px}
+
+/* 性别二择 */
+.sex{display:flex;gap:8px}
+.sex button{
+  flex:1 1 0;padding:11px 0;font-size:14px;
+  letter-spacing:.24em;text-indent:.24em;
+  background:none;color:var(--ivory-dim);box-shadow:none;
+  border:1px solid rgba(224,190,106,.32);
+}
+.sex button[aria-pressed="true"]{
+  background:rgba(224,190,106,.18);color:var(--ivory);border-color:var(--brass);
+}
+
+input[type="text"],input[type="number"]{
   font:inherit;font-size:15px;color:var(--ivory);
   background:rgba(0,0,0,.32);border:1px solid rgba(224,190,106,.35);
-  border-radius:2px;padding:10px 11px;flex:1 1 auto;min-width:0;
+  border-radius:2px;padding:10px 11px;min-width:0;width:100%;
+  font-variant-numeric:tabular-nums;
 }
-input[type="date"],input[type="time"]{color-scheme:dark}
 input:focus{outline:none;border-color:var(--brass)}
-input::placeholder{color:rgba(239,226,196,.3)}
+input::placeholder{color:rgba(239,226,196,.28)}
+input[type="number"]{-moz-appearance:textfield}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 
 select{
   font:inherit;font-size:14px;color:var(--ivory);
@@ -189,17 +233,18 @@ select{
 
 .bazi{
   font-size:12.5px;line-height:1.9;color:rgba(239,226,196,.62);
-  letter-spacing:.06em;min-height:1.9em;
+  letter-spacing:.06em;min-height:3.6em;
 }
 .bazi b{color:var(--brass);font-weight:500}
 .bazi .pillars{
-  font-size:15px;letter-spacing:.45em;text-indent:.45em;color:var(--ivory);
+  font-size:15px;letter-spacing:.4em;text-indent:.4em;color:var(--ivory);
 }
+.bazi .bad{color:var(--rust)}
 
 /* ══════════════════════════════════════
    8 · 第三幕 · 版面
    ══════════════════════════════════════ */
-#act3{justify-content:flex-start;gap:7px}
+#act3{justify-content:flex-start;gap:6px}
 
 .tabs{
   width:100%;max-width:680px;display:flex;gap:6px;
@@ -217,16 +262,25 @@ select{
 }
 .tabs .add{color:var(--brass);border-style:dashed}
 
+/* 抬头：宅型、适配结论、面积 */
 .house{
   width:100%;max-width:680px;
-  display:flex;flex-wrap:wrap;gap:4px 14px;
+  display:flex;flex-wrap:wrap;gap:4px 12px;
   align-items:baseline;justify-content:space-between;
   font-size:12.5px;color:rgba(239,226,196,.6);letter-spacing:.06em;
 }
 .house b{color:var(--brass);font-weight:500;font-variant-numeric:tabular-nums}
-.house .type{
-  color:var(--ivory);border-bottom:1px solid rgba(224,190,106,.4);padding-bottom:1px;
+.house .type{color:var(--ivory)}
+
+.fit{
+  font:inherit;font-size:12.5px;letter-spacing:.06em;
+  background:none;box-shadow:none;padding:4px 10px;
+  border:1px solid;border-radius:2px;cursor:pointer;
 }
+.fit.ok{color:var(--jade);border-color:rgba(127,168,138,.5);background:rgba(127,168,138,.1)}
+.fit.mid{color:var(--brass);border-color:rgba(224,190,106,.45);background:rgba(224,190,106,.08)}
+.fit.no{color:var(--rust);border-color:rgba(196,86,74,.5);background:rgba(196,86,74,.1)}
+.fit.none{color:rgba(239,226,196,.45);border-color:rgba(224,190,106,.25)}
 
 .canvas-wrap{
   position:relative;width:100%;max-width:680px;flex:1 1 auto;min-height:0;
@@ -236,7 +290,7 @@ select{
 #plan{display:block;width:100%;height:100%;touch-action:none}
 
 /* 北针：随坐向旋转，指出真北在图上的方位 */
-.rose{position:absolute;top:10px;right:10px;width:48px;height:48px;pointer-events:none}
+.rose{position:absolute;top:10px;right:10px;width:46px;height:46px;pointer-events:none}
 .rose svg{width:100%;height:100%;display:block}
 
 .measure{
@@ -258,10 +312,6 @@ select{
   background:linear-gradient(180deg,var(--brass),var(--gold));
   color:var(--lacquer);border-color:transparent;
 }
-.plan-tools .accent{
-  background:none;color:var(--brass);box-shadow:none;
-  border:1px solid var(--brass);
-}
 .chips button{
   padding:6px 11px;font-size:12.5px;
   background:none;color:var(--ivory-dim);box-shadow:none;
@@ -275,7 +325,7 @@ select{
    9 · 八宅九宫面板
    ══════════════════════════════════════ */
 .bz-title{
-  font-size:clamp(17px,5vw,21px);color:var(--ivory);
+  font-size:clamp(16px,4.8vw,20px);color:var(--ivory);
   letter-spacing:.32em;text-indent:.32em;
 }
 .bz-switch{display:flex;gap:8px}
@@ -287,6 +337,7 @@ select{
 .bz-switch button[aria-pressed="true"]{
   background:rgba(224,190,106,.18);color:var(--ivory);border-color:var(--brass);
 }
+.bz-switch button:disabled{opacity:.3}
 
 .bz-base{
   font-size:12.5px;line-height:1.8;color:rgba(239,226,196,.6);max-width:26em;
@@ -295,7 +346,7 @@ select{
 
 .bz-grid{
   display:grid;grid-template-columns:repeat(3,1fr);gap:5px;
-  width:100%;max-width:23em;
+  width:100%;max-width:22em;
 }
 .bz-cell{
   aspect-ratio:1;border-radius:2px;padding:5px 3px;
@@ -304,28 +355,24 @@ select{
   border:1px solid rgba(224,190,106,.18);
   background:rgba(0,0,0,.24);
 }
-.bz-cell .gua{font-size:11px;color:rgba(239,226,196,.5);letter-spacing:.04em}
-.bz-cell .star{font-size:clamp(14px,4.2vw,17px);letter-spacing:.04em}
-.bz-cell .gloss{
-  font-size:9.5px;line-height:1.35;color:rgba(239,226,196,.42);
-  padding:0 1px;
-}
+.bz-cell .gua{font-size:10.5px;color:rgba(239,226,196,.5);letter-spacing:.04em}
+.bz-cell .star{font-size:clamp(13px,4vw,16px);letter-spacing:.04em}
+.bz-cell .gloss{font-size:9px;line-height:1.35;color:rgba(239,226,196,.42);padding:0 1px}
 .bz-cell.good{border-color:rgba(127,168,138,.45);background:rgba(127,168,138,.08)}
 .bz-cell.good .star{color:var(--jade)}
-.bz-cell.bad{border-color:rgba(163,43,30,.45);background:rgba(163,43,30,.08)}
-.bz-cell.bad .star{color:#C4564A}
+.bz-cell.bad{border-color:rgba(196,86,74,.45);background:rgba(196,86,74,.08)}
+.bz-cell.bad .star{color:var(--rust)}
 .bz-cell.self{border-color:var(--brass);border-width:1.5px}
 .bz-cell.hub{
-  border-style:dashed;border-color:rgba(224,190,106,.3);
-  background:rgba(0,0,0,.1);
+  border-style:dashed;border-color:rgba(224,190,106,.3);background:rgba(0,0,0,.1);
 }
-.bz-cell.hub .star{color:rgba(239,226,196,.45);font-size:12px}
+.bz-cell.hub .star{color:rgba(239,226,196,.45);font-size:11.5px}
 
 .bz-verdict{
   width:100%;max-width:25em;
   padding:13px 15px;border-radius:2px;
   border:1px solid rgba(224,190,106,.3);background:rgba(0,0,0,.26);
-  font-size:13px;line-height:1.85;color:rgba(239,226,196,.72);
+  font-size:12.5px;line-height:1.85;color:rgba(239,226,196,.72);
   text-align:left;
 }
 .bz-verdict .head{
@@ -333,23 +380,25 @@ select{
   margin-bottom:5px;display:block;
 }
 .bz-verdict .head.ok{color:var(--jade)}
-.bz-verdict .head.no{color:#C4564A}
+.bz-verdict .head.no{color:var(--rust)}
 .bz-verdict b{color:var(--brass);font-weight:500}
 .bz-verdict ul{list-style:none;margin-top:4px}
 .bz-verdict li{padding-left:1em;position:relative}
-.bz-verdict li::before{
-  content:"·";position:absolute;left:.2em;color:rgba(224,190,106,.6);
-}
+.bz-verdict li::before{content:"·";position:absolute;left:.2em;color:rgba(224,190,106,.6)}
 
-.bz-foot{
-  font-size:11px;line-height:1.7;color:rgba(239,226,196,.34);max-width:25em;
-}
+.bz-foot{font-size:10.5px;line-height:1.7;color:rgba(239,226,196,.32);max-width:25em}
 </style>
 </head>
 <body>
 
 <!-- ═══ 第二幕 · 定盘 ═══════════════════ -->
 <main class="act" id="act2">
+  <div class="backbar">
+    <button class="link" id="toGate">‹ 回生辰</button>
+    <span class="step">第二幕 · 定盘</span>
+    <span></span>
+  </div>
+
   <div class="plate" id="plate">
     <svg id="dial" viewBox="0 0 400 400" aria-label="罗盘盘面"></svg>
     <svg class="hud" viewBox="0 0 400 400" aria-hidden="true">
@@ -375,15 +424,23 @@ select{
     <button id="lockNow" hidden>立即定盘</button>
     <button id="again" class="ghost" hidden>重新定盘</button>
     <button id="confirmStance" hidden>确认站位</button>
+    <button id="backToPlan" class="ghost" hidden>回格局图</button>
   </div>
 </main>
 
 <!-- ═══ 第三幕 · 格局图 ═════════════════ -->
 <section class="act" id="act3" hidden>
+  <div class="backbar">
+    <button class="link" id="remeasure">‹ 重测罗盘</button>
+    <span class="step">第三幕 · 格局</span>
+    <button class="link" id="editBirth">改生辰 ›</button>
+  </div>
+
   <div class="tabs" id="tabs"></div>
 
   <div class="house">
     <span id="houseType">—</span>
+    <button class="fit none" id="fitBadge">—</button>
     <span id="houseArea">尚未标注尺寸</span>
   </div>
 
@@ -420,7 +477,6 @@ select{
     <button class="mode ghost" data-mode="measure" aria-pressed="false">尺寸</button>
     <button class="mode ghost" data-mode="door"    aria-pressed="false">大门</button>
     <button class="mode ghost" data-mode="label"   aria-pressed="false">房间</button>
-    <button class="accent" id="openBazhai">八宅</button>
     <button class="ghost" id="undo">撤销</button>
     <button class="ghost" id="clear">清空本页</button>
   </div>
@@ -465,35 +521,51 @@ select{
     <button class="ghost" id="pageFloor">整层</button>
     <button class="ghost" id="pageRoom">单间</button>
   </div>
-  <button class="ghost" id="pageCancel">取消</button>
+  <button class="link" id="pageCancel">取消</button>
 </div>
 
 <!-- ═══ 第一幕 · 开场与生辰 ═════════════ -->
 <div class="gate" id="gate">
   <h1>罗盘</h1>
-  <p>手机端平齐胸，屏幕朝上，避开电脑、音箱、钢筋与金属桌面。首次使用请握机划几个「8」字校准磁力计。</p>
+  <p class="lead">手机端平齐胸，屏幕朝上，避开电脑、音箱、钢筋与金属桌面。首次使用请握机划几个「8」字校准磁力计。</p>
 
   <div class="birth">
-    <div class="row">
-      <span>生日</span>
-      <input type="date" id="birthDate" required>
+    <div class="field">
+      <label>出生年月日</label>
+      <div class="ymd">
+        <input class="y" type="number" id="birthY" inputmode="numeric"
+               min="1900" max="2100" placeholder="年">
+        <span>/</span>
+        <input class="m" type="number" id="birthM" inputmode="numeric"
+               min="1" max="12" placeholder="月">
+        <span>/</span>
+        <input class="d" type="number" id="birthD" inputmode="numeric"
+               min="1" max="31" placeholder="日">
+      </div>
     </div>
-    <div class="row">
-      <span>时辰</span>
-      <input type="time" id="birthTime">
+
+    <div class="field">
+      <label>出生时辰 <span class="opt">可不填</span></label>
+      <div class="hm">
+        <input type="number" id="birthH" inputmode="numeric" min="0" max="23" placeholder="时">
+        <span>:</span>
+        <input type="number" id="birthMin" inputmode="numeric" min="0" max="59" placeholder="分">
+      </div>
     </div>
-    <div class="row">
-      <span>性别</span>
-      <select id="birthSex" style="flex:1 1 auto">
-        <option value="male">男</option>
-        <option value="female">女</option>
-      </select>
+
+    <div class="field">
+      <label>性别</label>
+      <div class="sex">
+        <button id="sexMale"   aria-pressed="true">男</button>
+        <button id="sexFemale" aria-pressed="false">女</button>
+      </div>
     </div>
-    <p class="opt">时辰可不填。命卦只看年份，不填也能排八宅；填了才能定时柱，凑齐四柱。</p>
+
     <div class="bazi" id="baziOut"></div>
   </div>
 
   <button id="start" disabled>开盘</button>
+  <button class="link" id="gateBack" hidden>‹ 返回，不改动</button>
 </div>
 
 <script>
@@ -582,11 +654,7 @@ const STARS = [
 ];
 
 /* 九宫排列，正上为北 */
-const PALACES = [
-  '乾','坎','艮',
-  '兑', null, '震',
-  '坤','离','巽',
-];
+const PALACES = ['乾','坎','艮', '兑', null, '震', '坤','离','巽'];
 
 /* 干支 */
 const STEMS    = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
@@ -618,12 +686,20 @@ const $ = {
   lockNow  : document.getElementById('lockNow'),
   again    : document.getElementById('again'),
   confirm  : document.getElementById('confirmStance'),
+  backToPlan: document.getElementById('backToPlan'),
+  toGate   : document.getElementById('toGate'),
+
   gate     : document.getElementById('gate'),
   start    : document.getElementById('start'),
+  gateBack : document.getElementById('gateBack'),
 
-  birthDate: document.getElementById('birthDate'),
-  birthTime: document.getElementById('birthTime'),
-  birthSex : document.getElementById('birthSex'),
+  birthY   : document.getElementById('birthY'),
+  birthM   : document.getElementById('birthM'),
+  birthD   : document.getElementById('birthD'),
+  birthH   : document.getElementById('birthH'),
+  birthMin : document.getElementById('birthMin'),
+  sexMale  : document.getElementById('sexMale'),
+  sexFemale: document.getElementById('sexFemale'),
   baziOut  : document.getElementById('baziOut'),
 
   stance   : document.getElementById('stanceModal'),
@@ -636,15 +712,18 @@ const $ = {
   pageRoom  : document.getElementById('pageRoom'),
   pageCancel: document.getElementById('pageCancel'),
 
-  tabs     : document.getElementById('tabs'),
-  canvas   : document.getElementById('plan'),
-  houseType: document.getElementById('houseType'),
-  houseArea: document.getElementById('houseArea'),
-  needle   : document.getElementById('roseNeedle'),
-  chips    : document.getElementById('chips'),
-  undo     : document.getElementById('undo'),
-  clear    : document.getElementById('clear'),
-  planNote : document.getElementById('planNote'),
+  tabs      : document.getElementById('tabs'),
+  canvas    : document.getElementById('plan'),
+  houseType : document.getElementById('houseType'),
+  houseArea : document.getElementById('houseArea'),
+  fitBadge  : document.getElementById('fitBadge'),
+  needle    : document.getElementById('roseNeedle'),
+  chips     : document.getElementById('chips'),
+  undo      : document.getElementById('undo'),
+  clear     : document.getElementById('clear'),
+  planNote  : document.getElementById('planNote'),
+  remeasure : document.getElementById('remeasure'),
+  editBirth : document.getElementById('editBirth'),
 
   measure     : document.getElementById('measure'),
   measureWho  : document.getElementById('measureWho'),
@@ -653,14 +732,13 @@ const $ = {
   measureOk   : document.getElementById('measureOk'),
   measureClear: document.getElementById('measureClear'),
 
-  openBazhai : document.getElementById('openBazhai'),
-  bazhai     : document.getElementById('bazhaiModal'),
-  bzHouse    : document.getElementById('bzHouse'),
-  bzLife     : document.getElementById('bzLife'),
-  bzBase     : document.getElementById('bzBase'),
-  bzGrid     : document.getElementById('bzGrid'),
-  bzVerdict  : document.getElementById('bzVerdict'),
-  bzClose    : document.getElementById('bzClose'),
+  bazhai   : document.getElementById('bazhaiModal'),
+  bzHouse  : document.getElementById('bzHouse'),
+  bzLife   : document.getElementById('bzLife'),
+  bzBase   : document.getElementById('bzBase'),
+  bzGrid   : document.getElementById('bzGrid'),
+  bzVerdict: document.getElementById('bzVerdict'),
+  bzClose  : document.getElementById('bzClose'),
 };
 
 /* ══════════════════════════════════════
@@ -742,6 +820,28 @@ function houseOf(facing){
     facMountain : mountainOf(facing),
     facGua      : guaOf(facing),
   };
+}
+
+/**
+ * 命宅相配程度。三层判断各计一分：
+ * 命宅同组、大门落个人吉星、坐山落个人吉星。
+ */
+function fitness(house, life){
+  if (!house || !life) return null;
+
+  const plate     = youNian(life.gua.gua);
+  const doorStar  = plate.byGua[house.facGua];
+  const sitStar   = plate.byGua[house.gua];
+  const sameGroup = life.gua.group[0] === house.group[0];
+
+  const score = (sameGroup ? 1 : 0) + (doorStar.good ? 1 : 0) + (sitStar.good ? 1 : 0);
+  const tone  = score >= 3 ? 'ok' : score === 2 ? 'mid' : 'no';
+  const label = score >= 3 ? '宜居此宅'
+              : score === 2 ? '尚可'
+              : score === 1 ? '欠合'
+              :               '相冲';
+
+  return {plate, doorStar, sitStar, sameGroup, score, tone, label};
 }
 
 /* ══════════════════════════════════════
@@ -829,10 +929,10 @@ function hourPillar(hour, dayStemIdx){
 
 /** 四柱。无时辰则时柱留空，不作假设 */
 function fourPillars(date, hasTime){
-  const sy = solarYear(date);
-  const yp = yearPillar(sy);
+  const sy  = solarYear(date);
+  const yp  = yearPillar(sy);
   const ysi = STEMS.indexOf(yp[0]);
-  const dp = dayPillar(date);
+  const dp  = dayPillar(date);
 
   return {
     solarYear: sy,
@@ -850,7 +950,7 @@ function fourPillars(date, hasTime){
    project
      ├ v        结构版本，日后升级靠它判断要不要迁移
      ├ facing   第二幕定盘所得的向度
-     ├ birth    {date, time, sex} 原样保存，命卦与四柱皆由此推
+     ├ birth    {y, m, d, hh, mm, sex} 原样保存，命卦与四柱皆由此推
      ├ unit     显示单位；长度内部一律存米
      ├ active   当前页索引
      └ pages[]  每页一层楼或一个房间
@@ -870,6 +970,7 @@ const state = {
   absolute  : false,  // 是否有绝对方位可用
   startedAt : 0,      // 本轮采样起点
   samples   : [],     // {t, heading, tilt}
+  running   : false,  // 传感器是否已启动过
 };
 
 const ui = {
@@ -877,6 +978,8 @@ const ui = {
   room     : ROOMS[0],
   selected : null,    // 尺寸模式下选中的墙 id
   bzBasis  : 'house', // 九宫依宅卦或依命卦
+  sex      : 'male',
+  hasPlan  : false,   // 是否已进过第三幕，决定返回按钮是否出现
 };
 
 let project = newProject();
@@ -889,7 +992,7 @@ function newPage(name, kind){
 
 function newProject(){
   return {
-    v: 2, facing: null, birth: null, unit: 'm', active: 0,
+    v: 3, facing: null, birth: null, unit: 'm', active: 0,
     pages: [newPage('一楼', 'floor')],
   };
 }
@@ -905,7 +1008,7 @@ const page = () => project.pages[project.active];
    ══════════════════════════════════════ */
 
 const store = (() => {
-  const KEY = 'luopan.project.v2';
+  const KEY = 'luopan.project.v3';
   let usable = true;
   try {
     localStorage.setItem(KEY + '.probe', '1');
@@ -929,7 +1032,7 @@ const store = (() => {
         const raw = localStorage.getItem(KEY);
         if (!raw) return null;
         const data = JSON.parse(raw);
-        return data && data.v === 2 && Array.isArray(data.pages) ? data : null;
+        return data && data.v === 3 && Array.isArray(data.pages) ? data : null;
       } catch { return null; }
     },
   };
@@ -1038,36 +1141,75 @@ function drawDial(){
    9 · 第一幕 · 生辰
    ══════════════════════════════════════ */
 
+const numOrNull = el => {
+  const v = parseInt(el.value, 10);
+  return Number.isFinite(v) ? v : null;
+};
+
+/** 读表单。年月日缺一即视为未填 */
 function readBirth(){
-  const d = $.birthDate.value;
-  if (!d) return null;
-  return {date: d, time: $.birthTime.value || null, sex: $.birthSex.value};
+  const y = numOrNull($.birthY);
+  const m = numOrNull($.birthM);
+  const d = numOrNull($.birthD);
+  if (y === null || m === null || d === null) return null;
+  if (y < 1900 || y > 2100 || m < 1 || m > 12 || d < 1 || d > 31) return null;
+
+  /* 挡掉 2 月 30 日一类的无效日期 */
+  const probe = new Date(y, m - 1, d);
+  if (probe.getMonth() !== m - 1 || probe.getDate() !== d) return null;
+
+  const hh = numOrNull($.birthH);
+  const mm = numOrNull($.birthMin);
+  const hasHour = hh !== null && hh >= 0 && hh <= 23;
+
+  return {
+    y, m, d,
+    hh: hasHour ? hh : null,
+    mm: hasHour && mm !== null && mm >= 0 && mm <= 59 ? mm : 0,
+    sex: ui.sex,
+  };
+}
+
+function writeBirth(b){
+  if (!b) return;
+  $.birthY.value   = b.y ?? '';
+  $.birthM.value   = b.m ?? '';
+  $.birthD.value   = b.d ?? '';
+  $.birthH.value   = b.hh ?? '';
+  $.birthMin.value = b.hh === null || b.hh === undefined ? '' : (b.mm ?? 0);
+  setSex(b.sex || 'male');
 }
 
 function analyseBirth(birth){
-  if (!birth || !birth.date) return null;
-
-  const [y, m, day] = birth.date.split('-').map(Number);
-  let hh = 0, mm = 0;
-  if (birth.time){
-    const parts = birth.time.split(':').map(Number);
-    hh = parts[0] || 0; mm = parts[1] || 0;
-  }
-  const dt = new Date(y, m - 1, day, hh, mm);
+  if (!birth) return null;
+  const dt = new Date(birth.y, birth.m - 1, birth.d, birth.hh ?? 0, birth.mm ?? 0);
   if (Number.isNaN(dt.getTime())) return null;
 
-  const pillars = fourPillars(dt, Boolean(birth.time));
+  const pillars = fourPillars(dt, birth.hh !== null && birth.hh !== undefined);
   return {pillars, gua: lifeGua(pillars.solarYear, birth.sex)};
+}
+
+function setSex(sex){
+  ui.sex = sex;
+  $.sexMale  .setAttribute('aria-pressed', String(sex === 'male'));
+  $.sexFemale.setAttribute('aria-pressed', String(sex === 'female'));
+  renderBirth();
 }
 
 function renderBirth(){
   const birth = readBirth();
   $.start.disabled = !birth;
 
-  if (!birth){ $.baziOut.textContent = '请先填生日'; return; }
+  if (!birth){
+    const partial = $.birthY.value || $.birthM.value || $.birthD.value;
+    $.baziOut.innerHTML = partial
+      ? '<span class="bad">年月日请填完整且有效</span>'
+      : '填上年月日即可推算命卦';
+    return;
+  }
 
   const res = analyseBirth(birth);
-  if (!res){ $.baziOut.textContent = '日期无法辨识'; return; }
+  if (!res){ $.baziOut.innerHTML = '<span class="bad">日期无法辨识</span>'; return; }
 
   const {pillars: p, gua} = res;
   const shown = [p.year, p.month, p.day, p.hour || '——'].join(' ');
@@ -1076,6 +1218,15 @@ function renderBirth(){
   $.baziOut.innerHTML =
     `<div class="pillars">${shown}</div>`
     + `命卦 <b>${gua.num} ${gua.gua}</b> · <b>${gua.group}</b>${tail}`;
+}
+
+/** 填满一格自动跳下一格，省去手动点选 */
+function autoAdvance(from, to, max){
+  from.addEventListener('input', () => {
+    const v = from.value;
+    if (v.length >= String(max).length || parseInt(v, 10) > Math.floor(max / 10))
+      to.focus();
+  });
 }
 
 /* ══════════════════════════════════════
@@ -1214,7 +1365,7 @@ function restart(){
 
 function frame(){
   requestAnimationFrame(frame);
-  if (state.locked) return;
+  if (state.locked || $.act2.hidden) return;
 
   /* 沿最短路径逼近目标角，避免跨越 0° 时整圈回弹 */
   state.shown += delta(state.raw, state.shown) * CFG.SMOOTH;
@@ -1260,50 +1411,117 @@ function enableDialDrag(){
 }
 
 /* ══════════════════════════════════════
-   15 · 幕次切换
+   15 · 幕次导航
+   ══════════════════════════════════════
+
+   三幕皆可互往，且返回一律不破坏已有资料：
+   回生辰不清空格局，回罗盘重测只换向度，画好的墙一律保留。
    ══════════════════════════════════════ */
 
-function askStance(){ $.stance.hidden = false; }
+function showAct(which){
+  $.gate.hidden = which !== 1;
+  $.act2.hidden = which !== 2;
+  $.act3.hidden = which !== 3;
 
+  /* 第一幕的返回键仅在已有格局时出现 */
+  $.gateBack.hidden = !ui.hasPlan;
+  /* 第二幕的回格局图同理 */
+  $.backToPlan.hidden = !ui.hasPlan;
+
+  if (which === 3){
+    renderHouse();
+    resizeCanvas();
+    refreshPlan();
+  }
+}
+
+/** 第一幕 → 第二幕。首次需申请权限并起循环 */
+async function begin(){
+  const birth = readBirth();
+  if (!birth) return;
+  project.birth = birth;
+  persist();
+
+  showAct(2);
+
+  if (state.running) return;          // 已在跑，不重复申请
+
+  if (!await requestPermissionIfNeeded()){
+    $.note.textContent =
+      '未授予方向感应权限。可在 设置 › Safari › 动作与方向 中开启后重进。';
+    return;
+  }
+
+  state.running = true;
+  attachSensors();
+  requestAnimationFrame(frame);
+
+  setTimeout(() => {
+    if (state.live) return;
+    $.mountain.textContent = '未读到磁场';
+    $.note.innerHTML = '这台设备没有回传磁力计数据。请确认网址是 <b>https</b> 开头，'
+                     + '并检查系统定位服务是否开启。眼下可用手指转动盘面手动定向。';
+  }, 2500);
+}
+
+/** 第二幕 → 第三幕 */
 function enterAct3(){
   $.stance.hidden = true;
   project.facing = norm(state.shown);
+  ui.hasPlan = true;
 
-  $.act2.hidden = true;
-  $.act3.hidden = false;
-
-  renderHouse();
+  showAct(3);
   renderTabs();
-  resizeCanvas();
-  refreshPlan();
   persist();
 }
 
-function backToAct2(){
-  $.stance.hidden = true;
+/** 第三幕 → 第二幕重测。格局一律保留，只换向度 */
+function remeasure(){
+  showAct(2);
+  $.note.innerHTML = '重测中。格局图会保留，仅更新坐向。';
   restart();
 }
 
-/** 抬头：宅型、坐向，若已填生辰另报命宅相配与否 */
+/** 任一幕 → 第一幕改生辰。不动格局 */
+function editBirth(){
+  writeBirth(project.birth);
+  renderBirth();
+  showAct(1);
+}
+
+/** 第一幕返回。有格局回第三幕，否则回第二幕 */
+function gateBack(){
+  showAct(ui.hasPlan ? 3 : 2);
+}
+
+function askStance(){ $.stance.hidden = false; }
+function declineStance(){ $.stance.hidden = true; restart(); }
+
+/* ══════════════════════════════════════
+   16 · 第三幕 · 抬头
+   ══════════════════════════════════════ */
+
 function renderHouse(){
   const h = houseOf(project.facing);
   if (!h) return;
 
   $.needle.setAttribute('transform', `rotate(${-h.facing} 30 30)`);
 
-  let text = `<span class="type">${h.name} · ${h.group}</span>`
-           + ` 坐<b>${h.sitMountain}</b>向<b>${h.facMountain}</b>`;
+  $.houseType.innerHTML =
+    `<span class="type">${h.name}</span> 坐<b>${h.sitMountain}</b>向<b>${h.facMountain}</b>`;
 
-  const res = project.birth ? analyseBirth(project.birth) : null;
-  if (res){
-    const match = res.gua.group[0] === h.group[0];
-    text += ` · 命卦<b>${res.gua.gua}</b>${match ? '相配' : '不配'}`;
-  }
-  $.houseType.innerHTML = text;
+  /* 一句话的适配结论，点开即见九宫 */
+  const life = project.birth ? analyseBirth(project.birth) : null;
+  const fit  = fitness(h, life);
+
+  $.fitBadge.className = 'fit ' + (fit ? fit.tone : 'none');
+  $.fitBadge.textContent = fit
+    ? `${fit.label} · 看九宫`
+    : '未填生辰 · 看九宫';
 }
 
 /* ══════════════════════════════════════
-   16 · 八宅九宫面板
+   17 · 八宅九宫面板
    ══════════════════════════════════════ */
 
 function openBazhai(){
@@ -1313,17 +1531,23 @@ function openBazhai(){
 
 function setBzBasis(basis){
   ui.bzBasis = basis;
-  $.bzHouse.setAttribute('aria-pressed', String(basis === 'house'));
-  $.bzLife .setAttribute('aria-pressed', String(basis === 'life'));
+  syncBzSwitch();
   renderBazhai();
+}
+
+function syncBzSwitch(){
+  const hasLife = Boolean(project.birth);
+  $.bzHouse.setAttribute('aria-pressed', String(ui.bzBasis === 'house'));
+  $.bzLife .setAttribute('aria-pressed', String(ui.bzBasis === 'life' && hasLife));
+  $.bzLife.disabled = !hasLife;
 }
 
 function renderBazhai(){
   const h    = houseOf(project.facing);
   const life = project.birth ? analyseBirth(project.birth) : null;
 
-  /* 没有生辰就只能看宅卦 */
-  if (ui.bzBasis === 'life' && !life) setBzBasisSilent('house');
+  if (ui.bzBasis === 'life' && !life) ui.bzBasis = 'house';
+  syncBzSwitch();
 
   const useLife = ui.bzBasis === 'life' && life;
   const base    = useLife ? life.gua.gua : (h ? h.gua : null);
@@ -1363,82 +1587,56 @@ function renderBazhai(){
     $.bzGrid.append(cell);
   }
 
-  renderVerdict(h, life, base, byGua, byStar, useLife);
+  renderVerdict(h, life, byGua, byStar, useLife);
 }
 
-/** 切换基准但不重绘，供 renderBazhai 内部避免递归 */
-function setBzBasisSilent(basis){
-  ui.bzBasis = basis;
-  $.bzHouse.setAttribute('aria-pressed', String(basis === 'house'));
-  $.bzLife .setAttribute('aria-pressed', String(basis === 'life'));
-}
-
-/**
- * 适不适合这套房子。给三层判断：
- * 一、命宅是否同组，此为大前提
- * 二、大门朝向落在个人的哪一星，比同组更实用
- * 三、坐山落在个人的哪一星
- */
-function renderVerdict(h, life, base, byGua, byStar, useLife){
+/** 详细判语。三层：命宅同组、大门落星、坐山落星 */
+function renderVerdict(h, life, byGua, byStar, useLife){
   if (!h){ $.bzVerdict.textContent = ''; return; }
 
-  const fourGood = STARS.filter(s => s.good).map(s => byStar[s.name]);
-  const goodDirs = fourGood.map(g => `${GUA_DIR[g]}(${byGua[g].name})`).join('、');
-  const badDirs  = STARS.filter(s => !s.good)
-                        .map(s => `${GUA_DIR[byStar[s.name]]}(${s.name})`).join('、');
-
-  let html = '';
+  const goodDirs = STARS.filter(s => s.good)
+    .map(s => `${GUA_DIR[byStar[s.name]]}(${s.name})`).join('、');
+  const badDirs = STARS.filter(s => !s.good)
+    .map(s => `${GUA_DIR[byStar[s.name]]}(${s.name})`).join('、');
 
   if (!life){
-    html = `<span class="head">尚未填生辰</span>`
-         + `此盘只论宅，未论人。回第一幕补上生日即可判断命宅相配与否。`
-         + `<ul><li>四吉方 ${goodDirs}</li><li>四凶方 ${badDirs}</li></ul>`;
-    $.bzVerdict.innerHTML = html;
+    $.bzVerdict.innerHTML =
+      `<span class="head">尚未填生辰</span>`
+      + `此盘只论宅，未论人。上方「改生辰」补上生日即可判断命宅相配与否。`
+      + `<ul><li>四吉方 ${goodDirs}</li><li>四凶方 ${badDirs}</li></ul>`;
     return;
   }
 
-  /* 以命卦起盘，才能判断个人宜忌 */
-  const lifePlate = youNian(life.gua.gua);
-  const doorStar  = lifePlate.byGua[h.facGua];
-  const sitStar   = lifePlate.byGua[h.gua];
-  const sameGroup = life.gua.group[0] === h.group[0];
+  const fit = fitness(h, life);
 
-  const score = (sameGroup ? 1 : 0) + (doorStar.good ? 1 : 0) + (sitStar.good ? 1 : 0);
-  const verdict = score >= 3 ? ['ok', '相当合适']
-                : score === 2 ? ['ok', '大致合适']
-                : score === 1 ? ['no', '不甚合适']
-                :               ['no', '相冲较重'];
-
-  html = `<span class="head ${verdict[0]}">${verdict[1]}</span>`
-       + `你为 <b>${life.gua.num} ${life.gua.gua}</b> 命（${life.gua.group}），`
-       + `此宅为 <b>${h.name}</b>（${h.group}），`
-       + `${sameGroup ? '命宅同组' : '命宅异组'}。`
-       + `<ul>`
-       + `<li>大门朝 ${GUA_DIR[h.facGua]}，于你为 <b>${doorStar.name}</b>`
-       + `（${doorStar.good ? '吉' : '凶'}）</li>`
-       + `<li>坐山在 ${GUA_DIR[h.gua]}，于你为 <b>${sitStar.name}</b>`
-       + `（${sitStar.good ? '吉' : '凶'}）</li>`;
+  let html = `<span class="head ${fit.tone === 'mid' ? '' : fit.tone}">${fit.label}</span>`
+    + `你为 <b>${life.gua.num} ${life.gua.gua}</b> 命（${life.gua.group}），`
+    + `此宅为 <b>${h.name}</b>（${h.group}），`
+    + `${fit.sameGroup ? '命宅同组' : '命宅异组'}。`
+    + `<ul>`
+    + `<li>大门朝 ${GUA_DIR[h.facGua]}，于你为 <b>${fit.doorStar.name}</b>`
+    + `（${fit.doorStar.good ? '吉' : '凶'}）</li>`
+    + `<li>坐山在 ${GUA_DIR[h.gua]}，于你为 <b>${fit.sitStar.name}</b>`
+    + `（${fit.sitStar.good ? '吉' : '凶'}）</li>`;
 
   if (useLife){
-    html += `<li>你的四吉方 ${goodDirs}</li>`
-          + `<li>你的四凶方 ${badDirs}</li>`;
+    html += `<li>你的四吉方 ${goodDirs}</li><li>你的四凶方 ${badDirs}</li>`;
   } else {
     const lg = STARS.filter(s => s.good)
-                    .map(s => `${GUA_DIR[lifePlate.byStar[s.name]]}(${s.name})`).join('、');
+      .map(s => `${GUA_DIR[fit.plate.byStar[s.name]]}(${s.name})`).join('、');
     html += `<li>你的四吉方 ${lg}</li>`;
   }
-
   html += `</ul>`;
-  if (!sameGroup)
+
+  if (!fit.sameGroup)
     html += `命宅异组不必然要搬。将卧床与书桌移到你的四吉方，`
           + `厨厕储物留在四凶方，多能调和。`;
 
   $.bzVerdict.innerHTML = html;
-  void base;
 }
 
 /* ══════════════════════════════════════
-   17 · 页面管理
+   18 · 页面管理
    ══════════════════════════════════════ */
 
 function renderTabs(){
@@ -1496,7 +1694,7 @@ function removePage(i){
 }
 
 /* ══════════════════════════════════════
-   18 · 画布基础
+   19 · 画布基础
    ══════════════════════════════════════ */
 
 const ctx  = $.canvas.getContext('2d');
@@ -1529,7 +1727,7 @@ function pointerWorld(ev){
 }
 
 /* ══════════════════════════════════════
-   19 · 吸附
+   20 · 吸附
    ══════════════════════════════════════ */
 
 const snapToGrid = p => ({
@@ -1572,7 +1770,7 @@ function resolvePoint(p, from){
 }
 
 /* ══════════════════════════════════════
-   20 · 几何：比例尺、闭合环、面积
+   21 · 几何：比例尺、闭合环、面积
    ══════════════════════════════════════ */
 
 const pixelLen = w => Math.hypot(w.b.x - w.a.x, w.b.y - w.a.y);
@@ -1678,7 +1876,7 @@ const fmtLen    = m  => `${toDisplay(m).toFixed(2)} ${UNITS[project.unit].label}
 const fmtArea   = m2 => `${(m2 / (UNITS[project.unit].per ** 2)).toFixed(1)} ${UNITS[project.unit].area}`;
 
 /* ══════════════════════════════════════
-   21 · 绘制格局图
+   22 · 绘制格局图
    ══════════════════════════════════════ */
 
 let preview = null;   // 拖动中的墙
@@ -1868,7 +2066,7 @@ function drawLabels(){
 }
 
 /* ══════════════════════════════════════
-   22 · 交互
+   23 · 交互
    ══════════════════════════════════════ */
 
 let dragFrom = null;
@@ -1959,7 +2157,7 @@ function clearPage(){
 }
 
 /* ══════════════════════════════════════
-   23 · 尺寸标注
+   24 · 尺寸标注
    ══════════════════════════════════════ */
 
 function openMeasure(w){
@@ -1996,7 +2194,7 @@ function clearMeasure(){
 }
 
 /* ══════════════════════════════════════
-   24 · 界面刷新
+   25 · 界面刷新
    ══════════════════════════════════════ */
 
 function setMode(mode){
@@ -2027,7 +2225,7 @@ function updateArea(){
   const ring  = outerRing(p.walls);
 
   if (!scale){
-    $.houseArea.textContent = p.walls.length ? '标一道墙的长度即可算面积' : '尚未标注尺寸';
+    $.houseArea.textContent = p.walls.length ? '标一道墙即可算面积' : '尚未标注尺寸';
     return;
   }
   if (!ring){
@@ -2073,7 +2271,7 @@ function buildChips(){
 }
 
 /* ══════════════════════════════════════
-   25 · 启动
+   26 · 启动
    ══════════════════════════════════════ */
 
 async function requestPermissionIfNeeded(){
@@ -2086,54 +2284,20 @@ async function requestPermissionIfNeeded(){
   }
 }
 
-async function begin(){
-  const birth = readBirth();
-  if (!birth) return;
-  project.birth = birth;
-  persist();
-
-  $.gate.hidden = true;
-
-  if (!await requestPermissionIfNeeded()){
-    $.note.textContent =
-      '未授予方向感应权限。可在 设置 › Safari › 动作与方向 中开启后重进。';
-    return;
-  }
-
-  attachSensors();
-  requestAnimationFrame(frame);
-
-  setTimeout(() => {
-    if (state.live) return;
-    $.mountain.textContent = '未读到磁场';
-    $.note.innerHTML = '这台设备没有回传磁力计数据。请确认网址是 <b>https</b> 开头，'
-                     + '并检查系统定位服务是否开启。眼下可用手指转动盘面手动定向。';
-  }, 2500);
-}
-
 /** 有存档且已定过坐向，直接续上第三幕 */
 function resumeIfSaved(){
   const saved = store.load();
-  if (!saved) return false;
+  if (!saved) return;
 
   project = saved;
   if (project.active >= project.pages.length) project.active = 0;
+  if (project.birth) writeBirth(project.birth);
 
-  if (project.birth){
-    $.birthDate.value = project.birth.date || '';
-    $.birthTime.value = project.birth.time || '';
-    $.birthSex.value  = project.birth.sex  || 'male';
-  }
-  if (project.facing === null) return false;
+  if (project.facing === null) return;
 
-  $.gate.hidden = true;
-  $.act2.hidden = true;
-  $.act3.hidden = false;
-  renderHouse();
+  ui.hasPlan = true;
+  showAct(3);
   renderTabs();
-  resizeCanvas();
-  refreshPlan();
-  return true;
 }
 
 drawDial();
@@ -2141,19 +2305,31 @@ enableDialDrag();
 buildChips();
 setMode('wall');
 
-for (const el of [$.birthDate, $.birthTime, $.birthSex])
-  el.addEventListener('change', renderBirth);
-$.birthDate.addEventListener('input', renderBirth);
+/* 年月日与时分自动跳格 */
+autoAdvance($.birthY, $.birthM, 2100);
+autoAdvance($.birthM, $.birthD, 12);
+autoAdvance($.birthH, $.birthMin, 23);
 
-$.start.addEventListener('click', begin);
-$.lockNow.addEventListener('click', lockPlate);
-$.again.addEventListener('click', restart);
-$.confirm.addEventListener('click', askStance);
+for (const el of [$.birthY, $.birthM, $.birthD, $.birthH, $.birthMin])
+  el.addEventListener('input', renderBirth);
+
+$.sexMale  .addEventListener('click', () => setSex('male'));
+$.sexFemale.addEventListener('click', () => setSex('female'));
+
+$.start   .addEventListener('click', begin);
+$.gateBack.addEventListener('click', gateBack);
+$.toGate  .addEventListener('click', editBirth);
+$.lockNow .addEventListener('click', lockPlate);
+$.again   .addEventListener('click', restart);
+$.confirm .addEventListener('click', askStance);
+$.backToPlan.addEventListener('click', () => showAct(3));
 $.stanceYes.addEventListener('click', enterAct3);
-$.stanceNo.addEventListener('click', backToAct2);
+$.stanceNo .addEventListener('click', declineStance);
+$.remeasure.addEventListener('click', remeasure);
+$.editBirth.addEventListener('click', editBirth);
 
-$.pageFloor.addEventListener('click', () => addPage('floor'));
-$.pageRoom.addEventListener('click', () => addPage('room'));
+$.pageFloor .addEventListener('click', () => addPage('floor'));
+$.pageRoom  .addEventListener('click', () => addPage('room'));
 $.pageCancel.addEventListener('click', () => { $.pageModal.hidden = true; });
 
 $.canvas.addEventListener('pointerdown', onPlanDown);
@@ -2161,24 +2337,21 @@ $.canvas.addEventListener('pointermove', onPlanMove);
 $.canvas.addEventListener('pointerup', onPlanUp);
 $.canvas.addEventListener('pointercancel', onPlanUp);
 
-$.undo.addEventListener('click', undoLast);
+$.undo .addEventListener('click', undoLast);
 $.clear.addEventListener('click', clearPage);
 
-$.measureOk.addEventListener('click', commitMeasure);
+$.measureOk   .addEventListener('click', commitMeasure);
 $.measureClear.addEventListener('click', clearMeasure);
-$.measureLen.addEventListener('keydown', e => { if (e.key === 'Enter') commitMeasure(); });
-$.measureUnit.addEventListener('change', () => {
+$.measureLen  .addEventListener('keydown', e => { if (e.key === 'Enter') commitMeasure(); });
+$.measureUnit .addEventListener('change', () => {
   project.unit = $.measureUnit.value;
   afterEdit();
 });
 
-$.openBazhai.addEventListener('click', openBazhai);
-$.bzHouse.addEventListener('click', () => setBzBasis('house'));
-$.bzLife .addEventListener('click', () => setBzBasis('life'));
-$.bzClose.addEventListener('click', () => { $.bazhai.hidden = true; });
-
-for (const btn of document.querySelectorAll('.mode'))
-  btn.addEventListener('click', () => setMode(btn.dataset.mode));
+$.fitBadge.addEventListener('click', openBazhai);
+$.bzHouse .addEventListener('click', () => setBzBasis('house'));
+$.bzLife  .addEventListener('click', () => setBzBasis('life'));
+$.bzClose .addEventListener('click', () => { $.bazhai.hidden = true; });
 
 window.addEventListener('resize', resizeCanvas);
 window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 200));
