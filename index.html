@@ -35,7 +35,7 @@ body{
   height:100%;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:clamp(10px,2.4vh,20px);
-  padding:calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 16px);
+  padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 14px);
 }
 
 /* ══════════════════════════════════════
@@ -112,7 +112,7 @@ body{
    5 · 提示与按钮
    ══════════════════════════════════════ */
 .note{
-  font-size:12.5px;line-height:1.65;text-align:center;max-width:30em;
+  font-size:12.5px;line-height:1.65;text-align:center;max-width:32em;
   color:rgba(239,226,196,.55);min-height:1.65em;
 }
 .note b{color:var(--brass);font-weight:500}
@@ -141,7 +141,7 @@ button:disabled{opacity:.35;pointer-events:none}
   position:fixed;inset:0;z-index:9;
   background:rgba(23,17,14,.94);backdrop-filter:blur(3px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:22px;padding:28px;text-align:center;
+  gap:20px;padding:28px;text-align:center;
 }
 .gate h1{
   font-size:clamp(26px,8vw,36px);font-weight:500;
@@ -153,51 +153,80 @@ button:disabled{opacity:.35;pointer-events:none}
   font-size:clamp(19px,5.4vw,24px);line-height:1.6;color:var(--ivory);max-width:14em;
 }
 .modal .hint{font-size:13px;line-height:1.8;color:rgba(239,226,196,.5);max-width:24em}
-.modal .choices{display:flex;gap:14px;margin-top:4px}
+.modal .choices{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+
+input[type="text"],input[type="number"]{
+  font:inherit;font-size:15px;color:var(--ivory);
+  background:rgba(0,0,0,.3);border:1px solid rgba(224,190,106,.35);
+  border-radius:2px;padding:10px 12px;width:100%;max-width:15em;text-align:center;
+}
+input:focus{outline:none;border-color:var(--brass)}
+select{
+  font:inherit;font-size:14px;color:var(--ivory);
+  background:rgba(0,0,0,.3);border:1px solid rgba(224,190,106,.35);
+  border-radius:2px;padding:9px 8px;
+}
 
 /* ══════════════════════════════════════
-   7 · 第二幕 · 格局图
+   7 · 第二幕 · 版面
    ══════════════════════════════════════ */
-#act2{justify-content:flex-start;gap:12px}
+#act2{justify-content:flex-start;gap:8px}
+
+.tabs{
+  width:100%;max-width:680px;display:flex;gap:6px;
+  overflow-x:auto;padding-bottom:2px;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{
+  flex:0 0 auto;padding:7px 14px;font-size:13px;
+  letter-spacing:.08em;text-indent:.08em;
+  background:none;color:var(--ivory-dim);box-shadow:none;
+  border:1px solid rgba(224,190,106,.28);
+}
+.tabs button[aria-pressed="true"]{
+  background:rgba(224,190,106,.16);color:var(--ivory);border-color:var(--brass);
+}
+.tabs .add{color:var(--brass);border-style:dashed}
 
 .plan-head{
-  width:100%;max-width:640px;
-  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
-  font-size:13px;color:rgba(239,226,196,.62);
-  letter-spacing:.1em;
+  width:100%;max-width:680px;
+  display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  font-size:12.5px;color:rgba(239,226,196,.6);letter-spacing:.06em;
 }
 .plan-head b{color:var(--brass);font-weight:500;font-variant-numeric:tabular-nums}
 
 .canvas-wrap{
-  position:relative;width:100%;max-width:640px;flex:1 1 auto;min-height:0;
+  position:relative;width:100%;max-width:680px;flex:1 1 auto;min-height:0;
   border:1px solid rgba(224,190,106,.22);border-radius:3px;
   background:rgba(0,0,0,.18);overflow:hidden;
 }
 #plan{display:block;width:100%;height:100%;touch-action:none}
 
-/* 北针：随读数旋转，指出真北在图上的方位 */
-.rose{
-  position:absolute;top:10px;right:10px;width:52px;height:52px;
-  pointer-events:none;opacity:.9;
-}
+/* 北针：随坐向旋转，指出真北在图上的方位 */
+.rose{position:absolute;top:10px;right:10px;width:50px;height:50px;pointer-events:none}
 .rose svg{width:100%;height:100%;display:block}
 
-.plan-tools{
-  width:100%;max-width:640px;
-  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+.measure{
+  width:100%;max-width:680px;
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;
+  padding:10px;border:1px solid rgba(224,190,106,.3);border-radius:3px;
+  background:rgba(0,0,0,.25);
 }
-.plan-tools button{padding:9px 16px;font-size:13px;letter-spacing:.12em;text-indent:.12em}
+.measure .who{font-size:13px;color:var(--ivory-dim);letter-spacing:.06em}
+.measure input{width:7em;padding:8px 10px;font-size:14px}
+.measure button{padding:8px 16px;font-size:13px}
+
+.plan-tools,.chips{
+  width:100%;max-width:680px;
+  display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+}
+.plan-tools button{padding:9px 15px;font-size:13px;letter-spacing:.1em;text-indent:.1em}
 .plan-tools .mode[aria-pressed="true"]{
   background:linear-gradient(180deg,var(--brass),var(--gold));
   color:var(--lacquer);border-color:transparent;
 }
-
-.chips{
-  width:100%;max-width:640px;
-  display:flex;flex-wrap:wrap;gap:6px;justify-content:center;
-}
 .chips button{
-  padding:7px 13px;font-size:12.5px;letter-spacing:.08em;text-indent:.08em;
+  padding:6px 12px;font-size:12.5px;
   background:none;color:var(--ivory-dim);box-shadow:none;
   border:1px solid rgba(224,190,106,.3);
 }
@@ -240,15 +269,17 @@ button:disabled{opacity:.35;pointer-events:none}
 
 <!-- ═══ 第二幕 · 格局图 ═════════════════ -->
 <section class="act" id="act2" hidden>
+  <div class="tabs" id="tabs"></div>
+
   <div class="plan-head">
     <span>大门朝 <b id="planFacing">—</b></span>
-    <span>画面上方即屋外</span>
+    <span id="planArea">尚未标注尺寸</span>
   </div>
 
   <div class="canvas-wrap">
     <canvas id="plan"></canvas>
     <div class="rose">
-      <svg viewBox="0 0 60 60" id="rose" aria-label="北针">
+      <svg viewBox="0 0 60 60" aria-label="北针">
         <circle cx="30" cy="30" r="27" fill="rgba(23,17,14,.55)" stroke="rgba(224,190,106,.35)"/>
         <g id="roseNeedle">
           <path d="M30 8 L35 30 L30 26 L25 30 Z" fill="#A32B1E"/>
@@ -260,18 +291,29 @@ button:disabled{opacity:.35;pointer-events:none}
     </div>
   </div>
 
+  <div class="measure" id="measure" hidden>
+    <span class="who" id="measureWho">这道墙</span>
+    <input type="number" id="measureLen" inputmode="decimal" step="0.01" min="0" placeholder="长度">
+    <select id="measureUnit">
+      <option value="m">米</option>
+      <option value="ft">英尺</option>
+    </select>
+    <button id="measureOk">记下</button>
+    <button class="ghost" id="measureClear">清除</button>
+  </div>
+
   <div class="chips" id="chips" hidden></div>
 
   <div class="plan-tools">
-    <button class="mode ghost" data-mode="wall"  aria-pressed="true">墙</button>
-    <button class="mode ghost" data-mode="door"  aria-pressed="false">大门</button>
-    <button class="mode ghost" data-mode="label" aria-pressed="false">房间</button>
+    <button class="mode ghost" data-mode="wall"    aria-pressed="true">墙</button>
+    <button class="mode ghost" data-mode="measure" aria-pressed="false">尺寸</button>
+    <button class="mode ghost" data-mode="door"    aria-pressed="false">大门</button>
+    <button class="mode ghost" data-mode="label"   aria-pressed="false">房间</button>
     <button class="ghost" id="undo">撤销</button>
-    <button class="ghost" id="clear">清空</button>
-    <button id="planDone" disabled>完成</button>
+    <button class="ghost" id="clear">清空本页</button>
   </div>
 
-  <p class="note" id="planNote">按住拖动画一道墙，靠近既有墙角会自动咬合。</p>
+  <p class="note" id="planNote"></p>
 </section>
 
 <!-- ═══ 对话框 ═════════════════════════ -->
@@ -282,6 +324,16 @@ button:disabled{opacity:.35;pointer-events:none}
     <button class="ghost" id="stanceNo">不是</button>
     <button id="stanceYes">是</button>
   </div>
+</div>
+
+<div class="modal" id="pageModal" hidden>
+  <p class="ask">新增一页</p>
+  <input type="text" id="pageName" placeholder="例如：二楼、主卧" maxlength="12">
+  <div class="choices">
+    <button class="ghost" id="pageFloor">整层</button>
+    <button class="ghost" id="pageRoom">单间</button>
+  </div>
+  <button class="ghost" id="pageCancel">取消</button>
 </div>
 
 <div class="gate" id="gate">
@@ -314,6 +366,13 @@ const PLAN = {
   SNAP_PT  : 14,       // 端点吸附半径
   SNAP_DEG : 10,       // 拉直吸附角度
   MIN_LEN  : 12,       // 一道墙的最短长度
+  HIT      : 14,       // 选墙的命中半径
+};
+
+/* 单位换算：内部一律存米，此表只管显示 */
+const UNITS = {
+  m  : {label:'米',   per: 1,      area:'㎡'},
+  ft : {label:'英尺', per: 0.3048, area:'ft²'},
 };
 
 /* 二十四山：由子山起，顺时针每山十五度 */
@@ -350,20 +409,35 @@ const $ = {
   lockNow  : document.getElementById('lockNow'),
   again    : document.getElementById('again'),
   confirm  : document.getElementById('confirmStance'),
-  modal    : document.getElementById('stanceModal'),
-  stanceYes: document.getElementById('stanceYes'),
-  stanceNo : document.getElementById('stanceNo'),
   gate     : document.getElementById('gate'),
   start    : document.getElementById('start'),
 
+  stance   : document.getElementById('stanceModal'),
+  stanceYes: document.getElementById('stanceYes'),
+  stanceNo : document.getElementById('stanceNo'),
+
+  pageModal: document.getElementById('pageModal'),
+  pageName : document.getElementById('pageName'),
+  pageFloor: document.getElementById('pageFloor'),
+  pageRoom : document.getElementById('pageRoom'),
+  pageCancel:document.getElementById('pageCancel'),
+
+  tabs     : document.getElementById('tabs'),
   canvas   : document.getElementById('plan'),
   facing   : document.getElementById('planFacing'),
+  area     : document.getElementById('planArea'),
   needle   : document.getElementById('roseNeedle'),
   chips    : document.getElementById('chips'),
   undo     : document.getElementById('undo'),
   clear    : document.getElementById('clear'),
-  planDone : document.getElementById('planDone'),
   planNote : document.getElementById('planNote'),
+
+  measure     : document.getElementById('measure'),
+  measureWho  : document.getElementById('measureWho'),
+  measureLen  : document.getElementById('measureLen'),
+  measureUnit : document.getElementById('measureUnit'),
+  measureOk   : document.getElementById('measureOk'),
+  measureClear: document.getElementById('measureClear'),
 };
 
 /* ══════════════════════════════════════
@@ -498,7 +572,20 @@ function drawDial(){
 }
 
 /* ══════════════════════════════════════
-   5 · 状态
+   5 · 状态与数据模型
+   ══════════════════════════════════════
+
+   project
+     ├ v        结构版本，日后升级靠它判断要不要迁移
+     ├ facing   第一幕定盘所得的向度
+     ├ unit     显示单位；长度内部一律存米
+     ├ active   当前页索引
+     └ pages[]  每页一层楼或一个房间
+          ├ id / name / kind
+          ├ walls[]  {id, a:{x,y}, b:{x,y}, len}   len 为米，未标注则 null
+          ├ labels[] {x, y, text}
+          ├ door     {x, y} 或 null
+          └ trail[]  操作栈，供撤销
    ══════════════════════════════════════ */
 
 const state = {
@@ -512,18 +599,74 @@ const state = {
   samples   : [],     // {t, heading, tilt}
 };
 
-const plan = {
-  facing : null,      // 确认站位时锁定的向度
-  walls  : [],        // {a:{x,y}, b:{x,y}}
-  labels : [],        // {x, y, text}
-  door   : null,      // {x, y}
-  history: [],        // 供撤销：{type, ...}
-  mode   : 'wall',
-  room   : ROOMS[0],
+const ui = {
+  mode     : 'wall',
+  room     : ROOMS[0],
+  selected : null,    // 尺寸模式下选中的墙 id
 };
 
+let project = newProject();
+
+function uid(){ return Math.random().toString(36).slice(2, 9); }
+
+function newPage(name, kind){
+  return {id: uid(), name, kind, walls: [], labels: [], door: null, trail: []};
+}
+
+function newProject(){
+  return {v: 1, facing: null, unit: 'm', active: 0, pages: [newPage('一楼', 'floor')]};
+}
+
+const page = () => project.pages[project.active];
+
 /* ══════════════════════════════════════
-   6 · 画面更新
+   6 · 存储层
+   ══════════════════════════════════════
+
+   落盘用 localStorage，写入防抖 300 毫秒，避免拖动时狂写。
+   存储不可用（隐私模式、内嵌沙箱）时静默退回纯内存，
+   功能照常，只是关掉分页就不留。
+   ══════════════════════════════════════ */
+
+const store = (() => {
+  const KEY = 'luopan.project.v1';
+  let usable = true;
+  try {
+    localStorage.setItem(KEY + '.probe', '1');
+    localStorage.removeItem(KEY + '.probe');
+  } catch { usable = false; }
+
+  let timer = null;
+
+  return {
+    usable,
+    save(data){
+      if (!usable) return;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {}
+      }, 300);
+    },
+    load(){
+      if (!usable) return null;
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (!raw) return null;
+        const data = JSON.parse(raw);
+        return data && data.v === 1 && Array.isArray(data.pages) ? data : null;
+      } catch { return null; }
+    },
+    wipe(){
+      if (!usable) return;
+      try { localStorage.removeItem(KEY); } catch {}
+    },
+  };
+})();
+
+function persist(){ store.save(project); }
+
+/* ══════════════════════════════════════
+   7 · 画面更新 · 第一幕
    ══════════════════════════════════════ */
 
 function renderReadout(){
@@ -550,7 +693,7 @@ function showCountdown(on){
 }
 
 /* ══════════════════════════════════════
-   7 · 传感器
+   8 · 传感器
    ══════════════════════════════════════ */
 
 function readSample(heading, beta, gamma){
@@ -605,7 +748,7 @@ function detachSensors(){
 }
 
 /* ══════════════════════════════════════
-   8 · 定盘
+   9 · 定盘
    ══════════════════════════════════════ */
 
 /** 优先取端平时的样本；不足则退回全部近期样本 */
@@ -650,7 +793,7 @@ function restart(){
 }
 
 /* ══════════════════════════════════════
-   9 · 主循环
+   10 · 主循环
    ══════════════════════════════════════ */
 
 function frame(){
@@ -670,10 +813,10 @@ function frame(){
 }
 
 /* ══════════════════════════════════════
-   10 · 手动转盘（无传感器时的退路）
+   11 · 手动转盘（无传感器时的退路）
    ══════════════════════════════════════ */
 
-function enableDrag(){
+function enableDialDrag(){
   let last = null;
 
   const angleAt = ev => {
@@ -701,36 +844,99 @@ function enableDrag(){
 }
 
 /* ══════════════════════════════════════
-   11 · 幕次切换
+   12 · 幕次切换
    ══════════════════════════════════════ */
 
-function askStance(){
-  $.modal.hidden = false;
-}
+function askStance(){ $.stance.hidden = false; }
 
 function enterAct2(){
-  $.modal.hidden = false ? false : true;   // 关闭对话框
-  $.modal.hidden = true;
-  plan.facing = norm(state.shown);
-
-  const [gua, dir] = trigramOf(plan.facing);
-  const [, en] = compassOf(plan.facing);
-  $.facing.textContent =
-    `${mountainOf(plan.facing)} ${plan.facing.toFixed(1)}° ${dir}${en}`;
+  $.stance.hidden = true;
+  project.facing = norm(state.shown);
 
   $.act1.hidden = true;
   $.act2.hidden = false;
+
+  renderFacing();
+  renderTabs();
   resizeCanvas();
-  updateRose();
+  refreshPlan();
+  persist();
 }
 
 function backToAct1(){
-  $.modal.hidden = true;
+  $.stance.hidden = true;
   restart();
 }
 
+function renderFacing(){
+  const f = project.facing;
+  if (f === null) return;
+  const [, dir] = trigramOf(f);
+  const [, en] = compassOf(f);
+  $.facing.textContent = `${mountainOf(f)} ${f.toFixed(1)}° ${dir}${en}`;
+  $.needle.setAttribute('transform', `rotate(${-f} 30 30)`);
+}
+
 /* ══════════════════════════════════════
-   12 · 第二幕 · 画布基础
+   13 · 页面管理
+   ══════════════════════════════════════ */
+
+function renderTabs(){
+  $.tabs.textContent = '';
+
+  project.pages.forEach((p, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = p.name;
+    btn.setAttribute('aria-pressed', String(i === project.active));
+    btn.addEventListener('click', () => {
+      if (i === project.active && project.pages.length > 1){
+        if (confirm(`删除「${p.name}」这一页？`)) removePage(i);
+        return;
+      }
+      project.active = i;
+      ui.selected = null;
+      renderTabs();
+      refreshPlan();
+      persist();
+    });
+    $.tabs.append(btn);
+  });
+
+  const add = document.createElement('button');
+  add.className = 'add';
+  add.textContent = '＋ 新页';
+  add.addEventListener('click', openPageModal);
+  $.tabs.append(add);
+}
+
+function openPageModal(){
+  $.pageName.value = '';
+  $.pageModal.hidden = false;
+  setTimeout(() => $.pageName.focus(), 50);
+}
+
+function addPage(kind){
+  const fallback = kind === 'floor' ? `第${project.pages.length + 1}层` : '房间';
+  const name = ($.pageName.value || '').trim() || fallback;
+  project.pages.push(newPage(name, kind));
+  project.active = project.pages.length - 1;
+  ui.selected = null;
+  $.pageModal.hidden = true;
+  renderTabs();
+  refreshPlan();
+  persist();
+}
+
+function removePage(i){
+  project.pages.splice(i, 1);
+  project.active = Math.max(0, i - 1);
+  renderTabs();
+  refreshPlan();
+  persist();
+}
+
+/* ══════════════════════════════════════
+   14 · 画布基础
    ══════════════════════════════════════ */
 
 const ctx  = $.canvas.getContext('2d');
@@ -762,13 +968,8 @@ function pointerWorld(ev){
   return toWorld(ev.clientX - box.left, ev.clientY - box.top);
 }
 
-/** 北针指向：画面上方是屋外，即向度方向 */
-function updateRose(){
-  $.needle.setAttribute('transform', `rotate(${-(plan.facing || 0)} 30 30)`);
-}
-
 /* ══════════════════════════════════════
-   13 · 第二幕 · 吸附
+   15 · 吸附
    ══════════════════════════════════════ */
 
 const snapToGrid = p => ({
@@ -779,7 +980,7 @@ const snapToGrid = p => ({
 /** 落点若靠近已有墙端点，直接咬合过去，房间才不会有缝 */
 function snapToEndpoint(p){
   let best = null, bestDist = PLAN.SNAP_PT;
-  for (const w of plan.walls){
+  for (const w of page().walls){
     for (const end of [w.a, w.b]){
       const d = Math.hypot(end.x - p.x, end.y - p.y);
       if (d < bestDist){ bestDist = d; best = end; }
@@ -790,33 +991,136 @@ function snapToEndpoint(p){
 
 /** 接近水平或垂直时自动拉直 */
 function snapOrtho(from, to){
-  const dx = to.x - from.x, dy = to.y - from.y;
-  const angle = Math.abs(Math.atan2(dy, dx) * 180 / Math.PI);
-  const nearH = angle < PLAN.SNAP_DEG || angle > 180 - PLAN.SNAP_DEG;
-  const nearV = Math.abs(angle - 90) < PLAN.SNAP_DEG;
-  if (nearH) return {x: to.x, y: from.y};
-  if (nearV) return {x: from.x, y: to.y};
+  const angle = Math.abs(Math.atan2(to.y - from.y, to.x - from.x) * 180 / Math.PI);
+  if (angle < PLAN.SNAP_DEG || angle > 180 - PLAN.SNAP_DEG) return {x: to.x, y: from.y};
+  if (Math.abs(angle - 90) < PLAN.SNAP_DEG)                 return {x: from.x, y: to.y};
   return to;
 }
 
 function resolvePoint(p, from){
   const onEnd = snapToEndpoint(p);
   if (onEnd) return onEnd;
-  const straight = from ? snapOrtho(from, p) : p;
-  return snapToGrid(straight);
+  return snapToGrid(from ? snapOrtho(from, p) : p);
 }
 
 /* ══════════════════════════════════════
-   14 · 第二幕 · 绘制
+   16 · 几何：比例尺、闭合环、面积
    ══════════════════════════════════════ */
 
-let preview = null;   // {a, b} 拖动中的墙
+const pixelLen = w => Math.hypot(w.b.x - w.a.x, w.b.y - w.a.y);
+
+/** 由已标注的墙反推比例尺（米 / 像素）。取中位数，抗单笔误输。 */
+function pageScale(p){
+  const ratios = p.walls
+    .filter(w => w.len > 0 && pixelLen(w) > 1)
+    .map(w => w.len / pixelLen(w))
+    .sort((a, b) => a - b);
+  if (!ratios.length) return null;
+  return ratios[Math.floor(ratios.length / 2)];
+}
+
+/** 端点建图。坐标已吸附到网格，四舍五入即可当作同一点。 */
+function buildGraph(walls){
+  const nodes = new Map();
+  const key = q => `${Math.round(q.x)}:${Math.round(q.y)}`;
+
+  for (const w of walls){
+    const ka = key(w.a), kb = key(w.b);
+    if (ka === kb) continue;
+    if (!nodes.has(ka)) nodes.set(ka, {p: {...w.a}, nb: new Set()});
+    if (!nodes.has(kb)) nodes.set(kb, {p: {...w.b}, nb: new Set()});
+    nodes.get(ka).nb.add(kb);
+    nodes.get(kb).nb.add(ka);
+  }
+  return nodes;
+}
+
+/** 顺时针夹角，用来在岔路口挑最外侧那条边 */
+function turnAngle(from, at, to){
+  const base = Math.atan2(from.y - at.y, from.x - at.x);
+  const next = Math.atan2(to.y   - at.y, to.x   - at.x);
+  let d = base - next;
+  while (d <= 0) d += Math.PI * 2;
+  return d;
+}
+
+/**
+ * 沿外圈走一圈。起点取最左（并列取最上），必落在外轮廓上；
+ * 每到一个岔口都挑最外侧的边，于是绕出的就是外墙，内部隔墙不会干扰。
+ * 有断头墙（度数小于 2）代表尚未闭合，直接放弃。
+ */
+function outerRing(walls){
+  const g = buildGraph(walls);
+  if (g.size < 3) return null;
+  for (const n of g.values()) if (n.nb.size < 2) return null;
+
+  let startKey = null;
+  for (const [k, n] of g){
+    if (!startKey){ startKey = k; continue; }
+    const s = g.get(startKey).p;
+    if (n.p.x < s.x || (n.p.x === s.x && n.p.y < s.y)) startKey = k;
+  }
+
+  const ring = [];
+  const origin = g.get(startKey).p;
+  let prev = {x: origin.x, y: origin.y - 1};   // 虚拟上方点，保证首步朝外
+  let curKey = startKey;
+
+  const guard = walls.length * 4 + 8;
+  for (let i = 0; i < guard; i++){
+    const cur = g.get(curKey);
+    ring.push(cur.p);
+
+    let bestKey = null, best = Infinity;
+    for (const nk of cur.nb){
+      const d = turnAngle(prev, cur.p, g.get(nk).p);
+      if (d < best){ best = d; bestKey = nk; }
+    }
+    if (!bestKey) return null;
+
+    prev   = cur.p;
+    curKey = bestKey;
+    if (curKey === startKey) return ring.length >= 3 ? ring : null;
+  }
+  return null;
+}
+
+/** 鞋带公式 */
+function ringArea(ring){
+  let sum = 0;
+  for (let i = 0; i < ring.length; i++){
+    const a = ring[i], b = ring[(i + 1) % ring.length];
+    sum += a.x * b.y - b.x * a.y;
+  }
+  return Math.abs(sum) / 2;
+}
+
+/** 一页的实际面积，单位平方米；条件不足回传 null */
+function pageArea(p){
+  const scale = pageScale(p);
+  const ring  = outerRing(p.walls);
+  if (!scale || !ring) return null;
+  return ringArea(ring) * scale * scale;
+}
+
+/* 单位换算：内部米，显示按 project.unit */
+const toDisplay = m  => m / UNITS[project.unit].per;
+const toMetres  = v  => v * UNITS[project.unit].per;
+const fmtLen    = m  => `${toDisplay(m).toFixed(2)} ${UNITS[project.unit].label}`;
+const fmtArea   = m2 => `${(m2 / (UNITS[project.unit].per ** 2)).toFixed(1)} ${UNITS[project.unit].area}`;
+
+/* ══════════════════════════════════════
+   17 · 绘制
+   ══════════════════════════════════════ */
+
+let preview = null;   // 拖动中的墙
 
 function drawPlan(){
   const box = $.canvas.getBoundingClientRect();
   ctx.clearRect(0, 0, box.width, box.height);
 
   drawGrid();
+  drawRingFill();
   drawWalls();
   drawPreview();
   drawDoor();
@@ -838,21 +1142,60 @@ function drawGrid(){
   ctx.restore();
 }
 
-function drawWalls(){
+/** 外墙闭合时淡淡填一层，让人一眼看出已经围起来了 */
+function drawRingFill(){
+  const ring = outerRing(page().walls);
+  if (!ring) return;
   ctx.save();
-  ctx.strokeStyle = '#E8DCC0';
-  ctx.lineWidth = 4;
-  ctx.lineCap = 'round';
-  for (const w of plan.walls){
+  ctx.fillStyle = 'rgba(224,190,106,.07)';
+  ctx.beginPath();
+  ring.forEach((p, i) => {
+    const s = toScreen(p);
+    i ? ctx.lineTo(s.x, s.y) : ctx.moveTo(s.x, s.y);
+  });
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawWalls(){
+  const scale = pageScale(page());
+
+  for (const w of page().walls){
     const a = toScreen(w.a), b = toScreen(w.b);
+    const chosen = w.id === ui.selected;
+
+    ctx.save();
+    ctx.strokeStyle = chosen ? '#E0BE6A' : '#E8DCC0';
+    ctx.lineWidth   = chosen ? 6 : 4;
+    ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
     ctx.stroke();
+    ctx.restore();
+
+    /* 标注长度：自己填的用亮色，比例尺推算的用暗色 */
+    const shown = w.len ? w.len : (scale ? pixelLen(w) * scale : null);
+    if (shown){
+      const mid = {x: (a.x + b.x) / 2, y: (a.y + b.y) / 2};
+      let angle = Math.atan2(b.y - a.y, b.x - a.x);
+      if (angle > Math.PI / 2 || angle < -Math.PI / 2) angle += Math.PI;
+
+      ctx.save();
+      ctx.translate(mid.x, mid.y);
+      ctx.rotate(angle);
+      ctx.font = '11px "Helvetica Neue", Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = w.len ? 'rgba(224,190,106,.95)' : 'rgba(239,226,196,.4)';
+      ctx.fillText(fmtLen(shown), 0, -7);
+      ctx.restore();
+    }
   }
 
   /* 墙角点，看得出接得上没有 */
+  ctx.save();
   ctx.fillStyle = 'rgba(224,190,106,.75)';
-  for (const w of plan.walls){
+  for (const w of page().walls){
     for (const end of [w.a, w.b]){
       const s = toScreen(end);
       ctx.beginPath();
@@ -877,18 +1220,14 @@ function drawPreview(){
 }
 
 function drawDoor(){
-  if (!plan.door) return;
-  const s = toScreen(plan.door);
+  if (!page().door) return;
+  const s = toScreen(page().door);
   ctx.save();
   ctx.strokeStyle = '#A32B1E';
   ctx.fillStyle   = '#A32B1E';
   ctx.lineWidth = 2.5;
-  ctx.beginPath();
-  ctx.arc(s.x, s.y, 9, 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(s.x, s.y, 3.5, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.beginPath(); ctx.arc(s.x, s.y, 9, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(s.x, s.y, 3.5, 0, Math.PI * 2); ctx.fill();
   ctx.font = '11px "Songti SC", serif';
   ctx.textAlign = 'center';
   ctx.fillText('大门', s.x, s.y + 24);
@@ -901,7 +1240,7 @@ function drawLabels(){
   ctx.font = '13px "Songti SC", "Noto Serif SC", serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  for (const l of plan.labels){
+  for (const l of page().labels){
     const s = toScreen(l);
     ctx.fillText(l.text, s.x, s.y);
   }
@@ -909,25 +1248,52 @@ function drawLabels(){
 }
 
 /* ══════════════════════════════════════
-   15 · 第二幕 · 交互
+   18 · 交互
    ══════════════════════════════════════ */
 
 let dragFrom = null;
 
+/** 点到线段的距离，用来选墙 */
+function distToWall(p, w){
+  const dx = w.b.x - w.a.x, dy = w.b.y - w.a.y;
+  const len2 = dx * dx + dy * dy;
+  if (!len2) return Math.hypot(p.x - w.a.x, p.y - w.a.y);
+  let t = ((p.x - w.a.x) * dx + (p.y - w.a.y) * dy) / len2;
+  t = Math.max(0, Math.min(1, t));
+  return Math.hypot(p.x - (w.a.x + t * dx), p.y - (w.a.y + t * dy));
+}
+
+function wallAt(p){
+  let best = null, bestDist = PLAN.HIT;
+  for (const w of page().walls){
+    const d = distToWall(p, w);
+    if (d < bestDist){ bestDist = d; best = w; }
+  }
+  return best;
+}
+
 function onPlanDown(ev){
   const p = pointerWorld(ev);
 
-  if (plan.mode === 'door'){
-    plan.door = resolvePoint(p, null);
-    plan.history.push({type: 'door'});
-    drawPlan(); refreshPlanUI();
+  if (ui.mode === 'measure'){
+    const w = wallAt(p);
+    ui.selected = w ? w.id : null;
+    openMeasure(w);
+    drawPlan();
     return;
   }
 
-  if (plan.mode === 'label'){
-    plan.labels.push({x: p.x, y: p.y, text: plan.room});
-    plan.history.push({type: 'label'});
-    drawPlan(); refreshPlanUI();
+  if (ui.mode === 'door'){
+    page().door = resolvePoint(p, null);
+    page().trail.push({type: 'door'});
+    afterEdit();
+    return;
+  }
+
+  if (ui.mode === 'label'){
+    page().labels.push({x: p.x, y: p.y, text: ui.room});
+    page().trail.push({type: 'label'});
+    afterEdit();
     return;
   }
 
@@ -944,54 +1310,143 @@ function onPlanMove(ev){
 function onPlanUp(ev){
   if (!dragFrom) return;
   const end = resolvePoint(pointerWorld(ev), dragFrom);
-  const long = Math.hypot(end.x - dragFrom.x, end.y - dragFrom.y) >= PLAN.MIN_LEN;
-  if (long){
-    plan.walls.push({a: dragFrom, b: end});
-    plan.history.push({type: 'wall'});
+  if (Math.hypot(end.x - dragFrom.x, end.y - dragFrom.y) >= PLAN.MIN_LEN){
+    page().walls.push({id: uid(), a: dragFrom, b: end, len: null});
+    page().trail.push({type: 'wall'});
   }
   dragFrom = null;
   preview  = null;
-  drawPlan();
-  refreshPlanUI();
+  afterEdit();
 }
 
 function undoLast(){
-  const last = plan.history.pop();
+  const last = page().trail.pop();
   if (!last) return;
-  if (last.type === 'wall')  plan.walls.pop();
-  if (last.type === 'label') plan.labels.pop();
-  if (last.type === 'door')  plan.door = null;
-  drawPlan();
-  refreshPlanUI();
+  if (last.type === 'wall')  page().walls.pop();
+  if (last.type === 'label') page().labels.pop();
+  if (last.type === 'door')  page().door = null;
+  ui.selected = null;
+  closeMeasure();
+  afterEdit();
 }
 
-function clearPlan(){
-  plan.walls = [];
-  plan.labels = [];
-  plan.door = null;
-  plan.history = [];
-  drawPlan();
-  refreshPlanUI();
+function clearPage(){
+  const p = page();
+  p.walls = []; p.labels = []; p.door = null; p.trail = [];
+  ui.selected = null;
+  closeMeasure();
+  afterEdit();
 }
+
+/* ══════════════════════════════════════
+   19 · 尺寸标注
+   ══════════════════════════════════════ */
+
+function openMeasure(w){
+  if (!w){ closeMeasure(); return; }
+  $.measure.hidden = false;
+  $.measureWho.textContent = w.len ? '改这道墙' : '这道墙长';
+  $.measureLen.value = w.len ? toDisplay(w.len).toFixed(2) : '';
+  $.measureUnit.value = project.unit;
+  setTimeout(() => $.measureLen.focus(), 50);
+}
+
+function closeMeasure(){
+  $.measure.hidden = true;
+}
+
+function commitMeasure(){
+  const w = page().walls.find(x => x.id === ui.selected);
+  if (!w) return closeMeasure();
+
+  const val = parseFloat($.measureLen.value);
+  if (!(val > 0)) return;
+
+  project.unit = $.measureUnit.value;
+  w.len = toMetres(val);
+  closeMeasure();
+  ui.selected = null;
+  afterEdit();
+}
+
+function clearMeasure(){
+  const w = page().walls.find(x => x.id === ui.selected);
+  if (w) w.len = null;
+  closeMeasure();
+  ui.selected = null;
+  afterEdit();
+}
+
+/* ══════════════════════════════════════
+   20 · 界面刷新
+   ══════════════════════════════════════ */
 
 function setMode(mode){
-  plan.mode = mode;
+  ui.mode = mode;
+  ui.selected = null;
+  closeMeasure();
   for (const btn of document.querySelectorAll('.mode'))
     btn.setAttribute('aria-pressed', String(btn.dataset.mode === mode));
   $.chips.hidden = mode !== 'label';
-  $.planNote.textContent =
-    mode === 'wall'  ? '按住拖动画一道墙，靠近既有墙角会自动咬合。' :
-    mode === 'door'  ? '点一下大门所在的位置。' :
-                       '先选房间名，再点它在图上的位置。';
+  drawPlan();
+  updateNote();
+}
+
+function updateNote(){
+  const tips = {
+    wall   : '按住拖动画一道墙，靠近既有墙角会自动咬合。',
+    measure: '点一道墙，填它的实际长度。填一道就够，其余自动推算。',
+    door   : '点一下大门所在的位置。',
+    label  : '先选房间名，再点它在图上的位置。',
+  };
+  const storage = store.usable ? '已自动保存' : '本次有效，关掉分页不留';
+  $.planNote.innerHTML = `${tips[ui.mode]} <b>${storage}</b>`;
+}
+
+function updateArea(){
+  const p = page();
+  const scale = pageScale(p);
+  const ring  = outerRing(p.walls);
+
+  if (!scale){
+    $.area.textContent = p.walls.length ? '标一道墙的长度即可算面积' : '尚未标注尺寸';
+    return;
+  }
+  if (!ring){
+    $.area.textContent = '外墙尚未闭合';
+    return;
+  }
+
+  const here = ringArea(ring) * scale * scale;
+
+  /* 有多层时一并给出总和 */
+  const floors = project.pages.filter(x => x.kind === 'floor');
+  const areas  = floors.map(pageArea).filter(a => a !== null);
+  const total  = areas.reduce((s, a) => s + a, 0);
+
+  $.area.innerHTML = (floors.length > 1 && areas.length > 1)
+    ? `本页 <b>${fmtArea(here)}</b> · 全屋 <b>${fmtArea(total)}</b>`
+    : `本页 <b>${fmtArea(here)}</b>`;
+}
+
+function refreshPlan(){
+  drawPlan();
+  updateArea();
+  updateNote();
+}
+
+function afterEdit(){
+  refreshPlan();
+  persist();
 }
 
 function buildChips(){
   for (const name of ROOMS){
     const btn = document.createElement('button');
     btn.textContent = name;
-    btn.setAttribute('aria-pressed', String(name === plan.room));
+    btn.setAttribute('aria-pressed', String(name === ui.room));
     btn.addEventListener('click', () => {
-      plan.room = name;
+      ui.room = name;
       for (const other of $.chips.children)
         other.setAttribute('aria-pressed', String(other === btn));
     });
@@ -999,20 +1454,8 @@ function buildChips(){
   }
 }
 
-function refreshPlanUI(){
-  $.planDone.disabled = plan.walls.length < 3;
-}
-
-function finishPlan(){
-  const rooms = plan.labels.length;
-  $.planNote.innerHTML =
-    `格局已记录：<b>${plan.walls.length}</b> 道墙、<b>${rooms}</b> 个房间`
-    + (plan.door ? '、大门已标' : '、<b>尚未标大门</b>')
-    + '。第三幕待建。';
-}
-
 /* ══════════════════════════════════════
-   16 · 启动
+   21 · 启动
    ══════════════════════════════════════ */
 
 async function requestPermissionIfNeeded(){
@@ -1045,8 +1488,27 @@ async function begin(){
   }, 2500);
 }
 
+/** 有存档且已定过坐向，直接续上第二幕 */
+function resumeIfSaved(){
+  const saved = store.load();
+  if (!saved) return false;
+
+  project = saved;
+  if (project.active >= project.pages.length) project.active = 0;
+  if (project.facing === null) return false;
+
+  $.gate.hidden = true;
+  $.act1.hidden = true;
+  $.act2.hidden = false;
+  renderFacing();
+  renderTabs();
+  resizeCanvas();
+  refreshPlan();
+  return true;
+}
+
 drawDial();
-enableDrag();
+enableDialDrag();
 buildChips();
 setMode('wall');
 
@@ -1057,20 +1519,33 @@ $.confirm.addEventListener('click', askStance);
 $.stanceYes.addEventListener('click', enterAct2);
 $.stanceNo.addEventListener('click', backToAct1);
 
+$.pageFloor.addEventListener('click', () => addPage('floor'));
+$.pageRoom.addEventListener('click', () => addPage('room'));
+$.pageCancel.addEventListener('click', () => { $.pageModal.hidden = true; });
+
 $.canvas.addEventListener('pointerdown', onPlanDown);
 $.canvas.addEventListener('pointermove', onPlanMove);
 $.canvas.addEventListener('pointerup', onPlanUp);
 $.canvas.addEventListener('pointercancel', onPlanUp);
 
 $.undo.addEventListener('click', undoLast);
-$.clear.addEventListener('click', clearPlan);
-$.planDone.addEventListener('click', finishPlan);
+$.clear.addEventListener('click', clearPage);
+
+$.measureOk.addEventListener('click', commitMeasure);
+$.measureClear.addEventListener('click', clearMeasure);
+$.measureLen.addEventListener('keydown', e => { if (e.key === 'Enter') commitMeasure(); });
+$.measureUnit.addEventListener('change', () => {
+  project.unit = $.measureUnit.value;
+  afterEdit();
+});
 
 for (const btn of document.querySelectorAll('.mode'))
   btn.addEventListener('click', () => setMode(btn.dataset.mode));
 
 window.addEventListener('resize', resizeCanvas);
 window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 200));
+
+resumeIfSaved();
 </script>
 </body>
 </html>
