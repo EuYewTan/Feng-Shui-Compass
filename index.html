@@ -34,7 +34,7 @@ body{
 .act{
   height:100%;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:clamp(10px,2.4vh,20px);
+  gap:clamp(9px,2.2vh,18px);
   padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 14px);
 }
 
@@ -43,7 +43,7 @@ body{
    ══════════════════════════════════════ */
 .plate{
   position:relative;
-  width:min(90vw,52vh);height:min(90vw,52vh);
+  width:min(90vw,50vh);height:min(90vw,50vh);
   flex:0 0 auto;
 }
 .plate::after{                       /* 盘边木框 */
@@ -87,7 +87,7 @@ body{
   letter-spacing:.2em;text-indent:.2em;
 }
 .timer b{
-  font-size:clamp(30px,8.5vw,42px);font-weight:500;letter-spacing:0;
+  font-size:clamp(28px,8vw,40px);font-weight:500;letter-spacing:0;
   font-variant-numeric:tabular-nums;color:var(--brass);
 }
 .plate.tilted ~ .timer,
@@ -95,13 +95,13 @@ body{
 
 .readout{text-align:center;line-height:1.15}
 .readout .deg{
-  font-size:clamp(30px,8.5vw,44px);font-weight:500;
+  font-size:clamp(28px,8vw,42px);font-weight:500;
   font-variant-numeric:tabular-nums;color:var(--brass);
 }
 .readout .deg small{font-size:.42em;color:var(--ivory-dim);margin-left:.12em}
 .readout .mountain{
-  font-size:clamp(16px,4.6vw,20px);color:var(--ivory);
-  margin-top:5px;letter-spacing:.32em;text-indent:.32em;
+  font-size:clamp(15px,4.4vw,19px);color:var(--ivory);
+  margin-top:5px;letter-spacing:.3em;text-indent:.3em;
 }
 .readout .sitting{
   font-size:clamp(11.5px,3.2vw,13px);color:rgba(239,226,196,.52);
@@ -139,15 +139,15 @@ button:disabled{opacity:.35;pointer-events:none}
    ══════════════════════════════════════ */
 .gate,.modal{
   position:fixed;inset:0;z-index:9;
-  background:rgba(23,17,14,.94);backdrop-filter:blur(3px);
+  background:rgba(23,17,14,.95);backdrop-filter:blur(3px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:20px;padding:28px;text-align:center;
+  gap:18px;padding:26px 22px;text-align:center;overflow-y:auto;
 }
 .gate h1{
-  font-size:clamp(26px,8vw,36px);font-weight:500;
+  font-size:clamp(24px,7.5vw,34px);font-weight:500;
   letter-spacing:.5em;text-indent:.5em;color:var(--ivory);
 }
-.gate p{font-size:13.5px;line-height:1.8;color:rgba(239,226,196,.58);max-width:26em}
+.gate p{font-size:13px;line-height:1.8;color:rgba(239,226,196,.58);max-width:26em}
 
 .modal .ask{
   font-size:clamp(19px,5.4vw,24px);line-height:1.6;color:var(--ivory);max-width:14em;
@@ -155,22 +155,50 @@ button:disabled{opacity:.35;pointer-events:none}
 .modal .hint{font-size:13px;line-height:1.8;color:rgba(239,226,196,.5);max-width:24em}
 .modal .choices{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
 
-input[type="text"],input[type="number"]{
-  font:inherit;font-size:15px;color:var(--ivory);
-  background:rgba(0,0,0,.3);border:1px solid rgba(224,190,106,.35);
-  border-radius:2px;padding:10px 12px;width:100%;max-width:15em;text-align:center;
+/* ══════════════════════════════════════
+   7 · 生辰输入
+   ══════════════════════════════════════ */
+.birth{
+  width:100%;max-width:21em;
+  display:flex;flex-direction:column;gap:11px;
+  padding:16px;border:1px solid rgba(224,190,106,.25);border-radius:3px;
+  background:rgba(0,0,0,.22);
 }
+.birth .row{display:flex;gap:8px;align-items:center}
+.birth .row > span{
+  flex:0 0 3.4em;text-align:right;
+  font-size:13px;color:var(--ivory-dim);letter-spacing:.06em;
+}
+.birth .opt{color:rgba(239,226,196,.38);font-size:11.5px}
+
+input[type="text"],input[type="number"],input[type="date"],input[type="time"]{
+  font:inherit;font-size:15px;color:var(--ivory);
+  background:rgba(0,0,0,.32);border:1px solid rgba(224,190,106,.35);
+  border-radius:2px;padding:10px 11px;flex:1 1 auto;min-width:0;
+}
+input[type="date"],input[type="time"]{color-scheme:dark}
 input:focus{outline:none;border-color:var(--brass)}
+input::placeholder{color:rgba(239,226,196,.3)}
+
 select{
   font:inherit;font-size:14px;color:var(--ivory);
-  background:rgba(0,0,0,.3);border:1px solid rgba(224,190,106,.35);
+  background:rgba(0,0,0,.32);border:1px solid rgba(224,190,106,.35);
   border-radius:2px;padding:9px 8px;
 }
 
+.bazi{
+  font-size:12.5px;line-height:1.9;color:rgba(239,226,196,.62);
+  letter-spacing:.06em;min-height:1.9em;
+}
+.bazi b{color:var(--brass);font-weight:500}
+.bazi .pillars{
+  font-size:15px;letter-spacing:.5em;text-indent:.5em;color:var(--ivory);
+}
+
 /* ══════════════════════════════════════
-   7 · 第二幕 · 版面
+   8 · 第三幕 · 版面
    ══════════════════════════════════════ */
-#act2{justify-content:flex-start;gap:8px}
+#act3{justify-content:flex-start;gap:7px}
 
 .tabs{
   width:100%;max-width:680px;display:flex;gap:6px;
@@ -188,12 +216,16 @@ select{
 }
 .tabs .add{color:var(--brass);border-style:dashed}
 
-.plan-head{
+.house{
   width:100%;max-width:680px;
-  display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  display:flex;flex-wrap:wrap;gap:4px 14px;
+  align-items:baseline;justify-content:space-between;
   font-size:12.5px;color:rgba(239,226,196,.6);letter-spacing:.06em;
 }
-.plan-head b{color:var(--brass);font-weight:500;font-variant-numeric:tabular-nums}
+.house b{color:var(--brass);font-weight:500;font-variant-numeric:tabular-nums}
+.house .type{
+  color:var(--ivory);border-bottom:1px solid rgba(224,190,106,.4);padding-bottom:1px;
+}
 
 .canvas-wrap{
   position:relative;width:100%;max-width:680px;flex:1 1 auto;min-height:0;
@@ -203,30 +235,30 @@ select{
 #plan{display:block;width:100%;height:100%;touch-action:none}
 
 /* 北针：随坐向旋转，指出真北在图上的方位 */
-.rose{position:absolute;top:10px;right:10px;width:50px;height:50px;pointer-events:none}
+.rose{position:absolute;top:10px;right:10px;width:48px;height:48px;pointer-events:none}
 .rose svg{width:100%;height:100%;display:block}
 
 .measure{
   width:100%;max-width:680px;
   display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;
-  padding:10px;border:1px solid rgba(224,190,106,.3);border-radius:3px;
+  padding:9px;border:1px solid rgba(224,190,106,.3);border-radius:3px;
   background:rgba(0,0,0,.25);
 }
 .measure .who{font-size:13px;color:var(--ivory-dim);letter-spacing:.06em}
-.measure input{width:7em;padding:8px 10px;font-size:14px}
+.measure input{width:7em;padding:8px 10px;font-size:14px;flex:0 0 auto}
 .measure button{padding:8px 16px;font-size:13px}
 
 .plan-tools,.chips{
   width:100%;max-width:680px;
-  display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+  display:flex;flex-wrap:wrap;gap:6px;justify-content:center;
 }
-.plan-tools button{padding:9px 15px;font-size:13px;letter-spacing:.1em;text-indent:.1em}
+.plan-tools button{padding:9px 14px;font-size:13px;letter-spacing:.08em;text-indent:.08em}
 .plan-tools .mode[aria-pressed="true"]{
   background:linear-gradient(180deg,var(--brass),var(--gold));
   color:var(--lacquer);border-color:transparent;
 }
 .chips button{
-  padding:6px 12px;font-size:12.5px;
+  padding:6px 11px;font-size:12.5px;
   background:none;color:var(--ivory-dim);box-shadow:none;
   border:1px solid rgba(224,190,106,.3);
 }
@@ -237,8 +269,8 @@ select{
 </head>
 <body>
 
-<!-- ═══ 第一幕 · 定盘 ═══════════════════ -->
-<main class="act" id="act1">
+<!-- ═══ 第二幕 · 定盘 ═══════════════════ -->
+<main class="act" id="act2">
   <div class="plate" id="plate">
     <svg id="dial" viewBox="0 0 400 400" aria-label="罗盘盘面"></svg>
     <svg class="hud" viewBox="0 0 400 400" aria-hidden="true">
@@ -267,13 +299,13 @@ select{
   </div>
 </main>
 
-<!-- ═══ 第二幕 · 格局图 ═════════════════ -->
-<section class="act" id="act2" hidden>
+<!-- ═══ 第三幕 · 格局图 ═════════════════ -->
+<section class="act" id="act3" hidden>
   <div class="tabs" id="tabs"></div>
 
-  <div class="plan-head">
-    <span>大门朝 <b id="planFacing">—</b></span>
-    <span id="planArea">尚未标注尺寸</span>
+  <div class="house">
+    <span id="houseType">—</span>
+    <span id="houseArea">尚未标注尺寸</span>
   </div>
 
   <div class="canvas-wrap">
@@ -328,7 +360,7 @@ select{
 
 <div class="modal" id="pageModal" hidden>
   <p class="ask">新增一页</p>
-  <input type="text" id="pageName" placeholder="例如：二楼、主卧" maxlength="12">
+  <input type="text" id="pageName" placeholder="例如：二楼、主卧" maxlength="12" style="max-width:15em">
   <div class="choices">
     <button class="ghost" id="pageFloor">整层</button>
     <button class="ghost" id="pageRoom">单间</button>
@@ -336,10 +368,32 @@ select{
   <button class="ghost" id="pageCancel">取消</button>
 </div>
 
+<!-- ═══ 第一幕 · 开场与生辰 ═════════════ -->
 <div class="gate" id="gate">
   <h1>罗盘</h1>
-  <p>手机端平齐胸，屏幕朝上，避开电脑、音箱、钢筋与金属桌面。首次使用请握机划几个「8」字校准磁力计。站定后十秒内自动定盘。</p>
-  <button id="start">开盘</button>
+  <p>手机端平齐胸，屏幕朝上，避开电脑、音箱、钢筋与金属桌面。首次使用请握机划几个「8」字校准磁力计。</p>
+
+  <div class="birth">
+    <div class="row">
+      <span>生日</span>
+      <input type="date" id="birthDate" required>
+    </div>
+    <div class="row">
+      <span>时辰</span>
+      <input type="time" id="birthTime">
+    </div>
+    <div class="row">
+      <span>性别</span>
+      <select id="birthSex" style="flex:1 1 auto">
+        <option value="male">男</option>
+        <option value="female">女</option>
+      </select>
+    </div>
+    <p class="opt">时辰可不填，命卦只看年份。填了才能排出完整四柱。</p>
+    <div class="bazi" id="baziOut"></div>
+  </div>
+
+  <button id="start" disabled>开盘</button>
 </div>
 
 <script>
@@ -367,6 +421,7 @@ const PLAN = {
   SNAP_DEG : 10,       // 拉直吸附角度
   MIN_LEN  : 12,       // 一道墙的最短长度
   HIT      : 14,       // 选墙的命中半径
+  DOOR_Y   : 40,       // 大门基准线在虚拟坐标中的高度
 };
 
 /* 单位换算：内部一律存米，此表只管显示 */
@@ -390,13 +445,33 @@ const COMPASS   = [['北','N'],['东','E'],['南','S'],['西','W']];
 /* 房间标签 */
 const ROOMS = ['客厅','餐厅','厨房','主卧','次卧','书房','卫生间','阳台','玄关'];
 
+/* 八宅：坐山所属之卦决定宅之东西四 */
+const EAST_HOUSE = new Set(['坎','离','震','巽']);
+
+/* 八宅宅名，以坐山之卦为名 */
+const HOUSE_NAME = {
+  坎:'坎宅', 离:'离宅', 震:'震宅', 巽:'巽宅',
+  乾:'乾宅', 坤:'坤宅', 艮:'艮宅', 兑:'兑宅',
+};
+
+/* 干支 */
+const STEMS   = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const BRANCHES= ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+
+/* 十二时辰起始钟点，子时跨日 */
+const HOUR_BRANCH = ['子','丑','丑','寅','寅','卯','卯','辰','辰','巳','巳','午',
+                     '午','未','未','申','申','酉','酉','戌','戌','亥','亥','子'];
+
+/* 命卦对应之卦名；五在男为坤、在女为艮，另行处理 */
+const LIFE_GUA = {1:'坎', 2:'坤', 3:'震', 4:'巽', 6:'乾', 7:'兑', 8:'艮', 9:'离'};
+
 /* ══════════════════════════════════════
    2 · DOM
    ══════════════════════════════════════ */
 
 const $ = {
-  act1     : document.getElementById('act1'),
   act2     : document.getElementById('act2'),
+  act3     : document.getElementById('act3'),
   plate    : document.getElementById('plate'),
   dial     : document.getElementById('dial'),
   ring     : document.getElementById('ring'),
@@ -412,20 +487,25 @@ const $ = {
   gate     : document.getElementById('gate'),
   start    : document.getElementById('start'),
 
+  birthDate: document.getElementById('birthDate'),
+  birthTime: document.getElementById('birthTime'),
+  birthSex : document.getElementById('birthSex'),
+  baziOut  : document.getElementById('baziOut'),
+
   stance   : document.getElementById('stanceModal'),
   stanceYes: document.getElementById('stanceYes'),
   stanceNo : document.getElementById('stanceNo'),
 
-  pageModal: document.getElementById('pageModal'),
-  pageName : document.getElementById('pageName'),
-  pageFloor: document.getElementById('pageFloor'),
-  pageRoom : document.getElementById('pageRoom'),
-  pageCancel:document.getElementById('pageCancel'),
+  pageModal : document.getElementById('pageModal'),
+  pageName  : document.getElementById('pageName'),
+  pageFloor : document.getElementById('pageFloor'),
+  pageRoom  : document.getElementById('pageRoom'),
+  pageCancel: document.getElementById('pageCancel'),
 
   tabs     : document.getElementById('tabs'),
   canvas   : document.getElementById('plan'),
-  facing   : document.getElementById('planFacing'),
-  area     : document.getElementById('planArea'),
+  houseType: document.getElementById('houseType'),
+  houseArea: document.getElementById('houseArea'),
   needle   : document.getElementById('roseNeedle'),
   chips    : document.getElementById('chips'),
   undo     : document.getElementById('undo'),
@@ -475,7 +555,240 @@ const trigramOf  = d => TRIGRAMS [Math.floor(norm(d + 22.5) / 45)];
 const compassOf  = d => COMPASS  [Math.floor(norm(d + 45)   / 90)];
 
 /* ══════════════════════════════════════
-   4 · 盘面绘制
+   4 · 八宅
+   ══════════════════════════════════════
+
+   宅之东西四以坐山定，非以向定。
+   面朝大门量得的是向，坐 = 向 + 180°。
+   ══════════════════════════════════════ */
+
+function houseOf(facing){
+  if (facing === null || facing === undefined) return null;
+
+  const sitting = norm(facing + 180);
+  const [gua, dir] = trigramOf(sitting);
+  const east = EAST_HOUSE.has(gua);
+
+  return {
+    facing,
+    sitting,
+    gua,
+    dir,
+    name : HOUSE_NAME[gua],
+    group: east ? '东四宅' : '西四宅',
+    sitMountain : mountainOf(sitting),
+    facMountain : mountainOf(facing),
+  };
+}
+
+/* ══════════════════════════════════════
+   5 · 命卦与四柱
+   ══════════════════════════════════════
+
+   精度边界：立春以每年 2 月 3 日或 4 日近似，准确到日不到时刻。
+   要精确到时刻需引入天文历表，属另一量级的工程。
+   月柱与日柱采通行算法，日界以子时换日。
+   ══════════════════════════════════════ */
+
+/** 该年立春日期（近似）。1900–2100 间，多数年份为 2 月 4 日 */
+function lichunDay(year){
+  const early = [1897,1901,1905,1909,1913,1917,1921,1925,1929,1933,1937,
+                 1941,1945,1949,1953,1957,1961,1965,1969,1973,1977,1981,
+                 1985,1989,1993,1997,2021,2025,2029,2033,2037,2041,2045,
+                 2049,2053,2057,2061,2065,2069,2073,2077,2081,2085,2089];
+  return early.includes(year) ? 3 : 4;
+}
+
+/** 命理年：立春前算前一年 */
+function solarYear(date){
+  const y = date.getFullYear();
+  const m = date.getMonth() + 1;
+  const d = date.getDate();
+  if (m > 2) return y;
+  if (m === 2 && d >= lichunDay(y)) return y;
+  return y - 1;
+}
+
+/** 命卦。男逆行女顺行，五男作坤、五女作艮 */
+function lifeGua(year, sex){
+  let n;
+  if (sex === 'male'){
+    n = (10 - (year % 9)) % 9;
+    if (n === 0) n = 9;
+    /* 2000 年后男命另起，通行做法为 (9 - (year%9)) */
+    if (year >= 2000){
+      n = (9 - (year % 9)) % 9;
+      if (n === 0) n = 9;
+    }
+  } else {
+    n = ((year % 9) + 5) % 9;
+    if (n === 0) n = 9;
+    if (year >= 2000){
+      n = ((year % 9) + 6) % 9;
+      if (n === 0) n = 9;
+    }
+  }
+
+  const gua = n === 5 ? (sex === 'male' ? '坤' : '艮') : LIFE_GUA[n];
+  return {
+    num  : n,
+    gua,
+    group: EAST_HOUSE.has(gua) ? '东四命' : '西四命',
+  };
+}
+
+/** 年柱干支，以命理年推 */
+function yearPillar(year){
+  const stem   = STEMS[(year - 4 + 6000) % 10];
+  const branch = BRANCHES[(year - 4 + 6000) % 12];
+  return stem + branch;
+}
+
+/** 各月节气起始日（近似）。索引 0 为立春，即寅月 */
+const TERM_DAY = [4, 6, 5, 5, 6, 6, 7, 8, 8, 8, 7, 6];
+
+/** 月柱。以节气分月，非以初一 */
+function monthPillar(date, yearStem){
+  const m = date.getMonth() + 1;
+  const d = date.getDate();
+
+  /* 求节气月序：寅月为 0 */
+  let idx = (m + 9) % 12;                 // 2月→0, 3月→1 …
+  if (d < TERM_DAY[idx]) idx = (idx + 11) % 12;
+
+  const branch = BRANCHES[(idx + 2) % 12];  // 寅起
+  /* 五虎遁：甲己之年丙作首 */
+  const startStem = [2, 4, 6, 8, 0][yearStem % 5];
+  const stem = STEMS[(startStem + idx) % 10];
+  return stem + branch;
+}
+
+/** 日柱。以 1900-01-01 为甲戌日起算 */
+function dayPillar(date){
+  const base = Date.UTC(1900, 0, 1);
+  const here = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+  const days = Math.round((here - base) / 86400000);
+  const stem   = STEMS[(days + 10) % 10];
+  const branch = BRANCHES[(days + 10) % 12];
+  return {text: stem + branch, stemIdx: (days + 10) % 10};
+}
+
+/** 时柱。五鼠遁：甲己还加甲 */
+function hourPillar(hour, dayStemIdx){
+  const branch = HOUR_BRANCH[hour];
+  const bIdx   = BRANCHES.indexOf(branch);
+  const startStem = [0, 2, 4, 6, 8][dayStemIdx % 5];
+  const stem = STEMS[(startStem + bIdx) % 10];
+  return stem + branch;
+}
+
+/** 四柱。无时辰则时柱留空 */
+function fourPillars(date, hasTime){
+  const sy = solarYear(date);
+  const yp = yearPillar(sy);
+  const yearStemIdx = STEMS.indexOf(yp[0]);
+  const mp = monthPillar(date, yearStemIdx);
+  const dp = dayPillar(date);
+  const hp = hasTime ? hourPillar(date.getHours(), dp.stemIdx) : null;
+
+  return {solarYear: sy, year: yp, month: mp, day: dp.text, hour: hp};
+}
+
+/* ══════════════════════════════════════
+   6 · 状态与数据模型
+   ══════════════════════════════════════
+
+   project
+     ├ v        结构版本，日后升级靠它判断要不要迁移
+     ├ facing   第二幕定盘所得的向度
+     ├ birth    {date, time, sex} 原样保存，命卦与四柱皆由此推
+     ├ unit     显示单位；长度内部一律存米
+     ├ active   当前页索引
+     └ pages[]  每页一层楼或一个房间
+          ├ id / name / kind
+          ├ walls[]  {id, a:{x,y}, b:{x,y}, len}   len 为米，未标注则 null
+          ├ labels[] {x, y, text}
+          ├ door     {x, y} 或 null
+          └ trail[]  操作栈，供撤销
+   ══════════════════════════════════════ */
+
+const state = {
+  raw       : 0,      // 传感器最新方位
+  shown     : 0,      // 平滑后的显示方位
+  tilt      : 0,      // 当前偏离水平的角度
+  live      : false,  // 是否已收到数据
+  locked    : false,  // 是否已定盘
+  absolute  : false,  // 是否有绝对方位可用
+  startedAt : 0,      // 本轮采样起点
+  samples   : [],     // {t, heading, tilt}
+};
+
+const ui = {
+  mode     : 'wall',
+  room     : ROOMS[0],
+  selected : null,    // 尺寸模式下选中的墙 id
+};
+
+let project = newProject();
+
+function uid(){ return Math.random().toString(36).slice(2, 9); }
+
+function newPage(name, kind){
+  return {id: uid(), name, kind, walls: [], labels: [], door: null, trail: []};
+}
+
+function newProject(){
+  return {
+    v: 2, facing: null, birth: null, unit: 'm', active: 0,
+    pages: [newPage('一楼', 'floor')],
+  };
+}
+
+const page = () => project.pages[project.active];
+
+/* ══════════════════════════════════════
+   7 · 存储层
+   ══════════════════════════════════════
+
+   落盘用 localStorage，写入防抖 300 毫秒，避免拖动时狂写。
+   存储不可用（隐私模式、内嵌沙箱）时静默退回纯内存。
+   ══════════════════════════════════════ */
+
+const store = (() => {
+  const KEY = 'luopan.project.v2';
+  let usable = true;
+  try {
+    localStorage.setItem(KEY + '.probe', '1');
+    localStorage.removeItem(KEY + '.probe');
+  } catch { usable = false; }
+
+  let timer = null;
+
+  return {
+    usable,
+    save(data){
+      if (!usable) return;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {}
+      }, 300);
+    },
+    load(){
+      if (!usable) return null;
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (!raw) return null;
+        const data = JSON.parse(raw);
+        return data && data.v === 2 && Array.isArray(data.pages) ? data : null;
+      } catch { return null; }
+    },
+  };
+})();
+
+function persist(){ store.save(project); }
+
+/* ══════════════════════════════════════
+   8 · 盘面绘制
    ══════════════════════════════════════ */
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -572,101 +885,55 @@ function drawDial(){
 }
 
 /* ══════════════════════════════════════
-   5 · 状态与数据模型
-   ══════════════════════════════════════
-
-   project
-     ├ v        结构版本，日后升级靠它判断要不要迁移
-     ├ facing   第一幕定盘所得的向度
-     ├ unit     显示单位；长度内部一律存米
-     ├ active   当前页索引
-     └ pages[]  每页一层楼或一个房间
-          ├ id / name / kind
-          ├ walls[]  {id, a:{x,y}, b:{x,y}, len}   len 为米，未标注则 null
-          ├ labels[] {x, y, text}
-          ├ door     {x, y} 或 null
-          └ trail[]  操作栈，供撤销
+   9 · 第一幕 · 生辰
    ══════════════════════════════════════ */
 
-const state = {
-  raw       : 0,      // 传感器最新方位
-  shown     : 0,      // 平滑后的显示方位
-  tilt      : 0,      // 当前偏离水平的角度
-  live      : false,  // 是否已收到数据
-  locked    : false,  // 是否已定盘
-  absolute  : false,  // 是否有绝对方位可用
-  startedAt : 0,      // 本轮采样起点
-  samples   : [],     // {t, heading, tilt}
-};
-
-const ui = {
-  mode     : 'wall',
-  room     : ROOMS[0],
-  selected : null,    // 尺寸模式下选中的墙 id
-};
-
-let project = newProject();
-
-function uid(){ return Math.random().toString(36).slice(2, 9); }
-
-function newPage(name, kind){
-  return {id: uid(), name, kind, walls: [], labels: [], door: null, trail: []};
+function readBirth(){
+  const d = $.birthDate.value;
+  if (!d) return null;
+  return {date: d, time: $.birthTime.value || null, sex: $.birthSex.value};
 }
 
-function newProject(){
-  return {v: 1, facing: null, unit: 'm', active: 0, pages: [newPage('一楼', 'floor')]};
+function analyseBirth(birth){
+  if (!birth) return null;
+
+  const [y, m, day] = birth.date.split('-').map(Number);
+  let hh = 0, mm = 0;
+  if (birth.time){
+    const parts = birth.time.split(':').map(Number);
+    hh = parts[0] || 0; mm = parts[1] || 0;
+  }
+  const dt = new Date(y, m - 1, day, hh, mm);
+  if (Number.isNaN(dt.getTime())) return null;
+
+  const pillars = fourPillars(dt, Boolean(birth.time));
+  const gua = lifeGua(pillars.solarYear, birth.sex);
+  return {pillars, gua};
 }
 
-const page = () => project.pages[project.active];
+function renderBirth(){
+  const birth = readBirth();
+  $.start.disabled = !birth;
+
+  if (!birth){
+    $.baziOut.textContent = '请先填生日';
+    return;
+  }
+
+  const res = analyseBirth(birth);
+  if (!res){ $.baziOut.textContent = '日期无法辨识'; return; }
+
+  const {pillars: p, gua} = res;
+  const shown = [p.year, p.month, p.day, p.hour || '——'].join(' ');
+  const tail  = p.hour ? '' : '<br>时辰未填，时柱未定';
+
+  $.baziOut.innerHTML =
+    `<div class="pillars">${shown}</div>`
+    + `命卦 <b>${gua.num} ${gua.gua}</b> · <b>${gua.group}</b>${tail}`;
+}
 
 /* ══════════════════════════════════════
-   6 · 存储层
-   ══════════════════════════════════════
-
-   落盘用 localStorage，写入防抖 300 毫秒，避免拖动时狂写。
-   存储不可用（隐私模式、内嵌沙箱）时静默退回纯内存，
-   功能照常，只是关掉分页就不留。
-   ══════════════════════════════════════ */
-
-const store = (() => {
-  const KEY = 'luopan.project.v1';
-  let usable = true;
-  try {
-    localStorage.setItem(KEY + '.probe', '1');
-    localStorage.removeItem(KEY + '.probe');
-  } catch { usable = false; }
-
-  let timer = null;
-
-  return {
-    usable,
-    save(data){
-      if (!usable) return;
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {}
-      }, 300);
-    },
-    load(){
-      if (!usable) return null;
-      try {
-        const raw = localStorage.getItem(KEY);
-        if (!raw) return null;
-        const data = JSON.parse(raw);
-        return data && data.v === 1 && Array.isArray(data.pages) ? data : null;
-      } catch { return null; }
-    },
-    wipe(){
-      if (!usable) return;
-      try { localStorage.removeItem(KEY); } catch {}
-    },
-  };
-})();
-
-function persist(){ store.save(project); }
-
-/* ══════════════════════════════════════
-   7 · 画面更新 · 第一幕
+   10 · 第二幕 · 画面更新
    ══════════════════════════════════════ */
 
 function renderReadout(){
@@ -693,7 +960,7 @@ function showCountdown(on){
 }
 
 /* ══════════════════════════════════════
-   8 · 传感器
+   11 · 传感器
    ══════════════════════════════════════ */
 
 function readSample(heading, beta, gamma){
@@ -748,7 +1015,7 @@ function detachSensors(){
 }
 
 /* ══════════════════════════════════════
-   9 · 定盘
+   12 · 定盘
    ══════════════════════════════════════ */
 
 /** 优先取端平时的样本；不足则退回全部近期样本 */
@@ -777,7 +1044,10 @@ function lockPlate(){
   $.lockNow.hidden = true;
   $.again.hidden   = false;
   $.confirm.hidden = false;           // 定盘之后才可确认站位
-  $.note.innerHTML = `已定盘，取 ${pool.length} 笔样本平均。确认站位无误即可绘制格局。`;
+
+  const h = houseOf(state.shown);
+  $.note.innerHTML =
+    `已定盘，取 ${pool.length} 笔样本平均。此宅为 <b>${h.name}</b> · <b>${h.group}</b>。`;
   renderReadout();
 }
 
@@ -793,7 +1063,7 @@ function restart(){
 }
 
 /* ══════════════════════════════════════
-   10 · 主循环
+   13 · 主循环
    ══════════════════════════════════════ */
 
 function frame(){
@@ -813,7 +1083,7 @@ function frame(){
 }
 
 /* ══════════════════════════════════════
-   11 · 手动转盘（无传感器时的退路）
+   14 · 手动转盘（无传感器时的退路）
    ══════════════════════════════════════ */
 
 function enableDialDrag(){
@@ -844,41 +1114,50 @@ function enableDialDrag(){
 }
 
 /* ══════════════════════════════════════
-   12 · 幕次切换
+   15 · 幕次切换
    ══════════════════════════════════════ */
 
 function askStance(){ $.stance.hidden = false; }
 
-function enterAct2(){
+function enterAct3(){
   $.stance.hidden = true;
   project.facing = norm(state.shown);
 
-  $.act1.hidden = true;
-  $.act2.hidden = false;
+  $.act2.hidden = true;
+  $.act3.hidden = false;
 
-  renderFacing();
+  renderHouse();
   renderTabs();
   resizeCanvas();
   refreshPlan();
   persist();
 }
 
-function backToAct1(){
+function backToAct2(){
   $.stance.hidden = true;
   restart();
 }
 
-function renderFacing(){
-  const f = project.facing;
-  if (f === null) return;
-  const [, dir] = trigramOf(f);
-  const [, en] = compassOf(f);
-  $.facing.textContent = `${mountainOf(f)} ${f.toFixed(1)}° ${dir}${en}`;
-  $.needle.setAttribute('transform', `rotate(${-f} 30 30)`);
+/** 抬头：宅型、坐向，若已填生辰另报命宅相配与否 */
+function renderHouse(){
+  const h = houseOf(project.facing);
+  if (!h) return;
+
+  $.needle.setAttribute('transform', `rotate(${-h.facing} 30 30)`);
+
+  let text = `<span class="type">${h.name} · ${h.group}</span>`
+           + ` 坐<b>${h.sitMountain}</b>向<b>${h.facMountain}</b>`;
+
+  const res = project.birth ? analyseBirth(project.birth) : null;
+  if (res){
+    const match = res.gua.group.slice(0, 2) === h.group.slice(0, 2);
+    text += ` · 命卦<b>${res.gua.gua}</b>${match ? '相配' : '不配'}`;
+  }
+  $.houseType.innerHTML = text;
 }
 
 /* ══════════════════════════════════════
-   13 · 页面管理
+   16 · 页面管理
    ══════════════════════════════════════ */
 
 function renderTabs(){
@@ -936,7 +1215,7 @@ function removePage(i){
 }
 
 /* ══════════════════════════════════════
-   14 · 画布基础
+   17 · 画布基础
    ══════════════════════════════════════ */
 
 const ctx  = $.canvas.getContext('2d');
@@ -969,7 +1248,7 @@ function pointerWorld(ev){
 }
 
 /* ══════════════════════════════════════
-   15 · 吸附
+   18 · 吸附
    ══════════════════════════════════════ */
 
 const snapToGrid = p => ({
@@ -997,14 +1276,23 @@ function snapOrtho(from, to){
   return to;
 }
 
+/** 靠近大门基准线时也吸上去，方便从门口起笔 */
+function snapDoorLine(p){
+  return Math.abs(p.y - PLAN.DOOR_Y) <= PLAN.SNAP_PT
+    ? {x: p.x, y: PLAN.DOOR_Y} : null;
+}
+
 function resolvePoint(p, from){
   const onEnd = snapToEndpoint(p);
   if (onEnd) return onEnd;
-  return snapToGrid(from ? snapOrtho(from, p) : p);
+
+  const straight = snapToGrid(from ? snapOrtho(from, p) : p);
+  const onDoor = snapDoorLine(straight);
+  return onDoor || straight;
 }
 
 /* ══════════════════════════════════════
-   16 · 几何：比例尺、闭合环、面积
+   19 · 几何：比例尺、闭合环、面积
    ══════════════════════════════════════ */
 
 const pixelLen = w => Math.hypot(w.b.x - w.a.x, w.b.y - w.a.y);
@@ -1110,7 +1398,7 @@ const fmtLen    = m  => `${toDisplay(m).toFixed(2)} ${UNITS[project.unit].label}
 const fmtArea   = m2 => `${(m2 / (UNITS[project.unit].per ** 2)).toFixed(1)} ${UNITS[project.unit].area}`;
 
 /* ══════════════════════════════════════
-   17 · 绘制
+   20 · 绘制
    ══════════════════════════════════════ */
 
 let preview = null;   // 拖动中的墙
@@ -1120,6 +1408,7 @@ function drawPlan(){
   ctx.clearRect(0, 0, box.width, box.height);
 
   drawGrid();
+  drawDoorLine();
   drawRingFill();
   drawWalls();
   drawPreview();
@@ -1140,6 +1429,59 @@ function drawGrid(){
   }
   ctx.stroke();
   ctx.restore();
+}
+
+/**
+ * 大门基准线：画布上方一道朱红门槛，标出向度。
+ * 用户面朝大门外测得向度，故画布上方即屋外，由此线往下画即屋内。
+ */
+function drawDoorLine(){
+  const h = houseOf(project.facing);
+  if (!h) return;
+
+  const box = $.canvas.getBoundingClientRect();
+  const y = toScreen({x: 0, y: PLAN.DOOR_Y}).y;
+  const left  = toScreen({x: 40,  y: 0}).x;
+  const right = toScreen({x: PLAN.WORLD - 40, y: 0}).x;
+
+  ctx.save();
+
+  /* 门槛线 */
+  ctx.strokeStyle = 'rgba(163,43,30,.85)';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([12, 7]);
+  ctx.beginPath();
+  ctx.moveTo(left, y); ctx.lineTo(right, y);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  /* 朝外箭头 */
+  const mid = (left + right) / 2;
+  ctx.fillStyle = 'rgba(163,43,30,.9)';
+  ctx.beginPath();
+  ctx.moveTo(mid, y - 26);
+  ctx.lineTo(mid - 7, y - 14);
+  ctx.lineTo(mid + 7, y - 14);
+  ctx.closePath();
+  ctx.fill();
+
+  /* 标注 */
+  const [, dir] = trigramOf(h.facing);
+  const [, en] = compassOf(h.facing);
+  ctx.fillStyle = 'rgba(239,226,196,.9)';
+  ctx.font = '12px "Songti SC", "Noto Serif SC", serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(`大门朝 ${h.facMountain} ${h.facing.toFixed(0)}° ${dir}${en} 屋外`, mid, y - 32);
+
+  /* 屋内提示，仅在还没画墙时出现 */
+  if (!page().walls.length){
+    ctx.fillStyle = 'rgba(239,226,196,.32)';
+    ctx.font = '13px "Songti SC", serif';
+    ctx.fillText('由此线往下画即屋内', mid, y + 26);
+  }
+
+  ctx.restore();
+  void box;
 }
 
 /** 外墙闭合时淡淡填一层，让人一眼看出已经围起来了 */
@@ -1248,7 +1590,7 @@ function drawLabels(){
 }
 
 /* ══════════════════════════════════════
-   18 · 交互
+   21 · 交互
    ══════════════════════════════════════ */
 
 let dragFrom = null;
@@ -1339,7 +1681,7 @@ function clearPage(){
 }
 
 /* ══════════════════════════════════════
-   19 · 尺寸标注
+   22 · 尺寸标注
    ══════════════════════════════════════ */
 
 function openMeasure(w){
@@ -1351,9 +1693,7 @@ function openMeasure(w){
   setTimeout(() => $.measureLen.focus(), 50);
 }
 
-function closeMeasure(){
-  $.measure.hidden = true;
-}
+function closeMeasure(){ $.measure.hidden = true; }
 
 function commitMeasure(){
   const w = page().walls.find(x => x.id === ui.selected);
@@ -1378,7 +1718,7 @@ function clearMeasure(){
 }
 
 /* ══════════════════════════════════════
-   20 · 界面刷新
+   23 · 界面刷新
    ══════════════════════════════════════ */
 
 function setMode(mode){
@@ -1394,7 +1734,7 @@ function setMode(mode){
 
 function updateNote(){
   const tips = {
-    wall   : '按住拖动画一道墙，靠近既有墙角会自动咬合。',
+    wall   : '从上方朱红门槛线起笔，按住拖动画墙。',
     measure: '点一道墙，填它的实际长度。填一道就够，其余自动推算。',
     door   : '点一下大门所在的位置。',
     label  : '先选房间名，再点它在图上的位置。',
@@ -1409,11 +1749,11 @@ function updateArea(){
   const ring  = outerRing(p.walls);
 
   if (!scale){
-    $.area.textContent = p.walls.length ? '标一道墙的长度即可算面积' : '尚未标注尺寸';
+    $.houseArea.textContent = p.walls.length ? '标一道墙的长度即可算面积' : '尚未标注尺寸';
     return;
   }
   if (!ring){
-    $.area.textContent = '外墙尚未闭合';
+    $.houseArea.textContent = '外墙尚未闭合';
     return;
   }
 
@@ -1424,7 +1764,7 @@ function updateArea(){
   const areas  = floors.map(pageArea).filter(a => a !== null);
   const total  = areas.reduce((s, a) => s + a, 0);
 
-  $.area.innerHTML = (floors.length > 1 && areas.length > 1)
+  $.houseArea.innerHTML = (floors.length > 1 && areas.length > 1)
     ? `本页 <b>${fmtArea(here)}</b> · 全屋 <b>${fmtArea(total)}</b>`
     : `本页 <b>${fmtArea(here)}</b>`;
 }
@@ -1455,7 +1795,7 @@ function buildChips(){
 }
 
 /* ══════════════════════════════════════
-   21 · 启动
+   24 · 启动
    ══════════════════════════════════════ */
 
 async function requestPermissionIfNeeded(){
@@ -1469,6 +1809,11 @@ async function requestPermissionIfNeeded(){
 }
 
 async function begin(){
+  const birth = readBirth();
+  if (!birth) return;
+  project.birth = birth;
+  persist();
+
   $.gate.hidden = true;
 
   if (!await requestPermissionIfNeeded()){
@@ -1488,19 +1833,25 @@ async function begin(){
   }, 2500);
 }
 
-/** 有存档且已定过坐向，直接续上第二幕 */
+/** 有存档且已定过坐向，直接续上第三幕 */
 function resumeIfSaved(){
   const saved = store.load();
   if (!saved) return false;
 
   project = saved;
   if (project.active >= project.pages.length) project.active = 0;
+
+  if (project.birth){
+    $.birthDate.value = project.birth.date || '';
+    $.birthTime.value = project.birth.time || '';
+    $.birthSex.value  = project.birth.sex  || 'male';
+  }
   if (project.facing === null) return false;
 
   $.gate.hidden = true;
-  $.act1.hidden = true;
-  $.act2.hidden = false;
-  renderFacing();
+  $.act2.hidden = true;
+  $.act3.hidden = false;
+  renderHouse();
   renderTabs();
   resizeCanvas();
   refreshPlan();
@@ -1512,12 +1863,16 @@ enableDialDrag();
 buildChips();
 setMode('wall');
 
+for (const el of [$.birthDate, $.birthTime, $.birthSex])
+  el.addEventListener('change', renderBirth);
+$.birthDate.addEventListener('input', renderBirth);
+
 $.start.addEventListener('click', begin);
 $.lockNow.addEventListener('click', lockPlate);
 $.again.addEventListener('click', restart);
 $.confirm.addEventListener('click', askStance);
-$.stanceYes.addEventListener('click', enterAct2);
-$.stanceNo.addEventListener('click', backToAct1);
+$.stanceYes.addEventListener('click', enterAct3);
+$.stanceNo.addEventListener('click', backToAct2);
 
 $.pageFloor.addEventListener('click', () => addPage('floor'));
 $.pageRoom.addEventListener('click', () => addPage('room'));
@@ -1546,6 +1901,7 @@ window.addEventListener('resize', resizeCanvas);
 window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 200));
 
 resumeIfSaved();
+renderBirth();
 </script>
 </body>
 </html>
