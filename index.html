@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#17110E">
+<title>罗盘</title>
+<style>
+  :root{
+    --lacquer:#17110E;
+    --ivory:#EFE2C4;
+    --ivory-deep:#D6C193;
+    --ink:#22190F;
+    --cinnabar:#A32B1E;
+    --gold:#B4903C;
+    --brass:#E0BE6A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    background:
+      radial-gradient(ellipse at 50% 34%, #2A1F17 0%, var(--lacquer) 62%);
+    color:var(--ivory);
+    font-family:"Noto Serif SC","Songti SC","STSong","Source Han Serif SC",serif;
+    display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:clamp(14px,3.5vh,30px);
+    padding:calc(env(safe-area-inset-top) + 14px) 16px calc(env(safe-area-inset-bottom) + 18px);
+    overflow:hidden;touch-action:none;
+  }
+
+  /* ── 盘面 ───────────────────────────── */
+  .plate{
+    position:relative;
+    width:min(93vw,62vh);height:min(93vw,62vh);
+    flex:0 0 auto;
+  }
+  .plate::after{ /* 盘边木框 */
+    content:"";position:absolute;inset:-2.4%;border-radius:50%;
+    background:linear-gradient(150deg,#4A3524,#241812 55%,#3D2B1C);
+    box-shadow:0 14px 40px rgba(0,0,0,.65), inset 0 0 0 1px rgba(224,190,106,.28);
+    z-index:-1;
+  }
+  #dial{width:100%;height:100%;display:block;will-change:transform}
+
+  /* 天心十道：固定不动，代表手机所指 */
+  .threads{position:absolute;inset:0;pointer-events:none}
+  .threads i{position:absolute;background:rgba(224,190,106,.55)}
+  .threads .v{left:50%;top:-1.5%;bottom:-1.5%;width:1px;transform:translateX(-.5px)}
+  .threads .h{top:50%;left:-1.5%;right:-1.5%;height:1px;transform:translateY(-.5px)}
+  .threads .v{background:linear-gradient(180deg,var(--cinnabar) 0 46%,rgba(224,190,106,.5) 46%)}
+  .cursor{
+    position:absolute;left:50%;top:-3.6%;width:0;height:0;
+    transform:translateX(-50%);
+    border-left:8px solid transparent;border-right:8px solid transparent;
+    border-top:13px solid var(--cinnabar);
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,.7));
+  }
+
+  /* ── 读数 ───────────────────────────── */
+  .readout{text-align:center;line-height:1.15}
+  .deg{
+    font-size:clamp(40px,12vw,62px);font-weight:500;
+    letter-spacing:.01em;font-variant-numeric:tabular-nums;
+    color:var(--brass);
+  }
+  .deg small{font-size:.42em;color:var(--ivory-deep);margin-left:.12em}
+  .mountain{
+    font-size:clamp(17px,5vw,22px);color:var(--ivory);
+    margin-top:6px;letter-spacing:.32em;text-indent:.32em;
+  }
+  .sitting{
+    font-size:clamp(12px,3.4vw,14px);color:rgba(239,226,196,.52);
+    margin-top:9px;letter-spacing:.16em;text-indent:.16em;
+  }
+
+  /* ── 提示与按钮 ─────────────────────── */
+  .note{
+    font-size:13px;line-height:1.75;text-align:center;max-width:30em;
+    color:rgba(239,226,196,.6);
+  }
+  .note b{color:var(--brass);font-weight:500}
+  button{
+    font:inherit;font-size:15px;letter-spacing:.2em;text-indent:.2em;
+    color:var(--lacquer);background:linear-gradient(180deg,var(--brass),var(--gold));
+    border:0;border-radius:2px;padding:13px 30px;cursor:pointer;
+    box-shadow:0 3px 14px rgba(180,144,60,.3);
+  }
+  button:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+  button:active{transform:translateY(1px)}
+
+  /* 开场遮罩 */
+  .gate{
+    position:fixed;inset:0;z-index:9;
+    background:rgba(23,17,14,.94);backdrop-filter:blur(3px);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:22px;padding:28px;text-align:center;
+  }
+  .gate h1{
+    font-size:clamp(26px,8vw,36px);font-weight:500;
+    letter-spacing:.5em;text-indent:.5em;color:var(--ivory);
+  }
+  .gate p{font-size:13.5px;line-height:1.8;color:rgba(239,226,196,.58);max-width:26em}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="plate">
+  <svg id="dial" viewBox="0 0 400 400" aria-label="罗盘盘面"></svg>
+  <div class="threads"><i class="v"></i><i class="h"></i></div>
+  <div class="cursor"></div>
+</div>
+
+<div class="readout">
+  <div class="deg" id="deg">—<small>°</small></div>
+  <div class="mountain" id="mountain">等待磁场</div>
+  <div class="sitting" id="sitting"></div>
+</div>
+
+<p class="note" id="note"></p>
+
+<div class="gate" id="gate">
+  <h1>罗盘</h1>
+  <p>手机需平放于掌心，避开电脑、音箱、钢筋与金属桌面。首次使用请握机划几个「8」字，让磁力计自行校准。</p>
+  <button id="start">开盘</button>
+</div>
+
+<script>
+/* ══ 二十四山：由子山起，顺时针每山十五度 ══ */
+const MOUNTAINS = ['子','癸','丑','艮','寅','甲','卯','乙','辰','巽','巳','丙',
+                   '午','丁','未','坤','申','庚','酉','辛','戌','乾','亥','壬'];
+const CARDINAL  = new Set(['子','午','卯','酉']);
+/* ══ 八卦八方：坎起正北，每卦四十五度 ══ */
+const TRIGRAMS  = [['坎','北'],['艮','东北'],['震','东'],['巽','东南'],
+                   ['离','南'],['坤','西南'],['兑','西'],['乾','西北']];
+
+const NS = 'http://www.w3.org/2000/svg';
+const dial = document.getElementById('dial');
+const el = (tag, attrs) => {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+};
+const spin = a => `rotate(${a} 200 200)`;
+
+/* ── 绘制盘面 ─────────────────────────── */
+(function draw(){
+  const f = document.createDocumentFragment();
+
+  const defs = el('defs');
+  const g = el('radialGradient',{id:'wood',cx:'.5',cy:'.42',r:'.72'});
+  g.append(el('stop',{offset:'0',  'stop-color':'#F3E8CD'}),
+           el('stop',{offset:'.68','stop-color':'#E2D0A6'}),
+           el('stop',{offset:'1',  'stop-color':'#C8B183'}));
+  defs.append(g);
+  f.append(defs, el('circle',{cx:200,cy:200,r:198,fill:'url(#wood)'}));
+
+  [198,152,110,84].forEach(r =>
+    f.append(el('circle',{cx:200,cy:200,r,fill:'none',stroke:'#8A6E3E','stroke-width':.9})));
+
+  /* 第一层 · 二十四山 */
+  MOUNTAINS.forEach((m,i)=>{
+    const a = i*15;
+    f.append(el('line',{x1:200,y1:2,x2:200,y2:48,stroke:'#8A6E3E',
+                        'stroke-width':.8,transform:spin(a-7.5)}));
+    const t = el('text',{x:200,y:181,'text-anchor':'middle','font-size':17,
+                         fill:CARDINAL.has(m)?'#A32B1E':'#22190F',
+                         transform:spin(a)});
+    t.textContent = m;
+    f.append(t);
+  });
+
+  /* 第二层 · 八卦方位 */
+  TRIGRAMS.forEach(([gua,dir],i)=>{
+    const a = i*45;
+    f.append(el('line',{x1:200,y1:50,x2:200,y2:90,stroke:'#8A6E3E',
+                        'stroke-width':.8,transform:spin(a-22.5)}));
+    const t = el('text',{x:200,y:131,'text-anchor':'middle','font-size':15,
+                         fill:'#8C2318',transform:spin(a)});
+    t.textContent = gua;
+    const d = el('text',{x:200,y:147,'text-anchor':'middle','font-size':8.5,
+                         fill:'#7A6234',transform:spin(a)});
+    d.textContent = dir;
+    f.append(t,d);
+  });
+
+  /* 第三层 · 周天三百六十度 */
+  for(let a=0;a<360;a+=5){
+    const long = a%30===0;
+    f.append(el('line',{x1:200,y1:88,x2:200,y2:long?100:95,
+                        stroke:long?'#22190F':'#9C845A',
+                        'stroke-width':long?1:.6,transform:spin(a)}));
+    if(long){
+      const t = el('text',{x:200,y:109,'text-anchor':'middle','font-size':7.5,
+                           fill:'#7A6234',transform:spin(a)});
+      t.textContent = a;
+      f.append(t);
+    }
+  }
+
+  /* 天池 · 磁针 */
+  f.append(el('circle',{cx:200,cy:200,r:60,fill:'#F5EBD4',stroke:'#8A6E3E','stroke-width':.9}));
+  f.append(el('circle',{cx:200,cy:200,r:60,fill:'none',stroke:'#000','stroke-opacity':.07,'stroke-width':6}));
+  f.append(el('path',{d:'M200 152 L207 200 L200 248 L193 200 Z',fill:'#22190F'}));
+  f.append(el('path',{d:'M200 152 L207 200 L193 200 Z',fill:'#A32B1E'}));
+  f.append(el('circle',{cx:200,cy:200,r:4.6,fill:'#B4903C',stroke:'#22190F','stroke-width':.8}));
+  const label = el('text',{x:200,y:230,'text-anchor':'middle','font-size':9,
+                           fill:'#9C845A','letter-spacing':2});
+  label.textContent='天池';
+  f.append(label);
+
+  dial.append(f);
+})();
+
+/* ── 方位计算 ─────────────────────────── */
+const $deg = document.getElementById('deg');
+const $mtn = document.getElementById('mountain');
+const $sit = document.getElementById('sitting');
+const $note= document.getElementById('note');
+
+const mountainOf = d => MOUNTAINS[Math.floor(((d+7.5)%360)/15)];
+const trigramOf  = d => TRIGRAMS[Math.floor(((d+22.5)%360)/45)];
+
+let raw = 0, shown = 0, live = false, absoluteSeen = false;
+
+function render(){
+  const d = (shown%360+360)%360;
+  $deg.innerHTML = d.toFixed(1) + '<small>°</small>';
+  const [gua,dir] = trigramOf(d);
+  $mtn.textContent = `${mountainOf(d)}山 · ${gua}卦 ${dir}`;
+  const back = (d+180)%360;
+  $sit.textContent = `坐 ${mountainOf(back)} 向 ${mountainOf(d)}`;
+}
+
+function tick(){
+  let diff = raw - shown;
+  diff -= Math.round(diff/360)*360;      // 取最短路径，避免绕圈回弹
+  shown += diff * 0.16;                  // 低通滤波，压住抖动
+  dial.style.transform = `rotate(${-shown}deg)`;
+  render();
+  requestAnimationFrame(tick);
+}
+
+function onOrient(e){
+  let h = null;
+  if (typeof e.webkitCompassHeading === 'number') {
+    h = e.webkitCompassHeading;                       // iOS：已是磁北方位角
+  } else if (e.alpha !== null && (e.absolute || absoluteSeen)) {
+    h = 360 - e.alpha;                                // Android：alpha 逆时针，需取补
+  }
+  if (h === null || Number.isNaN(h)) return;
+
+  const so = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+  raw = (h + so) % 360;                               // 补偿横屏
+
+  if (!live){
+    live = true;
+    $note.innerHTML = '磁针所指为<b>磁北</b>，与传统罗盘一致，未作磁偏角修正。';
+  }
+}
+
+function onAbsolute(e){ absoluteSeen = true; onOrient(e); }
+
+/* ── 无传感器时可用手指转盘（方便电脑上调试） ── */
+(function enableDrag(){
+  const plate = document.querySelector('.plate');
+  let last = null;
+  const angleAt = ev => {
+    const r = plate.getBoundingClientRect();
+    return Math.atan2(ev.clientY - (r.top+r.height/2),
+                      ev.clientX - (r.left+r.width/2)) * 180/Math.PI;
+  };
+  plate.addEventListener('pointerdown', ev=>{
+    if (live) return;
+    last = angleAt(ev); plate.setPointerCapture(ev.pointerId);
+  });
+  plate.addEventListener('pointermove', ev=>{
+    if (last === null) return;
+    const a = angleAt(ev);
+    let d = a - last; d -= Math.round(d/360)*360;
+    raw = (raw + d + 360) % 360; shown = raw; last = a;
+  });
+  ['pointerup','pointercancel'].forEach(t =>
+    plate.addEventListener(t, ()=>{ last = null; }));
+})();
+
+/* ── 启动 ─────────────────────────────── */
+document.getElementById('start').addEventListener('click', async ()=>{
+  document.getElementById('gate').hidden = true;
+
+  const DOE = window.DeviceOrientationEvent;
+  if (DOE && typeof DOE.requestPermission === 'function'){   // iOS 13+
+    try {
+      if (await DOE.requestPermission() !== 'granted'){
+        $note.textContent = '未授予方向感应权限。可在 设置 › Safari › 动作与方向 中开启后重进。';
+        return;
+      }
+    } catch { /* 忽略，继续尝试监听 */ }
+  }
+
+  window.addEventListener('deviceorientationabsolute', onAbsolute, true);
+  window.addEventListener('deviceorientation', onOrient, true);
+  requestAnimationFrame(tick);
+
+  setTimeout(()=>{
+    if (!live){
+      $mtn.textContent = '未读到磁场';
+      $note.innerHTML = '这台设备没有回传磁力计数据。请确认网址是 <b>https</b> 开头，'
+                      + '并检查系统定位服务是否开启。眼下可用手指转动盘面手动定向。';
+    }
+  }, 2500);
+});
+</script>
+</body>
+</html>
